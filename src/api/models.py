@@ -1,19 +1,106 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import String, Boolean
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import String, Boolean, Integer,  ForeignKey, DateTime
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from datetime import datetime
 
 db = SQLAlchemy()
 
-class User(db.Model):
-    id: Mapped[int] = mapped_column(primary_key=True)
-    email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
-    password: Mapped[str] = mapped_column(nullable=False)
-    is_active: Mapped[bool] = mapped_column(Boolean(), nullable=False)
 
+class User (db.Model):
+    __tablename__ = "user"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
+    password_hash: Mapped[str] = mapped_column(String(100), nullable=False)
+    fecha_registro: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
+
+    michis: Mapped["Michi"] = relationship("Michi", back_populates="user")
 
     def serialize(self):
         return {
             "id": self.id,
             "email": self.email,
-            # do not serialize the password, its a security breach
+            "fecha_registro": self.fecha_registro
+        }
+
+
+class Michi (db.Model):
+    __tablename__ = "michi"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)
+    michi_name: Mapped[str] = mapped_column(String(50), nullable=False)
+    color: Mapped[str] = mapped_column(String(20))
+    pescados_totales: Mapped[int] = mapped_column(Integer, default=0)
+
+    user: Mapped["User"] = relationship("User", back_populates="michis")
+    partidas: Mapped[list["Partida"]] = relationship(
+        "Partida", back_populates="michis")
+    michi_inventario: Mapped[list["MichiInventario"]] = relationship(
+        "MichiInventario", back_populates="michi")
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "michi_name": self.michi_name,
+            "color": self.color,
+            "pescados_totales": self.pescados_totales
+        }
+
+
+class Accesorios(db.Model):
+    __tablename__ = "accesorios"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    accesorios_name: Mapped[str] = mapped_column(String(50), nullable=False)
+    tipo_de_accesorios: Mapped[str] = mapped_column(String(30))
+    precio_pescado: Mapped[int] = mapped_column(Integer, nullable=False)
+
+    michi_inventario: Mapped[list["MichiInventario"]] = relationship(
+        "MichiInventario", back_populates="accesorios")
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "accesorios_name": self.accesorios_name,
+            "tipo_de_accesorios": self.tipo_de_accesorios,
+            "precio_pescado": self.precio_pescado
+        }
+
+
+class MichiInventario (db.Model):
+    __tablename__ = "michi_inventario"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    michi_id: Mapped[int] = mapped_column(
+        ForeignKey("michi.id"), nullable=False)
+    accesorios_id: Mapped[int] = mapped_column(
+        ForeignKey("accesorios.id"), nullable=False)
+    esta_equipado: Mapped[bool] = mapped_column(Boolean, default=False)
+
+    michi: Mapped["Michi"] = relationship(
+        "Michi", back_populates="michi_inventario")
+    accesorios: Mapped["Accesorios"] = relationship(
+        "Accesorios", back_populates="michi_inventario")
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "michi_id": self.michi_id,
+            "accesorios_id": self.accesorios_id,
+            "esta_equipado": self.esta_equipado
+        }
+
+
+class Partida(db.Model):
+    __tablename__ = "partida"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    michi_id: Mapped[int] = mapped_column(
+        ForeignKey("michi.id"), nullable=False)
+    score: Mapped[int] = mapped_column(Integer, nullable=False)
+
+    michis: Mapped["Michi"] = relationship("Michi", back_populates="partidas")
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "michi_id": self.michi_id,
+            "score": self.score
         }
