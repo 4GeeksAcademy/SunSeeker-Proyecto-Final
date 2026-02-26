@@ -19,7 +19,7 @@ export default function PhaserGame() {
       // `parent` es el elemento DOM donde Phaser insertará el canvas
       parent: containerRef.current,
       width: 800,
-      height: 530,
+      height: 700,
       backgroundColor: "#1d1d1d",
       // escala automatica para las ditintas pantallas
       scale: {
@@ -28,8 +28,8 @@ export default function PhaserGame() {
         // Usamos el sistema 'arcade' por ser sencillo para prototipos
         default: "arcade",
         arcade: {
-          gravity: { y: 500 },
-          debug: false,
+          gravity: { y: 300 },
+          debug: true,
         },
       },
       // Lista de escenas; aquí pasamos la clase que implementa la lógica
@@ -47,7 +47,7 @@ export default function PhaserGame() {
   }, []);
 
   return (
-    <div style={{ width: 800, height: 530 }}>
+    <div style={{ width: 800, height: 700 }}>
       <div ref={containerRef} />
     </div>
   );
