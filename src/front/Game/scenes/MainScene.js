@@ -13,7 +13,8 @@ export default class MainScene extends Phaser.Scene {
         
     }
 
-
+    ScoreText = "";
+    
 
     preload() {
         this.load.baseURL = "./";
@@ -24,14 +25,17 @@ export default class MainScene extends Phaser.Scene {
         this.load.image('TablaMedio', 'img/TablaMedio.png');
         this.load.image('Pez', 'img/pezAzulSF.png');
 
-        this.load.spritesheet('GatoNaranja', 'img/gatoNaranja.png', {frameWidth: 53, frameHeight: 37 })
+        this.load.spritesheet('GatoNaranja', 'img/gatoNaranjaFinal.png', {frameWidth: 48, frameHeight: 31 })
 
     }
 
+    
     create() {
 
         
         this.GatoNar = "";
+        
+        
         
         // this.add.image(400, 330, 'fondo').setScale(0.8);
         this.add.image(400, 760, 'fondoLargo').setScale(1.1);
@@ -76,6 +80,21 @@ export default class MainScene extends Phaser.Scene {
         this.physics.add.existing(sueloInicio, true)
         platforms.add(sueloInicio)
 
+
+        this.GatoNar = this.physics.add.sprite(420, 100, 'GatoNaranja').setScale(1.6);
+        this.GatoNar.setCollideWorldBounds(true);
+        this.GatoNar.setBounce(0.1);
+        this.physics.add.collider(this.GatoNar, platforms);
+        this.GatoNar.Score = 0;
+
+        
+        function PuntosGato (gato, pezTocando){
+            pezTocando.disableBody(true,true);
+            this.GatoNar.Score += 25
+            console.log("Puntos:", this.GatoNar.Score)
+            this.ScoreText.setText('Score: ' + this.GatoNar.Score)
+        }
+        
         var peces = this.physics.add.group()
         this.physics.add.collider(peces, platforms)
         peces.create(265, 190, 'Pez').setScale(0.07);
@@ -84,17 +103,44 @@ export default class MainScene extends Phaser.Scene {
         peces.create(570, 900, 'Pez').setScale(0.07);
         peces.create(265, 1220, 'Pez').setScale(0.07);
         
-        this.GatoNar = this.physics.add.sprite(420, 1300, 'GatoNaranja').setScale(1.6);
-        this.GatoNar.setCollideWorldBounds(true);
-        this.GatoNar.setBounce(0.1);
-        this.physics.add.collider(this.GatoNar, platforms);
+        this.physics.add.overlap(this.GatoNar, peces, PuntosGato, null, this);
         
+       
         
         Animaciones(this)
 
         this.physics.world.setBounds(0,0, 800, 1500)
         this.cameras.main.setBounds(0,0, 800, 1500)
         this.cameras.main.startFollow(this.GatoNar, true, 0.1, 0.1)
+
+        this.gametime = 60;
+        this.timeTXT = this.add.text(350,0, this.gametime,{fontFamily: 'font1' ,fontSize:'64px', fill:'#000'} )
+        this.refreshTime()
+        this.timeTXT.setScrollFactor(0);
+
+        this.ScoreText = this.add.text(16,16, 'Score: 0', {fontSize:'32px', fill:'#000'})
+        this.ScoreText.setScrollFactor(0);
+    }
+
+    refreshTime(){
+        
+            this.gametime--;
+            this.timeTXT.setText(this.gametime);
+            if (this.gametime === 0){
+                this.physics.pause();
+                this.GatoNar.setTint(0xff0000);
+
+                this.time.addEvent({
+                    delay: 1500,
+                    loop: false,
+                    callback: () =>{
+                        this.scene.start("endScene")
+                    }
+                })
+
+            }else {
+                this.time.delayedCall(1000, this.refreshTime, [], this)
+            }
     }
 
     update() {
