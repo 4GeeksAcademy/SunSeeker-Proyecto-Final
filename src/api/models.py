@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import String, Boolean, Integer,  ForeignKey, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
+from flask_bcrypt import generate_password_hash
 
 db = SQLAlchemy()
 
@@ -12,6 +13,11 @@ class User (db.Model):
     email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
     password_hash: Mapped[str] = mapped_column(String(100), nullable=False)
     fecha_registro: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
+
+    
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password).decode('utf-8')
+
 
     michis: Mapped["Michi"] = relationship("Michi", back_populates="user")
 

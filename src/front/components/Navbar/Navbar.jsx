@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom";
-import "./index.css";
-export const Navbar = () => {
+import "./navbar.css";
+import { useState } from "react";
+import { SignupModal } from "../SignupModal/SignupModal";
 
+
+export const Navbar = () => {
+    const [showSignup, setShowSignup] = useState(false);
     return (
         <>
             <nav>
@@ -13,9 +17,10 @@ export const Navbar = () => {
                     </Link>
                     <div className="nav-button" id="logged-out">
                         <a href="#" className="btn btn-signin">Sign In</a>
-                        <a href="#" className="btn btn-signup">Sign Up</a>
+                        <a href="#" className="btn btn-signup" onClick={() => setShowSignup(true)}>Sign Up</a>
                     </div>
                 </div>
+                <SignupModal show={showSignup} onClose={() => setShowSignup(false)} />
             </nav>
         </>
     );
