@@ -12,4 +12,5 @@ export function Animaciones(Game){
                 frameRate: 10,
                 repeat: -1,
             });
+            
 }

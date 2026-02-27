@@ -21,5 +21,10 @@ export function Controles(Game){
                 Game.GatoNar.setVelocityY(-300);
 
             }
-        
+              if (Game.Perrito.body.velocity.x < 0) {
+                Game.Perrito.setFlipX(false); 
+             } else if (Game.Perrito.body.velocity.x > 0) {
+                Game.Perrito.setFlipX(true); 
+            }
+
         }
