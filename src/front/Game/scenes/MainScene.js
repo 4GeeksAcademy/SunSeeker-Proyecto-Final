@@ -19,6 +19,7 @@ export default class MainScene extends Phaser.Scene {
     this.load.image("TablaMedio", "img/TablaMedio.png");
     this.load.image("TablaLarga", "img/sueloLargo.png");
     this.load.image("Pez", "img/pezAzulSF.png");
+    this.load.image("PuertaGato", "img/puertaGato.png");
 
     this.load.spritesheet("GatoNaranja", "img/gatoNaranjaFinal.png", {
       frameWidth: 48,
@@ -37,6 +38,7 @@ export default class MainScene extends Phaser.Scene {
     // this.add.image(400, 330, 'fondo').setScale(0.8);
     this.add.image(400, 760, "fondoLargo").setScale(1.1);
     this.add.image(780, 470, "CasaCiro").setScale(0.6);
+    this.add.image(63, 75, 'PuertaGato').setScale(0.4)
 
     var platforms = this.physics.add.staticGroup();
 
@@ -85,17 +87,31 @@ export default class MainScene extends Phaser.Scene {
         this.Perrito.setVelocityX(150);
     }
 
-    this.Perrito = this.physics.add.sprite(770, 490, "Perrito").setScale(0.16);
+    function Morder(){
+      this.physics.pause();
+      this.GatoNar.setTint(0xff0000);
+      
+      this.time.addEvent({
+        delay: 3000,
+        loop: false,
+        callback: () => {
+          this.scene.start("endScene");
+        },
+      });
+    }
+
+    this.Perrito = this.physics.add.sprite(770, 490, "Perrito").setScale(0.13);
     this.Perrito.setCollideWorldBounds(true);
     this.Perrito.setVelocityX(150);
     this.Perrito.setBounce(1, 0);
     this.physics.add.collider(this.Perrito, platforms);
     this.physics.add.overlap(this.Perrito, respawnDog, Respawn, null, this);
 
-    this.GatoNar = this.physics.add.sprite(420, 1300, "GatoNaranja").setScale(1.6);
+    this.GatoNar = this.physics.add.sprite(420, 100, "GatoNaranja").setScale(1.6);
     this.GatoNar.setCollideWorldBounds(true);
     this.GatoNar.setBounce(0.1);
     this.physics.add.collider(this.GatoNar, platforms);
+    this.physics.add.collider(this.Perrito, this.GatoNar, Morder, null, this);
     this.GatoNar.Score = 0;
 
     function PuntosGato(gato, pezTocando) {

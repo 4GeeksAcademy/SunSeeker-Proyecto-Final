@@ -28,7 +28,7 @@ export default function PhaserGame() {
         // Usamos el sistema 'arcade' por ser sencillo para prototipos
         default: "arcade",
         arcade: {
-          gravity: { y: 300 },
+          gravity: { y: 350 },
           debug: false,
         },
       },
