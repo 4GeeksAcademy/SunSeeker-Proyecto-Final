@@ -34,8 +34,8 @@ export const Home = () => {
 	// }, [])
 
 	return (
-		<>
+		<div >
 		<PhaserGame/>
-		</>
+		</div>
 	);
 }; 
