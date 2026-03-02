@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import { Controles } from "../Controles/Controles";
 import { Animaciones } from "../Animaciones/Animaciones";
 
+
 export default class MainScene extends Phaser.Scene {
   constructor() {
     super("MainScene");
@@ -38,59 +39,69 @@ export default class MainScene extends Phaser.Scene {
     // this.add.image(400, 330, 'fondo').setScale(0.8);
     this.add.image(400, 760, "fondoLargo").setScale(1.1);
     this.add.image(780, 470, "CasaCiro").setScale(0.6);
-    this.add.image(63, 75, 'PuertaGato').setScale(0.4)
+    this.add.image(63, 75, "PuertaGato").setScale(0.4);
 
     var platforms = this.physics.add.staticGroup();
 
-    platforms.create(450, 150, "TablaMedio").setScale(0.2).refreshBody();
+    platforms.create(100, 180, "TablaLarga").setScale(0.8).refreshBody();
+    platforms.create(400, 250, "TablaMedio").setScale(0.13).refreshBody();
 
-    platforms.create(265, 280, "TablaIzq").setScale(0.3).refreshBody();
-    platforms.create(570, 390, "TablaDer").setScale(0.3).refreshBody();
-    platforms.create(265, 500, "TablaIzq").setScale(0.3).refreshBody();
-    platforms.create(720, 580, "TablaLarga").setScale(0.8).refreshBody();
+    platforms.create(700, 350, "TablaLarga").setScale(0.8).refreshBody();
+    platforms.create(30, 500, "TablaLarga").setScale(0.8).refreshBody();
+    platforms.create(760, 580, "TablaLarga").setScale(0.8).refreshBody();
+    platforms.create(350, 400, "TablaMedio").setScale(0.13).refreshBody();
+    platforms.create(400, 580, "TablaMedio").setScale(0.13).refreshBody();
 
     platforms.create(265, 700, "TablaIzq").setScale(0.3).refreshBody();
     platforms.create(570, 800, "TablaDer").setScale(0.3).refreshBody();
-    platforms.create(265, 900, "TablaIzq").setScale(0.3).refreshBody();
+    platforms.create(370, 870, "TablaMedio").setScale(0.13).refreshBody();
     platforms.create(570, 980, "TablaDer").setScale(0.3).refreshBody();
 
-    platforms.create(265, 1100, "TablaIzq").setScale(0.3).refreshBody();
-    platforms.create(570, 1180, "TablaDer").setScale(0.3).refreshBody();
-    platforms.create(265, 1300, "TablaIzq").setScale(0.3).refreshBody();
+    platforms.create(265, 1025, "TablaIzq").setScale(0.3).refreshBody();
+    platforms.create(570, 1125, "TablaDer").setScale(0.3).refreshBody();
+    platforms.create(265, 1250, "TablaIzq").setScale(0.3).refreshBody();
     platforms.create(570, 1350, "TablaDer").setScale(0.3).refreshBody();
+
+    platforms.children.iterate((plataforma) => {
+      plataforma.body.checkCollision.down = false;
+      plataforma.body.checkCollision.left = false;
+      plataforma.body.checkCollision.right = false;
+    });
+
+    var paredes = this.physics.add.staticGroup();
 
     let ParedIzq = this.add.zone(180, 920, 20, 700);
     this.physics.add.existing(ParedIzq, true);
-    platforms.add(ParedIzq);
+    paredes.add(ParedIzq);
 
     let ParedIzqHorizontal = this.add.zone(90, 560, 200, 20);
     this.physics.add.existing(ParedIzqHorizontal, true);
-    platforms.add(ParedIzqHorizontal);
+    paredes.add(ParedIzqHorizontal);
 
     let ParedDer = this.add.zone(660, 970, 20, 800);
     this.physics.add.existing(ParedDer, true);
-    platforms.add(ParedDer);
+    paredes.add(ParedDer);
 
     let ParedDerHorizontal = this.add.zone(750, 560, 200, 20);
     this.physics.add.existing(ParedDerHorizontal, true);
-    platforms.add(ParedDerHorizontal);
+    paredes.add(ParedDerHorizontal);
 
     let sueloInicio = this.add.zone(400, 1450, 800, 20);
     this.physics.add.existing(sueloInicio, true);
-    platforms.add(sueloInicio);
+    paredes.add(sueloInicio);
 
     let respawnDog = this.add.zone(15, 1400, 20, 20);
     this.physics.add.existing(respawnDog, true);
 
-    function Respawn(perrito, suelo){
-        perrito.setPosition(770, 490);
-        this.Perrito.setVelocityX(150);
+    function Respawn(perrito, suelo) {
+      perrito.setPosition(770, 490);
+      this.Perrito.setVelocityX(150);
     }
 
-    function Morder(){
+    function Morder() {
       this.physics.pause();
       this.GatoNar.setTint(0xff0000);
-      
+
       this.time.addEvent({
         delay: 3000,
         loop: false,
@@ -100,19 +111,49 @@ export default class MainScene extends Phaser.Scene {
       });
     }
 
+    function Next () {
+      this.time.addEvent({
+        delay: 1000,
+        loop: false,
+        callback: () => {
+          this.scene.start("Level2");
+        },
+      });
+    }
+       let NextLevel = this.add.zone(75, 100, 20, 20);
+    this.physics.add.existing(NextLevel, true);
+
     this.Perrito = this.physics.add.sprite(770, 490, "Perrito").setScale(0.13);
     this.Perrito.setCollideWorldBounds(true);
     this.Perrito.setVelocityX(150);
     this.Perrito.setBounce(1, 0);
     this.physics.add.collider(this.Perrito, platforms);
+    this.physics.add.collider(this.Perrito, paredes);
     this.physics.add.overlap(this.Perrito, respawnDog, Respawn, null, this);
 
-    this.GatoNar = this.physics.add.sprite(420, 100, "GatoNaranja").setScale(1.6);
+    this.GatoNar = this.physics.add
+      .sprite(420, 1300, "GatoNaranja")
+      .setScale(1.6);
     this.GatoNar.setCollideWorldBounds(true);
     this.GatoNar.setBounce(0.1);
-    this.physics.add.collider(this.GatoNar, platforms);
+    this.physics.add.collider(
+      this.GatoNar,
+      platforms,
+      null,
+      (gato, plataforma) => {
+        return (
+          gato.body.velocity.y >= 0 &&
+          gato.body.bottom <= plataforma.body.top + 20
+        );
+      },
+      this,
+    );
+    this.physics.add.collider(this.GatoNar, paredes);
     this.physics.add.collider(this.Perrito, this.GatoNar, Morder, null, this);
+    this.physics.add.overlap(this.GatoNar, NextLevel, Next, null, this);
     this.GatoNar.Score = 0;
+
+  
 
     function PuntosGato(gato, pezTocando) {
       pezTocando.disableBody(true, true);
@@ -123,11 +164,11 @@ export default class MainScene extends Phaser.Scene {
 
     var peces = this.physics.add.group();
     this.physics.add.collider(peces, platforms);
-    peces.create(265, 190, "Pez").setScale(0.07);
+    peces.create(170, 190, "Pez").setScale(0.07);
     peces.create(570, 510, "Pez").setScale(0.07);
     peces.create(265, 550, "Pez").setScale(0.07);
     peces.create(570, 900, "Pez").setScale(0.07);
-    peces.create(265, 1220, "Pez").setScale(0.07);
+    peces.create(265, 1150, "Pez").setScale(0.07);
 
     this.physics.add.overlap(this.GatoNar, peces, PuntosGato, null, this);
 

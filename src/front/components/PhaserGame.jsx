@@ -2,6 +2,9 @@ import { useEffect, useRef } from "react";
 import Phaser from "phaser";
 
 import MainScene from "../Game/scenes/MainScene";
+import Level2 from "../Game/scenes/Level2";
+import Level3 from "../Game/scenes/Level3";
+
 
 export default function PhaserGame() {
   const gameRef = useRef(null);
@@ -29,11 +32,11 @@ export default function PhaserGame() {
         default: "arcade",
         arcade: {
           gravity: { y: 350 },
-          debug: false,
+          debug: true,
         },
       },
       // Lista de escenas; aquí pasamos la clase que implementa la lógica
-      scene: [MainScene],
+      scene: [MainScene,Level2,Level3],
     };
 
     // Crear la instancia del juego con la configuración
