@@ -1,4 +1,4 @@
-import "./index.css";
+import "./footer.css";
 
 export const Footer = () => (
     <footer className="footer-callejon mt-3">
