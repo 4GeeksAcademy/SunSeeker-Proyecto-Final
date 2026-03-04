@@ -103,10 +103,10 @@ export default class MainScene extends Phaser.Scene {
       this.GatoNar.setTint(0xff0000);
 
       this.time.addEvent({
-        delay: 3000,
+        delay: 2000,
         loop: false,
         callback: () => {
-          this.scene.start("endScene");
+          this.scene.start("endScene", { score: this.GatoNar.Score });
         },
       });
     }
@@ -116,7 +116,7 @@ export default class MainScene extends Phaser.Scene {
         delay: 1000,
         loop: false,
         callback: () => {
-          this.scene.start("Level2");
+          this.scene.start("endScene", { score: this.GatoNar.Score });
         },
       });
     }
@@ -132,7 +132,7 @@ export default class MainScene extends Phaser.Scene {
     this.physics.add.overlap(this.Perrito, respawnDog, Respawn, null, this);
 
     this.GatoNar = this.physics.add
-      .sprite(420, 100, "GatoNaranja")
+      .sprite(420, 1300, "GatoNaranja")
       .setScale(1.6);
     this.GatoNar.setCollideWorldBounds(true);
     this.GatoNar.setBounce(0.1);
@@ -205,7 +205,7 @@ export default class MainScene extends Phaser.Scene {
         delay: 1500,
         loop: false,
         callback: () => {
-          this.scene.start("endScene");
+          this.scene.start("endScene", { score: this.GatoNar.Score });
         },
       });
     } else {
