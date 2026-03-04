@@ -103,7 +103,7 @@ export default class MainScene extends Phaser.Scene {
       this.GatoNar.setTint(0xff0000);
 
       this.time.addEvent({
-        delay: 3000,
+        delay: 2000,
         loop: false,
         callback: () => {
           this.scene.start("endScene", { score: this.GatoNar.Score });
@@ -116,7 +116,7 @@ export default class MainScene extends Phaser.Scene {
         delay: 1000,
         loop: false,
         callback: () => {
-          this.scene.start("Level2");
+          this.scene.start("endScene", { score: this.GatoNar.Score });
         },
       });
     }
