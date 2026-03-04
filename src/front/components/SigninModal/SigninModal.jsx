@@ -57,7 +57,7 @@ export const SigninModal = ({ show, onClose, onSwitch}) => {
         <div className="modal-overlay d-flex align-items-center justify-content-center p-3" onClick={onClose}>
             <div className="form-panel neon-pixel-border col-11 col-sm-10 col-md-8 col-lg-5 col-xl-4 p-4 position-relative" onClick={(e) => e.stopPropagation()}>
                 <button type="button" onClick={onClose} className="btn-submit-small">X</button>
-                <h2 className="text-center">SIGN IN</h2>
+                <h2 className="text-center">INGRESAR</h2>
                 <p className="form-title text-center">BIENVENIDO DE VUELTA, SUNSEEKER</p>
                 {status.msg && (
                     <div className={`pixel-alert ${status.type} mb-3`}>

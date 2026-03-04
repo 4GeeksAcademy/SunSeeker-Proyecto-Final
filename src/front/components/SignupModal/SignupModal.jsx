@@ -78,7 +78,7 @@ export const SignupModal = ({ show, onClose, onSwitch }) => {
         <div className="modal-overlay d-flex align-items-center justify-content-center p-3" onClick={onClose}>
             <div className="form-panel neon-pixel-border col-11 col-sm-10 col-md-8 col-lg-5 col-xl-4" onClick={(e) => e.stopPropagation()}>
                 <button type="button" onClick={onClose} className="btn-submit-small">X</button>
-                <h2>SIGN UP</h2>
+                <h2>REGISTRARSE</h2>
                 <p className="form-title">UNETE A LA BUSQUEDA</p>
                 {status.msg && (
                     <div className={`pixel-alert ${status.type} mb-3`}>

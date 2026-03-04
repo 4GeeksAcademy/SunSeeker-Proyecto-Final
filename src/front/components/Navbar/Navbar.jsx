@@ -28,8 +28,8 @@ export const Navbar = () => {
                     </div>
                 </Link>
                 <div className="nav-button d-flex flex-column flex-md-row gap-2" id="logged-out">
-                    <button href="#" className="btn btn-signup" onClick={() => setShowSignup(true)}>Sign Up</button>
-                    <button href="#" className="btn btn-signup" onClick={() => setShowSignin(true)}>Sign In</button>
+                    <button href="#" className="btn btn-signup" onClick={() => setShowSignup(true)}>Registrarse</button>
+                    <button href="#" className="btn btn-signup" onClick={() => setShowSignin(true)}> Ingresar  </button>
                 </div>
             </div>
             <SignupModal show={showSignup} onClose={() => setShowSignup(false)} onSwitch={openSignin}/>
