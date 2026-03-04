@@ -1,0 +1,31 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --sky-light: #8ecae6;
+  --teal: #219ebc;
+  --deep-teal: #126782;
+  --cyan: #4adfe3;
+  --navy: #023047;
+  --dark: #0d1b2a;
+  --card: #0e2a45;
+  --gold: #ffb703;
+  --amber: #fd9e02;
+  --orange: #fb8500;
+  --gold-dim: #c07d10;
+  --border: #f5a623;
+  --text: #e8d9a0;
+  --pixel: "Press Start 2P", monospace;
+}
+
+body {
+  background-image: url(../../assets/img/fondo_luz.jpg);
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: cover;
+  min-height: 100vh;
+  width: 100%;
+}
