@@ -1,51 +1,28 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
 :root {
-  --sky-light: #8ECAE6;
-  --teal: #219EBC;
+  --sky-light: #8ecae6;
+  --teal: #219ebc;
   --deep-teal: #126782;
   --cyan: #4adfe3;
   --navy: #023047;
   --dark: #0d1b2a;
   --card: #0e2a45;
-  --gold: #FFB703;
-  --amber: #FD9E02;
-  --orange: #FB8500;
+  --gold: #ffb703;
+  --amber: #fd9e02;
+  --orange: #fb8500;
   --gold-dim: #c07d10;
   --border: #f5a623;
   --text: #e8d9a0;
-  --pixel: 'Press Start 2P', monospace;
+  --pixel: "Press Start 2P", monospace;
 }
 
 .footer-callejon {
   background: #0d1b26;
   position: relative;
   overflow: hidden;
-}
-
-.callejon-pixeles {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 19px,
-      rgba(0, 0, 0, 0.2) 19px,
-      rgba(0, 0, 0, 0.2) 20px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 29px,
-      rgba(0, 0, 0, 0.15) 29px,
-      rgba(0, 0, 0, 0.15) 30px
-    );
-  background-size:
-    30px 20px,
-    30px 20px,
-    100% 20px,
-    30px 100%;
+  width: 100%;
+  min-height: 250px;
 }
 
 .callejon-glow {
@@ -61,6 +38,7 @@
     transparent 70%
   );
   pointer-events: none;
+  z-index: 2;
 }
 
 .callejon-box {
@@ -69,6 +47,7 @@
   background: #6b4c2a;
   border: 2px solid #4a3018;
   image-rendering: pixelated;
+  z-index: 5;
 }
 
 .callejon-box::after {
@@ -80,6 +59,7 @@
   height: 2px;
   background: rgba(0, 0, 0, 0.3);
 }
+
 .box-1 {
   left: 20px;
   width: 40px;
@@ -115,39 +95,62 @@
 
 .callejon-footer {
   position: relative;
-  z-index: 2;
+  z-index: 10;
   max-width: 1100px;
   margin: 0 auto;
-  padding: 40px 32px 28px;
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  gap: 40px;
+  padding: 60px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
 .callejon-marca h3 {
-  font-size: 16px;
+  font-size: 20px;
   font-family: var(--pixel);
   color: var(--gold);
-  text-shadow: 2px 2px 0 var(--orange), 0 0 20px var(--gold);
+  text-align: center;
+  text-shadow:
+    2px 2px 0 var(--orange),
+    0 0 20px var(--gold);
   margin-bottom: 12px;
   animation: glow2 2.5s infinite alternate;
 }
 
-@keyframes glow2 {
-  from {
-    text-shadow: 2px 2px 0 var(--orange), 0 0 8px var(--gold);
-  }
-
-  to {
-    text-shadow: 2px 2px 0 var(--orange), 0 0 24px var(--gold), 0 0 40px var(--amber);
-  }
-}
-
 .callejon-marca p {
-  font-size: 6px;
+  font-size: 8px;
   font-family: var(--pixel);
-  color: rgba(142, 202, 230, .5);
+  color: rgba(142, 202, 230, 0.5);
   line-height: 2;
+  text-align: center;
   letter-spacing: 1px;
 }
 
+@media (min-width: 768px) {
+  .callejon-footer {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+  .callejon-marca h3 {
+    font-size: 24px;
+    text-align: left;
+  }
+  .callejon-marca p {
+    font-size: 10px;
+    text-align: left;
+  }
+}
+
+@keyframes glow2 {
+  from {
+    text-shadow:
+      2px 2px 0 var(--orange),
+      0 0 8px var(--gold);
+  }
+  to {
+    text-shadow:
+      2px 2px 0 var(--orange),
+      0 0 24px var(--gold);
+  }
+}

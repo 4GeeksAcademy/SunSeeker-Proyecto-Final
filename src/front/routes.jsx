@@ -6,10 +6,11 @@ import {
     Route,
 } from "react-router-dom";
 import { Layout } from "./pages/Layout";
-import { Home } from "./pages/Home";
+
 import { Single } from "./pages/Single";
 import { Demo } from "./pages/Demo";
 import { Navbar } from "./components/Navbar/Navbar";
+import { Home } from "./pages/Home/Home";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
