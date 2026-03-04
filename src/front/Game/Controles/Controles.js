@@ -1,8 +1,8 @@
 
 
-export function Controles(Game){
+export function Controles(Game, cursors){
 
-     var cursors = Game.input.keyboard.createCursorKeys();
+     // var cursors = Game.input.keyboard.createCursorKeys();
 
             if (cursors.left.isDown) {
                 Game.GatoNar.setVelocityX(-160);

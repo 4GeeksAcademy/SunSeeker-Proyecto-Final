@@ -211,9 +211,11 @@ export default class MainScene extends Phaser.Scene {
     } else {
       this.time.delayedCall(1000, this.refreshTime, [], this);
     }
+
+    this.cursors = this.input.keyboard.createCursorKeys();
   }
 
   update() {
-    Controles(this);
+    Controles(this, this.cursors);
   }
 }
