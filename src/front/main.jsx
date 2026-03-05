@@ -6,21 +6,27 @@ import { router } from "./routes";  // Import the router configuration
 import { StoreProvider } from './hooks/useGlobalReducer';  // Import the StoreProvider for global state management
 import { BackendURL } from './components/BackendURL';
 
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
 const Main = () => {
+    const CLIENT_ID = '227740684290-3sgbfmusl1gj5s51fgen5c3j3moiibqb.apps.googleusercontent.com'
+
     
-    if(! import.meta.env.VITE_BACKEND_URL ||  import.meta.env.VITE_BACKEND_URL == "") return (
+    if (! import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_BACKEND_URL == "") return (
         <React.StrictMode>
-              <BackendURL/ >
+            <BackendURL />
         </React.StrictMode>
-        );
+    );
     return (
-        <React.StrictMode>  
+        <React.StrictMode>
             {/* Provide global state to all components */}
-            <StoreProvider> 
-                {/* Set up routing for the application */} 
-                <RouterProvider router={router}>
-                </RouterProvider>
-            </StoreProvider>
+            <GoogleOAuthProvider clientId={CLIENT_ID}>
+                <StoreProvider>
+                    {/* Set up routing for the application */}
+                    <RouterProvider router={router}>
+                    </RouterProvider>
+                </StoreProvider>
+            </GoogleOAuthProvider>
         </React.StrictMode>
     );
 }

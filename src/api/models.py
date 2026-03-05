@@ -2,7 +2,8 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import String, Boolean, Integer,  ForeignKey, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
-from flask_bcrypt import generate_password_hash
+from flask_bcrypt import generate_password_hash, check_password_hash
+
 
 db = SQLAlchemy()
 
@@ -14,12 +15,14 @@ class User (db.Model):
     password_hash: Mapped[str] = mapped_column(String(100), nullable=False)
     fecha_registro: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
 
-    
+    # DEBERIA SER UNA LISTA?? Mapped[list["Michi"]] = relationship("Michi", back_populates="user", cascade="all, delete-orphan")
+    michis: Mapped["Michi"] = relationship("Michi", back_populates="user", cascade="all, delete-orphan")
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password).decode('utf-8')
 
-
-    michis: Mapped["Michi"] = relationship("Michi", back_populates="user")
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
     def serialize(self):
         return {
@@ -39,9 +42,9 @@ class Michi (db.Model):
 
     user: Mapped["User"] = relationship("User", back_populates="michis")
     partidas: Mapped[list["Partida"]] = relationship(
-        "Partida", back_populates="michis")
+        "Partida", back_populates="michi", cascade="all, delete-orphan")
     michi_inventario: Mapped[list["MichiInventario"]] = relationship(
-        "MichiInventario", back_populates="michi")
+        "MichiInventario", back_populates="michi", cascade="all, delete-orphan")
 
     def serialize(self):
         return {
@@ -61,7 +64,7 @@ class Accesorios(db.Model):
     precio_pescado: Mapped[int] = mapped_column(Integer, nullable=False)
 
     michi_inventario: Mapped[list["MichiInventario"]] = relationship(
-        "MichiInventario", back_populates="accesorios")
+        "MichiInventario", back_populates="accesorios", cascade="all, delete-orphan")
 
     def serialize(self):
         return {
@@ -102,7 +105,7 @@ class Partida(db.Model):
         ForeignKey("michi.id"), nullable=False)
     score: Mapped[int] = mapped_column(Integer, nullable=False)
 
-    michis: Mapped["Michi"] = relationship("Michi", back_populates="partidas")
+    michi: Mapped["Michi"] = relationship("Michi", back_populates="partidas")
 
     def serialize(self):
         return {

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./signupModal.css";
 import { useNavigate } from "react-router-dom";
 import { signup } from "../../Service/BackEndServices";
+import { GoogleLogin } from "@react-oauth/google";
 
 export const SignupModal = ({ show, onClose }) => {
     const navigate = useNavigate();
@@ -163,6 +164,7 @@ export const SignupModal = ({ show, onClose }) => {
                     >
                         CREAR CUENTA
                     </button>
+                    <GoogleLogin onSuccess={(credentialResponse)=> {console.log(credentialResponse)}} onError={()=> console.log("login failed")}/>
                 </form>
                 <p className="card-footer-text">
                     ¿Ya tenés cuenta? <a onClick={onClose}>Iniciar sesión</a>
