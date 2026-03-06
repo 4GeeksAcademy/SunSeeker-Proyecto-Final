@@ -3,7 +3,7 @@ import "./SigninModal.css";
 import { useNavigate } from "react-router-dom";
 import { signin } from "../../Service/BackEndServices";
 
-export const SigninModal = ({ show, onClose, onSwitch}) => {
+export const SigninModal = ({ show, onClose, onSwitch, onLoginSuccess }) => {
     const [user, setUser] = useState({
         michi_name: "",
         password: ""
@@ -32,8 +32,10 @@ export const SigninModal = ({ show, onClose, onSwitch}) => {
         }
         const result = await signin(user, navigate)
         if (result && !result.error) {
+            localStorage.setItem("michi_name", user.michi_name)
             setStatus({ type: "success", msg: "Ingresando" });
             setTimeout(() => {
+                onLoginSuccess();
                 onClose();
                 navigate("/")
                 setStatus({ type: "", msg: "" })
