@@ -6,6 +6,9 @@ import Level2 from "../Game/scenes/Level2";
 import Level3 from "../Game/scenes/Level3";
 import endScene from "../Game/scenes/endScene";
 import Menu from "../Game/scenes/Menu";
+import Controles from "../Game/scenes/Controles";
+import Inventario from "../Game/scenes/Inventario";
+import Niveles from "../Game/scenes/Niveles";
 
 export default function PhaserGame() {
   const gameRef = useRef(null);
@@ -37,7 +40,7 @@ export default function PhaserGame() {
         },
       },
       // Lista de escenas; aquí pasamos la clase que implementa la lógica
-      scene: [Menu, MainScene,Level2,Level3,endScene],
+      scene: [Inventario,Menu, MainScene,Level2,Level3,endScene,Controles,Niveles],
     };
 
     // Crear la instancia del juego con la configuración

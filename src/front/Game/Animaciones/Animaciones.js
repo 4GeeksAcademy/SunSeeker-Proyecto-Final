@@ -13,11 +13,11 @@ export function Animaciones(Game){
                 repeat: -1,
             });
 
-            Game.anims.create({
-                key: 'leftPerro',
-                frames: Game.anims.generateFrameNumbers('Perrito', { start: 0, end: 1}),
-                frameRate: 10,
-                repeat: -1,
-            });
+            // Game.anims.create({
+            //     key: 'Perrito',
+            //     frames: Game.anims.generateFrameNumbers('Perrito', { start: 0, end: 1}),
+            //     frameRate: 10,
+            //     repeat: -1,
+            // });
             
 }
