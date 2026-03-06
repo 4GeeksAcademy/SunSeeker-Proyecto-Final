@@ -35,7 +35,7 @@ export const Home = () => {
     // }, [])
 
     return (
-        <div >
+        <div className=" d-flex justify-content-center align-item-center mt-5">
         <PhaserGame/>
         </div>
     );
