@@ -35,7 +35,6 @@ def signup():
         michi_name = michi_name,
         user_id=new_user.id,
         color="Naranja",
-        pescados_totales=0
     )
     db.session.add(new_michi)
     db.session.commit()
@@ -54,6 +53,15 @@ def sign_in():
     
     if user.check_password(data.get('password')):
         token = create_access_token(identity=str(user.id))        
+        cat = db.session.execute(db.select(Michi).where(Michi.user_id == user.id)).scalar_one_or_none()
+        new_inventario = MichiInventario(
+            michi_id= cat.id,
+            accesorios_id=None,
+            esta_equipado=False,
+            pescados_totales=0,
+        )
+        db.session.add(new_inventario)
+        db.session.commit()
         return jsonify({"msg": "Login succesfully", 'token': token}), 200
     return jsonify({"error": "email or password incorrect"}), 401
     
@@ -143,7 +151,6 @@ def modify_michi_aspect():
     if user:
         cat.michi_name = data.get('michi_name', cat.michi_name)
         cat.color = data.get('color', cat.color)
-        cat.pescados_totales = data.get('pescados_totales', cat.pescados_totales)
         db.session.commit()
         return jsonify(cat.serialize()), 200
     return jsonify({"error": "invalid credentials"}), 401
@@ -175,12 +182,13 @@ def get_all_inventories():
 def get_michi_inventory():
     user = db.session.get(User, int(get_jwt_identity()))
     cat = db.session.execute(db.select(Michi).where(Michi.user_id == user.id)).scalar_one_or_none()
-    inventory = db.session.execute(db.select(MichiInventario).where(MichiInventario.michi_id == cat.id)).scalar_one_or_none()
+    inventory = db.session.execute(db.select(MichiInventario).where(MichiInventario.michi_id == cat.id)).scalars().all()
 
-    if user:
-        return jsonify(inventory.serialize()), 200
-    return jsonify({"error": "invalid credentials"}), 401
+    if not user: 
+        return jsonify({"error": "invalid credentials"}), 401
+    return jsonify([e.serialize() for e in inventory]), 200
 
+# Unico uso al eliminarle el inventario a un usuario.
 @api.route('/get_inventario', methods=['POST'])
 @jwt_required()
 def create_inventory():
@@ -191,30 +199,32 @@ def create_inventory():
     if user:
         new_inventory = MichiInventario(
             michi_id= cat.id,
-            # REVISION POR LOGICA, RECIBIRLO POR EL FRONTEND O CONSEGUIR UNA MANERA DE VINCULARLO A LA TABLA ACCESORIOS.
             accesorios_id=data.get('accesorios_id'),
-            # ---------------------------------------------------------------------------------------------------------
-            esta_equipado=data.get('esta_equipado')
+            esta_equipado=data.get('esta_equipado'),
+            pescados_totales=data.get("pescados_totales")
         )
         db.session.add(new_inventory)
         db.session.commit()
         return jsonify({"msg": "inventory created"}), 201
     
-# REVISION------------------------------------------------------------
 @api.route('/get_inventario', methods=['PUT'])
 @jwt_required()
 def modify_inventory():
     data = request.get_json()
     user = db.session.get(User, int(get_jwt_identity()))
+    if not user:
+        return jsonify({"error": "invalid credentials"}), 401
+
     cat = db.session.execute(db.select(Michi).where(Michi.user_id == user.id)).scalar_one_or_none()
     inventory = db.session.execute(db.select(MichiInventario).where(MichiInventario.michi_id == cat.id)).scalar_one_or_none()
+   
+    inventory.accesorios_id = data.get('accesorios_id', inventory.accesorios_id)
+    inventory.esta_equipado = data.get('esta_equipado', inventory.esta_equipado)
+    inventory.pescados_totales = data.get("pescados_totales", inventory.pescados_totales)
+    db.session.commit()
+    return jsonify(inventory.serialize()), 200
+    
 
-    if user:
-        inventory.esta_equipado = data.get('esta_equipado', inventory.esta_equipado)
-        db.session.commit()
-        return jsonify(inventory.serialize()), 200
-    return jsonify({"error": "invalid credentials"}), 401
-# ---------------------------------------------------------------------
 @api.route('/get_inventario', methods=['DELETE'])
 @jwt_required()
 def delete_inventory():
@@ -226,7 +236,7 @@ def delete_inventory():
         db.session.delete(inventory)
         db.session.commit()
         return jsonify({"msg": "inventory deleted succesfully"}), 200
-    return jsonify({"error": "invalid crdentials"}), 401
+    return jsonify({"error": "invalid credentials"}), 401
 
 #  PARTIDAS C R U D
 
@@ -240,12 +250,16 @@ def get_all_runs():
 @jwt_required()
 def get_run():
     user = db.session.get(User, int(get_jwt_identity()))
+    if not user:
+        return jsonify({"error":"invalid credentials"}), 401
+    
+
     cat = db.session.execute(db.select(Michi).where(Michi.user_id == user.id)).scalar_one_or_none() 
     run = db.session.execute(db.select(Partida).where(Partida.michi_id == cat.id)).scalar_one_or_none()
-
-    if user:
-        return jsonify(run.serialize()), 200
-    return jsonify({"error":"invalid credentials"}), 401
+    if not run:
+        return jsonify({"error": "no run found"}), 404
+    return jsonify(run.serialize()), 200
+    
 
 @api.route('/get_partida', methods= ['POST'])
 @jwt_required()
@@ -253,9 +267,6 @@ def create_run():
     data = request.get_json()
     user = db.session.get(User, int(get_jwt_identity()))
     cat = db.session.execute(db.select(Michi).where(Michi.user_id == user.id)).scalar_one_or_none() 
-    # revision-----------------------------------------------------------------------------------------
-    run = db.session.execute(db.select(Partida).where(Partida.michi_id == cat.id)).scalar_one_or_none()
-    # -------------------------------------------------------------------------------------------------
 
     if not data.get('score'):
         return jsonify({"msg": "score is necessary"}), 400
@@ -281,7 +292,7 @@ def edit_run():
     if user:
         run.score = data.get('score', run.score)
         db.session.commit()
-        return jsonify({"msg": "score updated"}), 200
+        return jsonify({run.serialize()}), 200
     return jsonify({"error": "invalid credentials"}), 401
 
 
@@ -310,10 +321,9 @@ def get_all_accessories():
 def create_accessorie():
     data = request.get_json()
     new_accessorie = Accesorios(
-        accesorios_name= data.get("accesorio_path"),
-        # revision-----------------------------------------
+        accesorios_name= data.get("accesorios_name"),
         tipo_de_accesorios= data.get("tipo_de_accesorios"),
-        # -------------------------------------------------
+        path_accesorio= data.get("path_accesorio"),
         precio_pescado=data.get("precio_pescado")
     )
     db.session.add(new_accessorie)
@@ -325,8 +335,9 @@ def edit_accessorie(id):
     data = request.get_json()
     accessorie = db.session.get(Accesorios, id)
 
-    accessorie.accesorios_name = data.get("accesorio_path", accessorie.accesorios_name)
-    accessorie.tipo_de_accesorio = data.get("tipo_de_accesorio", accessorie.tipo_de_accesorio)
+    accessorie.path_accesorio = data.get("path_accesorio", accessorie.path_accesorio)
+    accessorie.accesorios_name = data.get("accesorios_name", accessorie.accesorios_name)
+    accessorie.tipo_de_accesorios = data.get("tipo_de_accesorios", accessorie.tipo_de_accesorios)
     accessorie.precio_pescado = data.get("precio_pescado", accessorie.precio_pescado)
     db.session.commit()
     return jsonify(accessorie.serialize())

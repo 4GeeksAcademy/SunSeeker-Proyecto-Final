@@ -2,7 +2,14 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import String, Boolean, Integer,  ForeignKey, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
+from sqlalchemy.dialects.postgresql import ENUM as pgEnum
 from flask_bcrypt import generate_password_hash, check_password_hash
+from enum import Enum
+
+class accessories_type(Enum):
+    cabeza = 'cabeza'
+    gafas = 'gafas'
+    color = 'color'
 
 
 db = SQLAlchemy()
@@ -15,7 +22,6 @@ class User (db.Model):
     password_hash: Mapped[str] = mapped_column(String(100), nullable=False)
     fecha_registro: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
 
-    # DEBERIA SER UNA LISTA?? Mapped[list["Michi"]] = relationship("Michi", back_populates="user", cascade="all, delete-orphan")
     michis: Mapped["Michi"] = relationship("Michi", back_populates="user", cascade="all, delete-orphan")
 
     def set_password(self, password):
@@ -38,13 +44,12 @@ class Michi (db.Model):
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)
     michi_name: Mapped[str] = mapped_column(String(50), nullable=False)
     color: Mapped[str] = mapped_column(String(20))
-    pescados_totales: Mapped[int] = mapped_column(Integer, default=0)
 
     user: Mapped["User"] = relationship("User", back_populates="michis")
     partidas: Mapped[list["Partida"]] = relationship(
         "Partida", back_populates="michi", cascade="all, delete-orphan")
     michi_inventario: Mapped[list["MichiInventario"]] = relationship(
-        "MichiInventario", back_populates="michi", cascade="all, delete-orphan")
+        "MichiInventario", back_populates="michi", cascade="all, delete-orphan", uselist=False)
 
     def serialize(self):
         return {
@@ -52,17 +57,28 @@ class Michi (db.Model):
             "user_id": self.user_id,
             "michi_name": self.michi_name,
             "color": self.color,
-            "pescados_totales": self.pescados_totales
         }
+    
+    def inventario_serialize(self):
+        return{
+         "inventario": {
+            "pescados": self.pescados_totales,
+            "accesorios": [
+                item.accesorios.serialize()
+                for item in self.michi_inventario
+            ]
+         }
+         }
 
+        
 
 class Accesorios(db.Model):
     __tablename__ = "accesorios"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     accesorios_name: Mapped[str] = mapped_column(String(50), nullable=False)
-    tipo_de_accesorios: Mapped[str] = mapped_column(String(30))
+    tipo_de_accesorios: Mapped[str] = mapped_column(pgEnum(accessories_type, name="accessories_type"), nullable=False)
     precio_pescado: Mapped[int] = mapped_column(Integer, nullable=False)
-
+    path_accesorio: Mapped[str] = mapped_column(String(250), nullable=False)
     michi_inventario: Mapped[list["MichiInventario"]] = relationship(
         "MichiInventario", back_populates="accesorios", cascade="all, delete-orphan")
 
@@ -70,7 +86,8 @@ class Accesorios(db.Model):
         return {
             "id": self.id,
             "accesorios_name": self.accesorios_name,
-            "tipo_de_accesorios": self.tipo_de_accesorios,
+            "tipo_de_accesorios": self.tipo_de_accesorios.value,
+            "path_accesorio": self.path_accesorio,
             "precio_pescado": self.precio_pescado
         }
 
@@ -78,11 +95,10 @@ class Accesorios(db.Model):
 class MichiInventario (db.Model):
     __tablename__ = "michi_inventario"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    michi_id: Mapped[int] = mapped_column(
-        ForeignKey("michi.id"), nullable=False)
-    accesorios_id: Mapped[int] = mapped_column(
-        ForeignKey("accesorios.id"), nullable=False)
+    michi_id: Mapped[int] = mapped_column(ForeignKey("michi.id"), nullable=False, unique=True)
+    accesorios_id: Mapped[list[int]] = mapped_column(ForeignKey("accesorios.id"), nullable=True)
     esta_equipado: Mapped[bool] = mapped_column(Boolean, default=False)
+    pescados_totales: Mapped[int] = mapped_column(Integer, default=0)
 
     michi: Mapped["Michi"] = relationship(
         "Michi", back_populates="michi_inventario")
@@ -93,16 +109,16 @@ class MichiInventario (db.Model):
         return {
             "id": self.id,
             "michi_id": self.michi_id,
-            "accesorios_id": self.accesorios_id,
+            "pescados_totales": self.pescados_totales,
+            "accesorios_id": [a.serialize() for a in self.accesorios_id],                  #habra que hacer un list comprenhension para cada uno de los id de los accesorios
             "esta_equipado": self.esta_equipado
         }
-
+# Habra que hacer un metodo para mostrar todos los accesorios?
 
 class Partida(db.Model):
     __tablename__ = "partida"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    michi_id: Mapped[int] = mapped_column(
-        ForeignKey("michi.id"), nullable=False)
+    michi_id: Mapped[int] = mapped_column(ForeignKey("michi.id"), nullable=False)
     score: Mapped[int] = mapped_column(Integer, nullable=False)
 
     michi: Mapped["Michi"] = relationship("Michi", back_populates="partidas")
