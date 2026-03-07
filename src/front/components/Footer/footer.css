@@ -18,11 +18,21 @@
 }
 
 .footer-callejon {
-  background: #0d1b26;
+  background: var(--navy);
   position: relative;
   overflow: hidden;
   width: 100%;
-  min-height: 250px;
+  min-height: 80px;
+  height: auto;
+  justify-content: center;
+  align-items: center;
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0, 0, 0, 0.12) 3px,
+    rgba(0, 0, 0, 0.12) 4px
+  );
 }
 
 .callejon-glow {
@@ -94,51 +104,65 @@
 }
 
 .callejon-footer {
-  position: relative;
-  z-index: 10;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 60px 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between; 
+  align-items: center;
+  padding: 8px 30px; 
+  height: 20px; 
+  width: 80%;
+  margin: 0;
+}
+
+.callejon-marca {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 2px;
 }
 
 .callejon-marca h3 {
-  font-size: 20px;
+  font-size: 10px;
   font-family: var(--pixel);
   color: var(--gold);
   text-align: center;
+  margin-bottom: 0;
   text-shadow:
     2px 2px 0 var(--orange),
     0 0 20px var(--gold);
-  margin-bottom: 12px;
   animation: glow2 2.5s infinite alternate;
 }
 
 .callejon-marca p {
-  font-size: 8px;
+  font-size: 9px;
   font-family: var(--pixel);
   color: rgba(142, 202, 230, 0.5);
   line-height: 2;
   text-align: center;
   letter-spacing: 1px;
+  margin-bottom: 0;
+  white-space: nowrap;
 }
+
 
 @media (min-width: 768px) {
   .callejon-footer {
-    flex-direction: row;
-    justify-content: space-between;
-    text-align: left;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    height: auto;
   }
   .callejon-marca h3 {
-    font-size: 24px;
-    text-align: left;
+    font-size: 19px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
   }
   .callejon-marca p {
-    font-size: 10px;
-    text-align: left;
+    font-size: 8px;
+    text-align:center;
+    white-space: normal;
   }
 }
 
