@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import "./SigninModal.css";
 import { useNavigate } from "react-router-dom";
 import { signin } from "../../Service/BackEndServices";
+import useGlobalReducer from "../../hooks/useGlobalReducer";
 
 export const SigninModal = ({ show, onClose, onSwitch, onLoginSuccess }) => {
+    const {dispatch} = useGlobalReducer();
     const [user, setUser] = useState({
         michi_name: "",
         password: ""
@@ -33,6 +35,10 @@ export const SigninModal = ({ show, onClose, onSwitch, onLoginSuccess }) => {
         const result = await signin(user, navigate)
         if (result && !result.error) {
             localStorage.setItem("michi_name", user.michi_name)
+            dispatch({
+                type: "login_user",
+                payload: user.michi_name
+            })
             setStatus({ type: "success", msg: "Ingresando" });
             setTimeout(() => {
                 onLoginSuccess();

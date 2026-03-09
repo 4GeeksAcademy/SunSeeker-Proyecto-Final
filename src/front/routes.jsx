@@ -12,6 +12,9 @@ import { Demo } from "./pages/Demo";
 import { Navbar } from "./components/Navbar/Navbar";
 import { Home } from "./pages/Home/Home";
 import { Ranking } from "./pages/Ranking/Ranking";
+import PhaserGame from "./components/PhaserGame";
+import { Game } from "./Game/Game";
+import { RouteProtect } from "./Game/RouteProtect";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -30,6 +33,7 @@ export const router = createBrowserRouter(
         <Route path="/demo" element={<Demo />} />
         <Route path="/" element={<Navbar />} />
         <Route path="/ranking" element={<Ranking />} />
+        <Route path="/game" element={<RouteProtect> <Game/> </RouteProtect>}/>
       </Route>
     )
 );
