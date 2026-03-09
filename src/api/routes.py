@@ -35,6 +35,9 @@ def signup():
         michi_name = michi_name,
         user_id=new_user.id,
         color="Naranja",
+        accesorios_id=None,
+        esta_equipado=False,
+        pescados_totales=0,
     )
     db.session.add(new_michi)
     db.session.commit()
@@ -53,14 +56,6 @@ def sign_in():
     
     if user.check_password(data.get('password')):
         token = create_access_token(identity=str(user.id))        
-        cat = db.session.execute(db.select(Michi).where(Michi.user_id == user.id)).scalar_one_or_none()
-        new_inventario = MichiInventario(
-            michi_id= cat.id,
-            accesorios_id=None,
-            esta_equipado=False,
-            pescados_totales=0,
-        )
-        db.session.add(new_inventario)
         db.session.commit()
         return jsonify({"msg": "Login succesfully", 'token': token}), 200
     return jsonify({"error": "email or password incorrect"}), 401

@@ -62,7 +62,7 @@ class Michi (db.Model):
     def inventario_serialize(self):
         return{
          "inventario": {
-            "pescados": self.pescados_totales,
+            "pescados": self.michi_inventario.pescados_totales,
             "accesorios": [
                 item.accesorios.serialize()
                 for item in self.michi_inventario
@@ -127,5 +127,8 @@ class Partida(db.Model):
         return {
             "id": self.id,
             "michi_id": self.michi_id,
-            "score": self.score
+            "score": self.score,
+            "michi_name": self.michi.michi_name
         }
+    
+    

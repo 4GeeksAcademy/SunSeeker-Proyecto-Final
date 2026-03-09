@@ -28,6 +28,6 @@ export const JamendoCall = async (dispatch)=>{
   dispatch({type: 'api_call', payload: data.results})
 };
 
-export const SendScore = async () =>{
-  const response = await fetch ( `${import.meta.env.VITE_BACKEND_URL}/api/signup`,)
-}
+// export const SendScore = async () =>{
+//   const response = await fetch ( `${import.meta.env.VITE_BACKEND_URL}/api/signup`,)
+// }
