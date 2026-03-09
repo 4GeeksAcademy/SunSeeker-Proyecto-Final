@@ -1,11 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./navbar.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SignupModal } from "../SignupModal/SignupModal";
 import { SigninModal } from "../SigninModal/SigninModal";
+import useGlobalReducer from "../../hooks/useGlobalReducer";
 
 
 export const Navbar = () => {
+    const { store, dispatch } = useGlobalReducer();
+    const navigate = useNavigate();
     const [showSignup, setShowSignup] = useState(false);
     const [showSignin, setShowSignin] = useState(false);
 
@@ -19,17 +22,34 @@ export const Navbar = () => {
         setShowSignin(true);
     }
 
-    const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"))
-    const michiName = localStorage.getItem("michi_name");
+    const isLoggedIn = !!store.user;
+    const michiName = store.user;
     const handleLoginSuccess = () => {
-        setIsLoggedIn(true);
         setShowSignin(false);
+        navigate("/")
     }
+
     const handleLogout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("michi_name");
-        setIsLoggedIn(false);
+        dispatch({
+            type: "logout_user"
+        });
+        navigate("/")
     }
+    useEffect(() => {
+        const handleStorageChange = () => {
+            const token = localStorage.getItem("token")
+            if (!token && store.user) {
+                dispatch({ type: "logout_user" });
+                navigate("/")
+            }
+        };
+        window.addEventListener("storage", handleStorageChange);
+        return() =>{
+            window.removeEventListener("storage", handleStorageChange)
+        };
+    }, [store.user, dispatch, navigate])
     return (
         <nav>
             <div className="nav-home d-flex justify-content-between align-items-center container-fluid">
