@@ -110,10 +110,10 @@ class MichiInventario (db.Model):
             "id": self.id,
             "michi_id": self.michi_id,
             "pescados_totales": self.pescados_totales,
-            "accesorios_id": [a.serialize() for a in self.accesorios_id],                  #habra que hacer un list comprenhension para cada uno de los id de los accesorios
+            "accesorios_id": [a.serialize() for a in self.accesorios.accesorios_id],                  
             "esta_equipado": self.esta_equipado
         }
-# Habra que hacer un metodo para mostrar todos los accesorios?
+
 
 class Partida(db.Model):
     __tablename__ = "partida"
@@ -128,7 +128,8 @@ class Partida(db.Model):
             "id": self.id,
             "michi_id": self.michi_id,
             "score": self.score,
-            "michi_name": self.michi.michi_name
+            "michi_name": self.michi.michi_name,
+            "color" : self.michi.color
         }
     
     
