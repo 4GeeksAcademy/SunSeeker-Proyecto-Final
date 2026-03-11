@@ -35,10 +35,7 @@ def signup():
     new_michi = Michi(
         michi_name = michi_name,
         user_id=new_user.id,
-        color="Naranja",
-        accesorios_id=None,
-        esta_equipado=False,
-        pescados_totales=0,
+        color="Naranja"
     )
     db.session.add(new_michi)
     db.session.commit()

@@ -67,8 +67,9 @@ export const Navbar = () => {
                                 <span className="flecha-pixel">▼</span>
                             </div>
                             <ul className="michi-dropdown-menu">
-                                <li><Link to="/demo">Accesorios</Link></li>
+                                <li><Link to="/accesorios">Accesorios</Link></li>
                                 <li><Link to="/ranking">Ranking</Link></li>
+                                <li className="michi-name-display"><Link to="/game"><i className="fa-solid fa-cat"></i> JUGAR</Link></li>
                                 <li onClick={handleLogout} className="logout-btn">Logout</li>
                             </ul>
                         </div>
