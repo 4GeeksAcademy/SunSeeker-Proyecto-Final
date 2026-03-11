@@ -17,6 +17,7 @@ export default class Menu extends Phaser.Scene {
       frameWidth: 48,
       frameHeight: 31,
     });
+    
   }
 
   create() {

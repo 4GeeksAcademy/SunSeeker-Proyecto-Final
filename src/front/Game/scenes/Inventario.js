@@ -9,11 +9,13 @@ preload() {
     this.load.baseURL = "./";
     this.load.image("fondoLuz", "img/fondoLuz.jpg");
     this.load.image("fondoAmarillo", "img/VacioSF.png");
+    this.load.image("FlechaAtras", "img/FlechaAtras.png");
 
     this.load.spritesheet("GatoNaranja", "img/gatoNaranjaFinal.png", {
       frameWidth: 48,
       frameHeight: 31,
     });
+    
   }
 
   create() {
@@ -21,6 +23,9 @@ preload() {
     Animaciones(this);
 
     this.add.image(400, 330, "fondoLuz").setScale(0.8);
+
+    //Flecha Volver
+    this.add.image(100, 80, "FlechaAtras").setScale(0.16);
 
     //fondos de Gato
     this.add.image(220, 200, "fondoAmarillo").setScale(0.6);
@@ -33,6 +38,8 @@ preload() {
     this.Gato1 = this.add.sprite(220, 200, "GatoNaranja")
       .setScale(1.6);
     this.Gato1.anims.play("left", true);
+
+   
     
 
     var paredes = this.physics.add.staticGroup();
@@ -61,6 +68,13 @@ preload() {
     this.GatoNar.setFlipX(false);
     this.GatoNar.anims.play("left", true);
     this.physics.add.collider(GatoSentado, this.GatoNar, Sentar, null, this);
+
+    /// Flecha Volver
+    const Volver = this.add.zone(75, 56, 50, 48);
+    Volver.setOrigin(0);
+    Volver.setInteractive();
+    Volver.once("pointerdown", () => this.scene.start("Menu"));
+    // this.add.graphics().lineStyle(2, 0xff0000).strokeRectShape(Volver);
 
     
 

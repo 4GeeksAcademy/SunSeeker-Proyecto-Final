@@ -29,6 +29,8 @@ export default class MainScene extends Phaser.Scene {
       frameWidth: 525,
       frameHeight: 400,
     });
+    
+
   }
 
   create() {
@@ -131,7 +133,7 @@ export default class MainScene extends Phaser.Scene {
     this.physics.add.overlap(this.Perrito, respawnDog, Respawn, null, this);
 
     this.GatoNar = this.physics.add
-      .sprite(420, 1300, "GatoNaranja")
+      .sprite(420, 1300, "Gatonaranja")
       .setScale(1.6);
     this.GatoNar.setCollideWorldBounds(true);
     this.GatoNar.setBounce(0.1);

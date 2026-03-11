@@ -8,6 +8,7 @@ export default class Controles extends Phaser.Scene {
 preload() {
     this.load.baseURL = "./";
     this.load.image("fondoLuz", "img/fondoLuz.jpg");
+    this.load.image("FlechaAtras", "img/FlechaAtras.png");
 
     this.load.spritesheet("GatoNaranja", "img/gatoNaranjaFinal.png", {
       frameWidth: 48,
@@ -17,6 +18,9 @@ preload() {
 
   create() {
     this.add.image(400, 330, "fondoLuz").setScale(0.8);
+
+    //Flecha Volver
+    this.add.image(100, 80, "FlechaAtras").setScale(0.16);
 
     var paredes = this.physics.add.staticGroup();
 
@@ -45,6 +49,13 @@ preload() {
     this.GatoNar.setFlipX(false);
     this.GatoNar.anims.play("left", true);
     this.physics.add.collider(GatoSentado, this.GatoNar, Sentar, null, this);
+
+    //Flecha Volver
+    const Volver = this.add.zone(75, 56, 50, 48);
+    Volver.setOrigin(0);
+    Volver.setInteractive();
+    Volver.once("pointerdown", () => this.scene.start("Menu"));
+    // this.add.graphics().lineStyle(2, 0xff0000).strokeRectShape(Volver);
   }
 
 update() {}

@@ -3,7 +3,10 @@ export default class Level2 extends Phaser.Scene {
     super("Level2");
   }
 
-preload() {}
+preload() {
+  console.log('estas en el Level2');
+  
+}
 
 create() {}
 
