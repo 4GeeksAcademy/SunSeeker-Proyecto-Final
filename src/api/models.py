@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import String, Boolean, Integer,  ForeignKey, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
-from flask_bcrypt import generate_password_hash
+from flask_bcrypt import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
@@ -10,16 +10,19 @@ db = SQLAlchemy()
 class User (db.Model):
     __tablename__ = "user"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
+    email: Mapped[str] = mapped_column(
+        String(100), unique=True, nullable=False)
     password_hash: Mapped[str] = mapped_column(String(100), nullable=False)
-    fecha_registro: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
+    fecha_registro: Mapped[datetime] = mapped_column(
+        DateTime, default=datetime.now)
 
-    
+    michis: Mapped["Michi"] = relationship("Michi", back_populates="user")
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password).decode('utf-8')
 
-
-    michis: Mapped["Michi"] = relationship("Michi", back_populates="user")
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
     def serialize(self):
         return {
@@ -33,7 +36,7 @@ class Michi (db.Model):
     __tablename__ = "michi"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)
-    michi_name: Mapped[str] = mapped_column(String(50), nullable=False)
+    michi_name: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
     color: Mapped[str] = mapped_column(String(20))
     pescados_totales: Mapped[int] = mapped_column(Integer, default=0)
 
