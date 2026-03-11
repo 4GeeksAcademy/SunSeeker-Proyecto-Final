@@ -18,9 +18,11 @@ db = SQLAlchemy()
 class User (db.Model):
     __tablename__ = "user"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
+    email: Mapped[str] = mapped_column(
+        String(100), unique=True, nullable=False)
     password_hash: Mapped[str] = mapped_column(String(100), nullable=False)
-    fecha_registro: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
+    fecha_registro: Mapped[datetime] = mapped_column(
+        DateTime, default=datetime.now)
 
     michis: Mapped["Michi"] = relationship("Michi", back_populates="user", cascade="all, delete-orphan")
 
@@ -42,7 +44,7 @@ class Michi (db.Model):
     __tablename__ = "michi"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)
-    michi_name: Mapped[str] = mapped_column(String(50), nullable=False)
+    michi_name: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
     color: Mapped[str] = mapped_column(String(20))
 
     user: Mapped["User"] = relationship("User", back_populates="michis")

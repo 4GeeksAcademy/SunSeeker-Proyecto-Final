@@ -4,6 +4,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User, Michi, Partida, Accesorios, MichiInventario
 from api.utils import generate_sitemap, APIException
+from sqlalchemy import select
 from flask_cors import CORS
 from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity
 
@@ -44,22 +45,23 @@ def signup():
     return jsonify ({"msg": "Usuario creado correctamente!"}), 201
 
 @api.route('/signin', methods=['POST'])
-def sign_in():
+def signin():
     data = request.get_json()
-    user = db.session.execute(db.select(User).where(User.email == data.get('email'))).scalar_one_or_none()
+    michi_name = data.get("michi_name")
+    password = data.get("password")
+    if not all([michi_name, password]):
+        return jsonify({"error": "Todo los campos son requeridos"}), 400
+    michi = db.session.execute(select(Michi).where(
+        Michi.michi_name == michi_name)).scalar_one_or_none()
+    if michi is None:
+        return jsonify({"msg": "Contraseña o Michi_Name incorrectos"}), 400
+    user = michi.user
+    if user.check_password(password):
+        access_token = create_access_token(identity=str(user.id))
+        return jsonify({"msg": "Inicio de sesión exitosa", "token": access_token}), 200
+    else:
+        return jsonify({"msg": "Contraseña o Michi_Name incorrectos"}), 400
 
-    if user is None:
-        return jsonify({"msg": "User not found"}), 400
-    
-    if not data.get('email') or not data.get('password'):
-        return jsonify({"error": "email and password required"})
-    
-    if user.check_password(data.get('password')):
-        token = create_access_token(identity=str(user.id))        
-        db.session.commit()
-        return jsonify({"msg": "Login succesfully", 'token': token}), 200
-    return jsonify({"error": "email or password incorrect"}), 401
-    
 # USUARIO C R U D por renombrar las rutas
 # VERIFICAR LOS RETURN si se necesita que se devuelva la serializacioin en alguno.
 
@@ -344,3 +346,4 @@ def delete_accessorie(id):
     db.session.delete(accessorie)
     db.session.commit()
     return jsonify({"msg": "accessorie deleted successfully"}), 200
+
