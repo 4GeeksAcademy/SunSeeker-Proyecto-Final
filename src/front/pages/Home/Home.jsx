@@ -4,7 +4,8 @@ import PhaserGame from "../../components/PhaserGame.jsx";
 import "./Home.css";
 import { ModalHome } from "./ModalHome.jsx";
 import { useNavigate } from "react-router-dom";
-import { jamendocall } from "./service/BackEndServices.js"
+import { jamendoCall } from "../../Service/BackEndServices.js";
+
 
 export const Home = () => {
     const {store , dispatch} = useGlobalReducer();
@@ -19,7 +20,7 @@ export const Home = () => {
     };
 
     useEffect(()=>{
-		jamendocall()
+		jamendoCall(dispatch)
 	},[])
 
     return (
