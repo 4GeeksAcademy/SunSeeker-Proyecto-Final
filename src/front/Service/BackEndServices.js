@@ -35,3 +35,12 @@ export const signin = async (user) => {
   localStorage.setItem("token", data.token);
   return { success: true, data };
 };
+
+export const queryRanking = async () => {
+  const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/signin`);
+  const data = await response.json();
+  if (!response.ok){
+    throw new Error(data.error)
+  };
+  return data;
+};
