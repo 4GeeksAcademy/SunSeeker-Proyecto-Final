@@ -2,7 +2,6 @@ import Phaser from "phaser";
 import { Controles } from "../Controles/Controles";
 import { Animaciones } from "../Animaciones/Animaciones";
 
-
 export default class MainScene extends Phaser.Scene {
   constructor() {
     super("MainScene");
@@ -25,11 +24,13 @@ export default class MainScene extends Phaser.Scene {
     this.load.spritesheet("GatoNaranja", "img/gatoNaranjaFinal.png", {
       frameWidth: 48,
       frameHeight: 31,
-    });
+    })
     this.load.spritesheet("Perrito", "img/perritoDef.png", {
       frameWidth: 525,
       frameHeight: 400,
     });
+    
+
   }
 
   create() {
@@ -111,7 +112,7 @@ export default class MainScene extends Phaser.Scene {
       });
     }
 
-    function Next () {
+    function Next() {
       this.time.addEvent({
         delay: 1000,
         loop: false,
@@ -120,7 +121,7 @@ export default class MainScene extends Phaser.Scene {
         },
       });
     }
-       let NextLevel = this.add.zone(75, 100, 20, 20);
+    let NextLevel = this.add.zone(75, 100, 20, 20);
     this.physics.add.existing(NextLevel, true);
 
     this.Perrito = this.physics.add.sprite(770, 490, "Perrito").setScale(0.13);
@@ -132,7 +133,7 @@ export default class MainScene extends Phaser.Scene {
     this.physics.add.overlap(this.Perrito, respawnDog, Respawn, null, this);
 
     this.GatoNar = this.physics.add
-      .sprite(420, 1300, "GatoNaranja")
+      .sprite(420, 1300, "Gatonaranja")
       .setScale(1.6);
     this.GatoNar.setCollideWorldBounds(true);
     this.GatoNar.setBounce(0.1);
@@ -152,8 +153,6 @@ export default class MainScene extends Phaser.Scene {
     this.physics.add.collider(this.Perrito, this.GatoNar, Morder, null, this);
     this.physics.add.overlap(this.GatoNar, NextLevel, Next, null, this);
     this.GatoNar.Score = 0;
-
-  
 
     function PuntosGato(gato, pezTocando) {
       pezTocando.disableBody(true, true);
@@ -192,6 +191,8 @@ export default class MainScene extends Phaser.Scene {
       fill: "#000",
     });
     this.ScoreText.setScrollFactor(0);
+
+    // this.cursors = this.input.keyboard.createCursorKeys();
   }
 
   refreshTime() {
@@ -214,6 +215,6 @@ export default class MainScene extends Phaser.Scene {
   }
 
   update() {
-    Controles(this);
-  }
+    Controles(this,this.cursors ,this.perrito)
+}
 }

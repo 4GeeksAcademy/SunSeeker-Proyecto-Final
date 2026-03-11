@@ -23,7 +23,7 @@ export function Controles(Game){
             }
               if (Game.Perrito.body.velocity.x < 0) {
                 Game.Perrito.setFlipX(false); 
-                Game.Perrito.anims.play('leftPerro', true)
+                Game.Perrito.anims.play('Perrito', true)
              } else if (Game.Perrito.body.velocity.x > 0) {
                 Game.Perrito.setFlipX(true); 
             }

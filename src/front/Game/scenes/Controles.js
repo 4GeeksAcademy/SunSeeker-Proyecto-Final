@@ -1,33 +1,26 @@
 import { Animaciones } from "../Animaciones/Animaciones";
 
-export default class endScene extends Phaser.Scene {
+export default class Controles extends Phaser.Scene {
   constructor() {
-    super("endScene");
+    super("Controles");
   }
 
-  init(data) {
-    this.PuntosObtenidos = data.score || 0;
-  }
-
-  preload() {
+preload() {
     this.load.baseURL = "./";
     this.load.image("fondoLuz", "img/fondoLuz.jpg");
+    this.load.image("FlechaAtras", "img/FlechaAtras.png");
 
     this.load.spritesheet("GatoNaranja", "img/gatoNaranjaFinal.png", {
       frameWidth: 48,
       frameHeight: 31,
     });
-    
   }
 
   create() {
     this.add.image(400, 330, "fondoLuz").setScale(0.8);
-    this.add.text(
-      100,
-      150,
-      "Tu Gato ha hecho " + this.PuntosObtenidos + " puntos",
-      { fontSize: "32px", fill: "#fff" },
-    );
+
+    //Flecha Volver
+    this.add.image(100, 80, "FlechaAtras").setScale(0.16);
 
     var paredes = this.physics.add.staticGroup();
 
@@ -56,7 +49,16 @@ export default class endScene extends Phaser.Scene {
     this.GatoNar.setFlipX(false);
     this.GatoNar.anims.play("left", true);
     this.physics.add.collider(GatoSentado, this.GatoNar, Sentar, null, this);
+
+    //Flecha Volver
+    const Volver = this.add.zone(75, 56, 50, 48);
+    Volver.setOrigin(0);
+    Volver.setInteractive();
+    Volver.once("pointerdown", () => this.scene.start("Menu"));
+    // this.add.graphics().lineStyle(2, 0xff0000).strokeRectShape(Volver);
   }
 
-  update() {}
+update() {}
+
+
 }
