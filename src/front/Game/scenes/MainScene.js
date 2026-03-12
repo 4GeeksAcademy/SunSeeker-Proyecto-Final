@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { Controles } from "../Controles/Controles";
 import { Animaciones } from "../Animaciones/Animaciones";
+import { CommunicatorMusic } from "../CommunicatorMusic";
 
 export default class MainScene extends Phaser.Scene {
   constructor() {
@@ -34,6 +35,14 @@ export default class MainScene extends Phaser.Scene {
   }
 
   create() {
+    CommunicatorMusic.on("change-music-state" , (isPlaying) => {
+      if (isPlaying){
+        this.sound.resumeAll();
+      } else {
+        this.sound.pauseAll();
+      }
+    });
+    
     this.GatoNar = "";
     this.Perrito = "";
 
