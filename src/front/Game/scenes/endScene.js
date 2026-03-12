@@ -1,5 +1,10 @@
 import { Animaciones } from "../Animaciones/Animaciones";
 
+export const obtenerNombreDelGato = () => {
+  const nombreGuardado = localStorage.getItem("michi_name");
+  return nombreGuardado ? nombreGuardado : "Invitado";
+};
+
 export default class endScene extends Phaser.Scene {
   constructor() {
     super("endScene");
@@ -17,17 +22,17 @@ export default class endScene extends Phaser.Scene {
       frameWidth: 48,
       frameHeight: 31,
     });
-    
   }
 
   create() {
+    //Nombre del jugador traido del localstore
+    const nombreDelJugador = obtenerNombreDelGato();
+
     this.add.image(400, 330, "fondoLuz").setScale(0.8);
-    this.add.text(
-      100,
-      150,
-      "Tu Gato ha hecho " + this.PuntosObtenidos + " puntos",
-      { fontSize: "32px", fill: "#fff" },
-    );
+    this.add.text(100, 150, nombreDelJugador + ' consigió ' + this.PuntosObtenidos + " puntos", {
+      fontSize: "32px",
+      fill: "#fff",
+    });
 
     var paredes = this.physics.add.staticGroup();
 
