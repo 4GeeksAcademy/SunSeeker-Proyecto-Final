@@ -2,12 +2,18 @@ import Phaser from "phaser";
 import { Controles } from "../Controles/Controles";
 import { Animaciones } from "../Animaciones/Animaciones";
 
+export const obtenerNombreDelGato = () => {
+  const nombreGuardado = localStorage.getItem("michi_name");
+  return nombreGuardado ? nombreGuardado : "Invitado";
+};
+
 export default class MainScene extends Phaser.Scene {
   constructor() {
     super("MainScene");
   }
 
   ScoreText = "";
+  
 
   preload() {
     this.load.baseURL = "./";
@@ -24,18 +30,19 @@ export default class MainScene extends Phaser.Scene {
     this.load.spritesheet("GatoNaranja", "img/gatoNaranjaFinal.png", {
       frameWidth: 48,
       frameHeight: 31,
-    })
+    });
     this.load.spritesheet("Perrito", "img/perritoDef.png", {
       frameWidth: 525,
       frameHeight: 400,
     });
-    
-
   }
 
   create() {
     this.GatoNar = "";
     this.Perrito = "";
+
+    //Nombre del jugador traido del localstore
+    const nombreDelJugador = obtenerNombreDelGato();
 
     // this.add.image(400, 330, 'fondo').setScale(0.8);
     this.add.image(400, 760, "fondoLargo").setScale(1.1);
@@ -59,7 +66,7 @@ export default class MainScene extends Phaser.Scene {
     platforms.create(570, 980, "TablaDer").setScale(0.3).refreshBody();
 
     platforms.create(265, 1025, "TablaIzq").setScale(0.3).refreshBody();
-    platforms.create(570, 1125, "TablaDer").setScale(0.3).refreshBody();
+    platforms.create(570, 1140, "TablaDer").setScale(0.3).refreshBody();
     platforms.create(265, 1250, "TablaIzq").setScale(0.3).refreshBody();
     platforms.create(570, 1350, "TablaDer").setScale(0.3).refreshBody();
 
@@ -215,6 +222,6 @@ export default class MainScene extends Phaser.Scene {
   }
 
   update() {
-    Controles(this,this.cursors ,this.perrito)
-}
+    Controles(this, this.cursors, this.perrito);
+  }
 }
