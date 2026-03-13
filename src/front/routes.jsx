@@ -15,6 +15,7 @@ import { Ranking } from "./pages/Ranking/Ranking";
 import PhaserGame from "./components/PhaserGame";
 import { Game } from "./Game/Game";
 import { RouteProtect } from "./Game/RouteProtect";
+import { Accesorios } from "./pages/Accesorios/Accesorios";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -32,8 +33,9 @@ export const router = createBrowserRouter(
         <Route path="/single/:theId" element={ <Single />} />  {/* Dynamic route for single items */}
         <Route path="/demo" element={<Demo />} />
         <Route path="/" element={<Navbar />} />
-        <Route path="/ranking" element={<Ranking />} />
+        <Route path="/ranking" element={<RouteProtect> <Ranking /> </RouteProtect>} />
         <Route path="/game" element={<RouteProtect> <Game/> </RouteProtect>}/>
+        <Route path="/accesorios" element={<RouteProtect> <Accesorios /> </RouteProtect>} />
       </Route>
     )
 );

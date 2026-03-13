@@ -1,0 +1,149 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+:root {
+  --sky-light: #8ecae6;
+  --teal: #219ebc;
+  --deep-teal: #126782;
+  --cyan: #4adfe3;
+  --navy: #023047;
+  --dark: #0d1b2a;
+  --card: #0e2a45;
+  --gold: #ffb703;
+  --amber: #fd9e02;
+  --orange: #fb8500;
+  --gold-dim: #c07d10;
+  --border: #f5a623;
+  --text: #e8d9a0;
+  --pixel: "Press Start 2P", monospace;
+}
+
+.game-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #0a192f;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.music-container {
+  position: absolute;
+  left: 100px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+}
+
+.pixel-reproductor {
+  background-color: var(--dark);
+  padding: 15px;
+  border: 3px solid var(--border);
+  box-shadow: 6px 6px 0px var(--dark);
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.nombre-music {
+  font-family: var(--pixel);
+  color: var(--gold);
+  font-size: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pixel-buttons-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--sky-light);
+  font-family: var(--pixel);
+}
+
+.fa-solid {
+  font-size: 20px;
+}
+
+.pixel-play-circulo {
+  width: 55px;
+  height: 55px;
+  background-color: var(--border);
+  border: 4px solid var(--sky-light);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.pixel-play-triangulo {
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 16px solid var(--navy);
+  margin-left: 6px;
+}
+
+.pause {
+  color: var(--navy);
+}
+
+.pixel-regresar,
+.pixel-adelantar {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.pixel-bar {
+  width: 4px;
+  height: 16px;
+  background-color: var(--sky-light);
+}
+
+.pixel-flecha-left {
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right: 12px solid var(--sky-light);
+}
+
+.pixel-flecha-right {
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 12px solid var(--sky-light);
+}
+
+.pixel-play-circulo:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px;
+}
+
+.phaser-game-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-height: 95vh; 
+}
+
+@media (max-width: 992px) {
+  .game-screen {
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 10px;
+  }
+
+  .music-container {
+    position: static; 
+    transform: none;
+    margin-left: 0;
+    margin-bottom: 10px;
+  }
+}
