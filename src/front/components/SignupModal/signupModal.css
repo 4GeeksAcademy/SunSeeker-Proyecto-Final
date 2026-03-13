@@ -370,7 +370,7 @@ h2 {
 }
 
 .btn-google-pixel {
-  background: #ffffff;
+  background: var(--text);
   color: var(--dark);
 }
 

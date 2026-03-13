@@ -192,7 +192,7 @@ export const SignupModal = ({ show, onClose, onSwitch }) => {
                         className="btn-google-pixel"
                         onClick={() => loginConGoogle()}
                     >
-                        <i class="fa-brands fa-google"></i>
+                        <i className="fa-brands fa-google"></i>
                         INICIAR SESION CON GOOGLE
                     </button>
                 </form>
