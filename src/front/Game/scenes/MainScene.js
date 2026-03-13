@@ -3,6 +3,11 @@ import { Controles } from "../Controles/Controles";
 import { Animaciones } from "../Animaciones/Animaciones";
 import { CommunicatorMusic } from "../CommunicatorMusic";
 
+export const obtenerNombreDelGato = () => {
+  const nombreGuardado = localStorage.getItem("michi_name");
+  return nombreGuardado ? nombreGuardado : "Invitado";
+};
+
 export default class MainScene extends Phaser.Scene {
   constructor() {
     super("MainScene");
@@ -68,7 +73,7 @@ export default class MainScene extends Phaser.Scene {
     platforms.create(570, 980, "TablaDer").setScale(0.3).refreshBody();
 
     platforms.create(265, 1025, "TablaIzq").setScale(0.3).refreshBody();
-    platforms.create(570, 1125, "TablaDer").setScale(0.3).refreshBody();
+    platforms.create(570, 1140, "TablaDer").setScale(0.3).refreshBody();
     platforms.create(265, 1250, "TablaIzq").setScale(0.3).refreshBody();
     platforms.create(570, 1350, "TablaDer").setScale(0.3).refreshBody();
 

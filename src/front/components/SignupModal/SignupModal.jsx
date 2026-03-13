@@ -2,13 +2,19 @@ import React, { useEffect, useState } from "react";
 import "./signupModal.css";
 import { useNavigate } from "react-router-dom";
 import { signup } from "../../Service/BackEndServices";
-import { GoogleLogin } from "@react-oauth/google";
+import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 
 export const SignupModal = ({ show, onClose, onSwitch }) => {
     const navigate = useNavigate();
     const [showPass, setShowPass] = useState(false);
     const [showConfirmPass, setShowConfirmPass] = useState(false);
     const [status, setStatus] = useState({ type: "", msg: "" });
+    const [showRequirements, setShowRequirements] = useState(false);
+
+    const loginConGoogle = useGoogleLogin({
+        onSuccess: tokenResponse => console.log(tokenResponse),
+        onError: () => console.log("Login Failed"),
+    });
 
     const [formData, setFormData] = useState({
         michi_name: "",
@@ -29,21 +35,18 @@ export const SignupModal = ({ show, onClose, onSwitch }) => {
             setShowPass(false);
             setShowConfirmPass(false);
         }
-    },[show]);
+    }, [show]);
 
     if (!show) return null;
 
-    const getStrength = () => {
-        if (!formData.password) return 0;
-
-        let s = 0;
-        if (formData.password.length > 5) s++;
-        if (formData.password.length > 9) s++;
-        if (/[A-Z]/.test(formData.password)) s++;
-        if (/[0-9]/.test(formData.password)) s++;
-        return s;
-    };
-    const strength = getStrength();
+    const password = formData.password || "";
+    const requirements = [
+        { label: "Minimo 6 caracteres", met: password.length > 5 },
+        { label: "Minimo 10 caracteres", met: password.length > 9 },
+        { label: "Una mayuscula", met: /[A-Z]/.test(password) },
+        { label: "Un numero", met: /[0-9]/.test(password) },
+    ];
+    const strength = requirements.filter(req => req.met).length;
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -64,8 +67,8 @@ export const SignupModal = ({ show, onClose, onSwitch }) => {
 
         if (result) {
             setStatus({ type: "success", msg: "Cuenta creada con éxito =)" });
-            setTimeout(() => { 
-                onClose(); 
+            setTimeout(() => {
+                onClose();
                 navigate("/")
                 setStatus({ type: "", msg: "" })
             }, 1500);
@@ -86,7 +89,7 @@ export const SignupModal = ({ show, onClose, onSwitch }) => {
                         {status.msg}
                     </div>
                 )}
-                <form onSubmit={handleSubmit} className="container-fluid p-0">
+                <form onSubmit={handleSubmit} className="container-fluid p-0" autoComplete="off">
                     <div className="campos mb-3">
                         <label className="form-label">Usuario</label>
                         <div className="campos-wrap d-flex align-items-center">
@@ -108,8 +111,9 @@ export const SignupModal = ({ show, onClose, onSwitch }) => {
                                 className="form-control"
                                 type="email"
                                 name="email"
-                                placeholder="gato@sunseeker.com"
+                                placeholder="michi@sunseeker.com"
                                 onChange={handleChange}
+                                autoComplete="off"
                             />
                         </div>
                     </div>
@@ -123,6 +127,8 @@ export const SignupModal = ({ show, onClose, onSwitch }) => {
                                 name="password"
                                 placeholder="••••••••"
                                 onChange={handleChange}
+                                onFocus={() => setShowRequirements(true)}
+                                onBlur={() => setShowRequirements(false)}
                             />
                             <button
                                 type="button"
@@ -141,6 +147,23 @@ export const SignupModal = ({ show, onClose, onSwitch }) => {
                             </div>
                             <div className="strength-label small mt-1 text-end">SEGURIDAD</div>
                         </div>
+                        {showRequirements && (
+                            <div className="password-requirements mb-3 animacion-fade-in">
+                                {requirements.map((req, index) => (
+                                    <div key={index} className={`req-item ${req.met ? 'on' : 'off'}`}
+                                    >
+                                        <span className="req-icon">
+                                            {req.met ? (
+                                                <i className="fa-solid fa-check"></i>
+                                            ) : (
+                                                <i className="fa-solid fa-x"></i>
+                                            )}
+                                        </span>
+                                        {req.label}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                     <div className="campos mb-4">
                         <label className="form-label">Confirmar contraseña</label>
@@ -161,10 +184,17 @@ export const SignupModal = ({ show, onClose, onSwitch }) => {
                             </button>
                         </div>
                     </div>
-                    <button type="submit" className="btn-submit w-100 py-3 mb-3">
+                    <button type="submit" className="btn-submit">
                         CREAR CUENTA
                     </button>
-                    <GoogleLogin onSuccess={(credentialResponse)=> {console.log(credentialResponse)}} onError={()=> console.log("login failed")}/>
+                    <button
+                        type="button"
+                        className="btn-google-pixel"
+                        onClick={() => loginConGoogle()}
+                    >
+                        <i class="fa-brands fa-google"></i>
+                        INICIAR SESION CON GOOGLE
+                    </button>
                 </form>
                 <p className="card-footer-text text-center mt-3">
                     ¿Ya tenés cuenta? <a href="#" className="text-decoration-none" onClick={onSwitch}>Iniciar sesión</a>

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 
 :root {
   --sky-light: #8ecae6;
@@ -32,18 +32,20 @@
 }
 
 .btn-submit-small {
-  width: auto; 
+  width: auto;
   display: inline-block;
-  padding: 8px 12px; 
+  padding: 8px 12px;
   font-family: var(--pixel);
-  font-size: 16px; 
+  font-size: 16px;
   cursor: pointer;
   background: var(--gold);
   color: var(--navy);
   border: none;
   text-transform: uppercase;
-  box-shadow: 3px 3px 0 var(--orange); 
-  transition: transform 0.1s, box-shadow 0.1s;
+  box-shadow: 3px 3px 0 var(--orange);
+  transition:
+    transform 0.1s,
+    box-shadow 0.1s;
 }
 
 .btn-submit-small:active {
@@ -75,14 +77,35 @@
     8px 8px 0 var(--orange),
     0 0 20px rgba(251, 133, 0, 0.4);
   position: relative;
+  scrollbar-gutter: stable;
 }
 
-h2{
-    font-family: var(--pixel);
-    font-size: 24px;
-    color: var(--gold);
-    text-align: center;
-    margin-bottom: 5px;
+.form-panel.neon-pixel-border::-webkit-scrollbar {
+  width: 10px;
+}
+
+.form-panel.neon-pixel-border::-webkit-scrollbar-track {
+  background: var(--dark);
+  border-left: 1px solid var(--deep-teal);
+}
+
+.form-panel.neon-pixel-border::-webkit-scrollbar-thumb {
+  background: var(--deep-teal);
+  border: 2px solid var(--dark);
+  box-shadow: inset 0 0 0 1px var(--deep-teal);
+}
+
+.form-panel.neon-pixel-border::-webkit-scrollbar-thumb:hover {
+  background: var(--gold);
+  box-shadow: inset 0 0 0 1px var(--orange);
+}
+
+h2 {
+  font-family: var(--pixel);
+  font-size: 24px;
+  color: var(--gold);
+  text-align: center;
+  margin-bottom: 5px;
 }
 
 .form-panel.active {
@@ -100,34 +123,39 @@ h2{
 }
 
 .pixel-alert {
-    font-family: var(--pixel);
-    font-size: 10px;
-    padding: 10px;
-    margin-bottom: 20px;
-    text-align: center;
-    border: 2px solid;
-    letter-spacing: 1px;
-    animation: slideDown 0.3s ease-out;
+  font-family: var(--pixel);
+  font-size: 10px;
+  padding: 10px;
+  margin-bottom: 20px;
+  text-align: center;
+  border: 2px solid;
+  letter-spacing: 1px;
+  animation: slideDown 0.3s ease-out;
 }
 
 .pixel-alert.error {
-    background: rgba(231, 76, 60, 0.2);
-    color: #ff4d4d;
-    border-color: #ff4d4d;
-    box-shadow: 4px 4px 0 rgba(255, 77, 77, 0.2);
+  background: rgba(231, 76, 60, 0.2);
+  color: #ff4d4d;
+  border-color: #ff4d4d;
+  box-shadow: 4px 4px 0 rgba(255, 77, 77, 0.2);
 }
 
 .pixel-alert.success {
-    background: rgba(46, 204, 113, 0.2);
-    color: #2ecc71;
-    border-color: #2ecc71;
-    box-shadow: 4px 4px 0 rgba(46, 204, 113, 0.2);
+  background: rgba(46, 204, 113, 0.2);
+  color: #2ecc71;
+  border-color: #2ecc71;
+  box-shadow: 4px 4px 0 rgba(46, 204, 113, 0.2);
 }
 
-
 @keyframes slideDown {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .campos {
@@ -188,8 +216,9 @@ h2{
 }
 
 .campos input.form-control {
-    color: #ffffff !important; 
+  color: #ffffff !important;
 }
+
 .contraseña-toggle {
   position: absolute;
   right: 10px;
@@ -251,46 +280,116 @@ h2{
   letter-spacing: 1px;
 }
 
-.btn-submit {
-  width: 100%;
+.password-requirements {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 15px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 2px solid var(--gold-dim);
+  opacity: 0;
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.req-item {
   font-family: var(--pixel);
-  font-size: 20px;
-  padding: 14px;
-  margin-top: 8px;
+  font-size: 8px;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.req-item.off {
+  color: rgba(232, 217, 160, 0.3);
+}
+
+.req-item.on {
+  color: var(--orange);
+  text-shadow: 0 0 5px var(--orange);
+}
+
+.req-icon {
+  margin-right: 10px;
+  font-size: 5px;
+}
+
+.req-icon i {
+  font-size: 10px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.req-item.off .fa-x {
+  color: #ff4d4d;
+  opacity: 0.5;
+}
+
+.req-item.on .fa-check {
+  color: var(--cyan);
+  filter: drop-shadow(0 0 2px var(--cyan));
+}
+
+.btn-submit, 
+.btn-google-pixel {
+  width: 100%;
+  height: 48px; 
+  padding: 15px; 
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-family: var(--pixel);
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border: none;
   cursor: pointer;
+  position: relative;
+  box-shadow: 5px 5px 0 var(--amber);
+  transition: all 0.1s ease;
+}
+
+.btn-submit {
   background: var(--gold);
   color: var(--navy);
-  border: none;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  box-shadow: 5px 5px 0 var(--orange);
-  transition:
-    transform 0.1s,
-    box-shadow 0.1s,
-    background 0.15s;
-  position: relative;
-  overflow: hidden;
+}
+
+.btn-google-pixel {
+  background: #ffffff;
+  color: var(--dark);
 }
 
 .btn-submit::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.15) 0%,
-    transparent 50%
-  );
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
   pointer-events: none;
 }
 
-.btn-submit:hover {
-  background: var(--amber);
+.btn-submit:active, 
+.btn-google-pixel:active {
+  transform: translate(3px, 3px);
+  box-shadow: 2px 2px 0 var(--amber);
 }
 
-.btn-submit:active {
-  transform: translate(3px, 3px);
-  box-shadow: 2px 2px 0 var(--orange);
+.btn-google-pixel i {
+  font-size: 14px;
 }
 
 .card-footer-text {
