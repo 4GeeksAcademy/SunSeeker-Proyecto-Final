@@ -14,9 +14,9 @@ preload() {
     this.load.image("FlechaAtras", "img/FlechaAtras.png");
 
 
-    this.load.spritesheet("GatoNaranja", "img/gatoNaranjaFinal.png", {
-      frameWidth: 48,
-      frameHeight: 31,
+    this.load.spritesheet("GatoNaranjaF", "img/GatoNaranja1.png", {
+      frameWidth: 49,
+      frameHeight: 36,
     });
    
   }
@@ -50,7 +50,7 @@ preload() {
     }
 
     this.GatoNar = this.physics.add
-      .sprite(700, 600, "GatoNaranja")
+      .sprite(700, 600, "GatoNaranjaF")
       .setScale(1.6);
     this.GatoNar.setCollideWorldBounds(true);
     this.physics.add.collider(this.GatoNar, paredes);

@@ -11,7 +11,7 @@ from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identi
 api = Blueprint('api', __name__)
 
 # Allow CORS requests to this API
-CORS(api)
+
 
 
 #  REGISTRO E INGRESO
@@ -29,6 +29,11 @@ def signup():
 
     if existing_user:
         return jsonify({"error": "Usuario con ese email ya existe"}), 400
+
+    existing_michi = db.session.execute(db.select(Michi).where(Michi.michi_name == michi_name)).scalar_one_or_none()
+
+    if existing_michi:
+        return jsonify({"error": "Nombre de michi ya existe"}), 400
     new_user = User(email=email)
     new_user.set_password(password)
     db.session.add(new_user)

@@ -57,5 +57,4 @@ export const Home = () => {
             <ModalHome id="homeModal" />
         </>
     )
-
 };
