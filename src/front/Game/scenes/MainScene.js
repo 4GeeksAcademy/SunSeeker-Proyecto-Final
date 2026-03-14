@@ -13,7 +13,6 @@ export default class MainScene extends Phaser.Scene {
   }
 
   ScoreText = "";
-  
 
   preload() {
     this.load.baseURL = "./";
@@ -26,10 +25,12 @@ export default class MainScene extends Phaser.Scene {
     this.load.image("TablaLarga", "img/sueloLargo.png");
     this.load.image("Pez", "img/pezAzulSF.png");
     this.load.image("PuertaGato", "img/puertaGato.png");
+    this.load.image("Menu", "img/MenuSFondo.png");
+    this.load.image("ScoreFondo", "img/vacioLargo.png");
 
-    this.load.spritesheet("GatoNaranja", "img/gatoNaranjaFinal.png", {
-      frameWidth: 48,
-      frameHeight: 31,
+    this.load.spritesheet("GatoNaranjaF", "img/GatoNaranja1.png", {
+      frameWidth: 49,
+      frameHeight: 36,
     });
     this.load.spritesheet("Perrito", "img/perritoDef.png", {
       frameWidth: 525,
@@ -40,6 +41,7 @@ export default class MainScene extends Phaser.Scene {
   create() {
     this.GatoNar = "";
     this.Perrito = "";
+    this.isDead = false;
 
     //Nombre del jugador traido del localstore
     const nombreDelJugador = obtenerNombreDelGato();
@@ -107,7 +109,10 @@ export default class MainScene extends Phaser.Scene {
     }
 
     function Morder() {
+      if (this.isDead) return;
+      this.isDead = true;
       this.physics.pause();
+      this.GatoNar.anims.play('Muerte', true);
       this.GatoNar.setTint(0xff0000);
 
       this.time.addEvent({
@@ -128,6 +133,7 @@ export default class MainScene extends Phaser.Scene {
         },
       });
     }
+
     let NextLevel = this.add.zone(75, 100, 20, 20);
     this.physics.add.existing(NextLevel, true);
 
@@ -140,7 +146,7 @@ export default class MainScene extends Phaser.Scene {
     this.physics.add.overlap(this.Perrito, respawnDog, Respawn, null, this);
 
     this.GatoNar = this.physics.add
-      .sprite(420, 1300, "Gatonaranja")
+      .sprite(420, 100, "GatoNaranjaF")
       .setScale(1.6);
     this.GatoNar.setCollideWorldBounds(true);
     this.GatoNar.setBounce(0.1);
@@ -192,12 +198,22 @@ export default class MainScene extends Phaser.Scene {
     });
     this.refreshTime();
     this.timeTXT.setScrollFactor(0);
+    this.add.image(115, 34, "ScoreFondo").setScale(0.46).setScrollFactor(0);
 
     this.ScoreText = this.add.text(16, 16, "Score: 0", {
       fontSize: "32px",
       fill: "#000",
     });
     this.ScoreText.setScrollFactor(0);
+
+    ///Boton Volver al Menu
+    this.add.image(730, 30, "Menu").setScale(0.06).setScrollFactor(0);
+    //funcion volver al menu
+    const Menu = this.add.zone(673, 10, 115, 38);
+    Menu.setOrigin(0);
+    Menu.setInteractive().setScrollFactor(0);
+    Menu.once("pointerdown", () => this.scene.start("Menu"));
+    // this.add.graphics().lineStyle(2, 0xff0000).strokeRectShape(Menu).setScrollFactor(0);
 
     // this.cursors = this.input.keyboard.createCursorKeys();
   }
@@ -222,6 +238,9 @@ export default class MainScene extends Phaser.Scene {
   }
 
   update() {
+    if (this.isDead) {
+        return; 
+    }
     Controles(this, this.cursors, this.perrito);
   }
 }

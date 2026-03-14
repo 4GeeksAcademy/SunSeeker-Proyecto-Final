@@ -13,11 +13,14 @@ export default class Menu extends Phaser.Scene {
     this.load.image("Inventario", "img/menuInventario.png");
     this.load.image("Niveles", "img/menuNiveles.png");
 
-    this.load.spritesheet("GatoNaranja", "img/gatoNaranjaFinal.png", {
-      frameWidth: 48,
-      frameHeight: 31,
+    this.load.spritesheet("GatoNaranjaF", "img/GatoNaranja1.png", {
+      frameWidth: 49,
+      frameHeight: 36,
     });
-    
+    this.load.spritesheet("Perrito", "img/perritoDef.png", {
+      frameWidth: 525,
+      frameHeight: 400,
+    });
   }
 
   create() {
@@ -81,7 +84,6 @@ export default class Menu extends Phaser.Scene {
     controlesOption.setInteractive();
     controlesOption.once("pointerdown", () => this.scene.start("Controles"));
     // this.add.graphics().lineStyle(2, 0xff0000).strokeRectShape(controlesOption);
-
 
   }
 

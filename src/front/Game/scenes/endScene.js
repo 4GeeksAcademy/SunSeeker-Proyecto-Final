@@ -18,9 +18,9 @@ export default class endScene extends Phaser.Scene {
     this.load.baseURL = "./";
     this.load.image("fondoLuz", "img/fondoLuz.jpg");
 
-    this.load.spritesheet("GatoNaranja", "img/gatoNaranjaFinal.png", {
-      frameWidth: 48,
-      frameHeight: 31,
+   this.load.spritesheet("GatoNaranjaF", "img/GatoNaranja1.png", {
+      frameWidth: 49,
+      frameHeight: 36,
     });
   }
 
@@ -51,7 +51,7 @@ export default class endScene extends Phaser.Scene {
     }
 
     this.GatoNar = this.physics.add
-      .sprite(700, 600, "GatoNaranja")
+      .sprite(700, 600, "GatoNaranjaF")
       .setScale(1.6);
     this.GatoNar.setCollideWorldBounds(true);
     this.physics.add.collider(this.GatoNar, paredes);
@@ -61,6 +61,17 @@ export default class endScene extends Phaser.Scene {
     this.GatoNar.setFlipX(false);
     this.GatoNar.anims.play("left", true);
     this.physics.add.collider(GatoSentado, this.GatoNar, Sentar, null, this);
+
+     ///Boton Volver al Menu
+    this.add.image(730, 30, "Menu").setScale(0.06).setScrollFactor(0);
+    //funcion volver al menu
+    const Menu = this.add.zone(673, 10, 115, 38);
+    Menu.setOrigin(0);
+    Menu.setInteractive().setScrollFactor(0);
+    Menu.once("pointerdown", () => this.scene.start("Menu"));
+    // this.add.graphics().lineStyle(2, 0xff0000).strokeRectShape(Menu).setScrollFactor(0);
+
+    
   }
 
   update() {}
