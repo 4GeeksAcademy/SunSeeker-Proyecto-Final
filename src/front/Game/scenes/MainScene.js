@@ -30,27 +30,46 @@ export default class MainScene extends Phaser.Scene {
     this.load.spritesheet("GatoNaranja", "img/gatoNaranjaFinal.png", {
       frameWidth: 48,
       frameHeight: 31,
-    })
+    });
     this.load.spritesheet("Perrito", "img/perritoDef.png", {
       frameWidth: 525,
       frameHeight: 400,
     });
-    
-
   }
 
   create() {
-    CommunicatorMusic.on("change-music-state" , (isPlaying) => {
-      if (isPlaying){
-        this.sound.resumeAll();
+    //esto es parte del bloque de codigo del reproductor de Jamendo - funciona por el momento con nivel uno, menu y escena final
+    CommunicatorMusic.removeAllListeners("change-music-state");
+    CommunicatorMusic.on("change-music-state", (data) => {
+      if (!this.sys || !this.scene.isActive()) return;
+
+      if (data.isPlaying) {
+        if (this.physics && this.physics.world) {
+          this.physics.resume();
+        }
+
+        if (this.time) this.time.paused = false;
+
+        if (this.GatoNar && this.GatoNar.anims) {
+          this.GatoNar.anims.resume();
+          this.GatoNar.anims.play("turn", true);
+
+          if (data.bpm) {
+            const speedRatio = data.bpm / 120;
+            this.GatoNar.anims.timeScale = speedRatio;
+          }
+        }
       } else {
-        this.sound.pauseAll();
+        if (this.physics && this.physics.world) this.physics.pause();
+        if (this.time) this.time.paused = true;
+        if (this.GatoNar && this.GatoNar.anims) {
+          this.GatoNar.anims.pause();
+        }
       }
     });
-    
+
     this.GatoNar = "";
     this.Perrito = "";
-
     // this.add.image(400, 330, 'fondo').setScale(0.8);
     this.add.image(400, 760, "fondoLargo").setScale(1.1);
     this.add.image(780, 470, "CasaCiro").setScale(0.6);
@@ -229,6 +248,6 @@ export default class MainScene extends Phaser.Scene {
   }
 
   update() {
-    Controles(this,this.cursors ,this.perrito)
-}
+    Controles(this, this.cursors, this.perrito);
+  }
 }

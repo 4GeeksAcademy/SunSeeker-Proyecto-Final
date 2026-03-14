@@ -63,6 +63,7 @@ export const SignupModal = ({ show, onClose, onSwitch }) => {
             setStatus({ type: "error", msg: "Las contraseñas no coinciden" });
             return;
         }
+        
         const result = await signup(formData);
 
         if (result) {
