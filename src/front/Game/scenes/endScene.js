@@ -1,4 +1,10 @@
 import { Animaciones } from "../Animaciones/Animaciones";
+import { CommunicatorMusic } from "../CommunicatorMusic";
+
+export const obtenerNombreDelGato = () => {
+  const nombreGuardado = localStorage.getItem("michi_name");
+  return nombreGuardado ? nombreGuardado : "Invitado";
+};
 
 export const obtenerNombreDelGato = () => {
   const nombreGuardado = localStorage.getItem("michi_name");
@@ -25,6 +31,25 @@ export default class endScene extends Phaser.Scene {
   }
 
   create() {
+    //esto es parte del bloque de codigo del reproductor de Jamendo - funciona por el momento con nivel uno, menu y escena final
+    CommunicatorMusic.removeAllListeners("change-music-state");
+    CommunicatorMusic.on("change-music-state", (data) => {
+      if (!this.scene.isActive() || !this.sys) return;
+
+      if (data.isPlaying) {
+        if (this.physics && this.physics.world) this.physics.resume();
+        if (this.GatoNar && this.GatoNar.anims) {
+          this.GatoNar.anims.resume();
+          if (data.bpm) this.GatoNar.anims.timeScale = data.bpm / 120;
+        }
+      } else {
+        if (this.physics && this.physics.world) this.physics.pause();
+        if (this.GatoNar && this.GatoNar.anims) {
+          this.GatoNar.anims.pause();
+        }
+      }
+    });
+
     //Nombre del jugador traido del localstore
     const nombreDelJugador = obtenerNombreDelGato();
 

@@ -18,28 +18,66 @@ export const Game = () => {
         }
     }, [])
 
-    const changeMusic = () => {
+    useEffect(() => {
+        const playFromPhaser = () => {
+            if (!isPlaying) handleTogglePlay();
+        };
+        CommunicatorMusic.on("request-play-music", playFromPhaser);
+        return () => {
+            CommunicatorMusic.off("request-play-music", playFromPhaser);
+        };
+    }, [tracks, isPlaying, currentTrackIndex])
+
+    const handleTogglePlay = () => {
         const audio = audioRef.current;
+        const currentTrack = tracks[currentTrackIndex];
+        if (!currentTrack) return;
+        if (!audio.src) {
+            audio.src = currentTrack.audio;
+        }
 
-        if (tracks.length > 0) {
-            const trackUrl = tracks[currentTrackIndex].audio;
-            if (!audio.src !== trackUrl) {
-                audio.src = trackUrl;
-            }
-
-            if (isPlaying) {
-                audio.pause();
-                CommunicatorMusic.emit("change-music-state", false);
-            } else {
-                audio.play()
-                    .then(() => {
-                        CommunicatorMusic.emit("change-music-state", true);
-                    })
-                    .catch(e => console.error("Error de reproducción:", e));
-            }
-            setIsPlaying(!isPlaying);
+        if (isPlaying) {
+            audio.pause();
+            setIsPlaying(false);
+            CommunicatorMusic.emit("change-music-state", { isPlaying: false });
+        } else {
+            audio.play()
+                .then(() => {
+                    setIsPlaying(true);
+                    const bpm = currentTrack.musicinfo?.bpm || 120;
+                    CommunicatorMusic.emit("change-music-state", {
+                        isPlaying: true,
+                        bpm: bpm
+                    });
+                })
+                .catch(e => console.error("Error al reproducir:", e));
         }
     };
+
+    const changeTrack = (direccion) => {
+        if (tracks.length === 0) return;
+        const newIndex = direccion === "next" ? (currentTrackIndex + 1) % tracks.length : (currentTrackIndex - 1 + tracks.length) % tracks.length;
+        setCurrentTrackIndex(newIndex);
+        const audio = audioRef.current;
+        const nextTrack = tracks[newIndex];
+        audio.src = nextTrack.audio;
+        audio.load();
+
+        if (isPlaying) {
+            audio.play()
+                .then(() => {
+                    const bpm = nextTrack.musicinfo?.bpm || 120;
+                    CommunicatorMusic.emit("change-music-state", {
+                        isPlaying: true,
+                        bpm: bpm
+                    });
+                })
+                .catch(e => console.error("Error al saltar de pista:", e));
+        } else {
+            CommunicatorMusic.emit("change-music-state", { isPlaying: false });
+        }
+    };
+
     return (
         <div className="game-screen mt-3">
             <div className="music-container">
@@ -49,18 +87,18 @@ export const Game = () => {
                     </div>
                     <div className="pixel-buttons-row">
                         <span className="pixel-icono musica"><i className="fa-solid fa-music"></i></span>
-                        <div className="pixel-regresar">
+                        <div className="pixel-regresar" onClick={() => changeTrack('prev')}>
                             <div className="pixel-flecha-left"></div>
                             <div className="pixel-bar"></div>
                         </div>
-                        <div className="pixel-play-circulo" onClick={changeMusic}>
+                        <div className="pixel-play-circulo" onClick={handleTogglePlay}>
                             {isPlaying ? (
                                 <div className="pause"><i className="fa-solid fa-pause"></i></div>
                             ) : (
                                 <div className="pixel-play-triangulo"></div>
                             )}
                         </div>
-                        <div className="pixel-adelantar">
+                        <div className="pixel-adelantar" onClick={() => changeTrack('next')}>
                             <div className="pixel-bar"></div>
                             <div className="pixel-flecha-right"></div>
                         </div>
