@@ -21,7 +21,7 @@ export const signup = async (user) => {
 
 export const jamendoCall = async (dispatch) => {
   const response = await fetch(
-    `https://api.jamendo.com/v3.0/tracks/?client_id=${JamendoUser}&format=json&limit=5&fuzzytags=lofi&order=popularity_month`,
+    `https://api.jamendo.com/v3.0/tracks/?client_id=${JamendoUser}&format=json&limit=5&fuzzytags=lofi&order=popularity_month&include=musicinfo`,
   );
   const data = await response.json();
   if (!response.ok) {

@@ -1,4 +1,5 @@
 import { Animaciones } from "../Animaciones/Animaciones";
+import { CommunicatorMusic } from "../CommunicatorMusic";
 
 export default class Menu extends Phaser.Scene {
   constructor() {
@@ -66,6 +67,12 @@ export default class Menu extends Phaser.Scene {
     jugarOption.setInteractive();
     jugarOption.once("pointerdown", () => this.scene.start("MainScene"));
     // this.add.graphics().lineStyle(2, 0xff0000).strokeRectShape(jugarOption);
+
+    //esto es parte del bloque de codigo del reproductor de Jamendo - funciona por el momento con nivel uno, menu y escena final
+    jugarOption.once("pointerdown", () => {
+      CommunicatorMusic.emit("request-play-music");
+      this.scene.start("MainScene");
+    });
 
     const nivelesOption = this.add.zone(265, 196, 350, 48);
     nivelesOption.setOrigin(0);

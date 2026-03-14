@@ -3,7 +3,8 @@ export const initialStore=()=>{
   return{
     user: hasToken ? localStorage.getItem("michi_name") : null,
     message: null,
-    Music:[]
+    Music:[],
+    // michi:{}
   }
 }
 
@@ -16,10 +17,9 @@ export default function storeReducer(store, action = {}) {
       };
       
     case 'api_call':
-
       return {
         ...store,
-       Music: [... store.Music, action.payload ]
+       Music: action.payload
       };
     case "login_user":
       return {
@@ -30,7 +30,12 @@ export default function storeReducer(store, action = {}) {
       return{
         ...store,
         user: null
-      }
+      };
+    // case "get_user":
+    //   return {
+    //     ...store,
+    //     michi: action.payload
+    //   };
     default:
       throw Error('Unknown action.');
   }    

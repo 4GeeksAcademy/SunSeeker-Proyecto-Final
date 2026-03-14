@@ -72,7 +72,7 @@ export const SigninModal = ({ show, onClose, onSwitch, onLoginSuccess }) => {
                         {status.msg}
                     </div>
                 )}
-                <form onSubmit={handleSubmit} className="container-fluid p-0">
+                <form onSubmit={handleSubmit} className="container-fluid p-0" autoComplete="off">
                     <div className="campos mb-3">
                         <label className="form-label">Usuario</label>
                         <div className="campos-wrap d-flex align-items-center">

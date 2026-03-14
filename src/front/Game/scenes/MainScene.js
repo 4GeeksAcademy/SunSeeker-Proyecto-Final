@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { Controles } from "../Controles/Controles";
 import { Animaciones } from "../Animaciones/Animaciones";
+import { CommunicatorMusic } from "../CommunicatorMusic";
 
 export const obtenerNombreDelGato = () => {
   const nombreGuardado = localStorage.getItem("michi_name");
@@ -39,6 +40,36 @@ export default class MainScene extends Phaser.Scene {
   }
 
   create() {
+    //esto es parte del bloque de codigo del reproductor de Jamendo - funciona por el momento con nivel uno, menu y escena final
+    CommunicatorMusic.removeAllListeners("change-music-state");
+    CommunicatorMusic.on("change-music-state", (data) => {
+      if (!this.sys || !this.scene.isActive()) return;
+
+      if (data.isPlaying) {
+        if (this.physics && this.physics.world) {
+          this.physics.resume();
+        }
+
+        if (this.time) this.time.paused = false;
+
+        if (this.GatoNar && this.GatoNar.anims) {
+          this.GatoNar.anims.resume();
+          this.GatoNar.anims.play("turn", true);
+
+          if (data.bpm) {
+            const speedRatio = data.bpm / 120;
+            this.GatoNar.anims.timeScale = speedRatio;
+          }
+        }
+      } else {
+        if (this.physics && this.physics.world) this.physics.pause();
+        if (this.time) this.time.paused = true;
+        if (this.GatoNar && this.GatoNar.anims) {
+          this.GatoNar.anims.pause();
+        }
+      }
+    });
+
     this.GatoNar = "";
     this.Perrito = "";
     this.isDead = false;
