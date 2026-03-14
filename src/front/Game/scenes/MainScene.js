@@ -14,6 +14,7 @@ export default class MainScene extends Phaser.Scene {
   }
 
   ScoreText = "";
+  
 
   preload() {
     this.load.baseURL = "./";
@@ -70,6 +71,10 @@ export default class MainScene extends Phaser.Scene {
 
     this.GatoNar = "";
     this.Perrito = "";
+
+    //Nombre del jugador traido del localstore
+    const nombreDelJugador = obtenerNombreDelGato();
+
     // this.add.image(400, 330, 'fondo').setScale(0.8);
     this.add.image(400, 760, "fondoLargo").setScale(1.1);
     this.add.image(780, 470, "CasaCiro").setScale(0.6);
