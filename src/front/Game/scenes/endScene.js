@@ -6,11 +6,6 @@ export const obtenerNombreDelGato = () => {
   return nombreGuardado ? nombreGuardado : "Invitado";
 };
 
-export const obtenerNombreDelGato = () => {
-  const nombreGuardado = localStorage.getItem("michi_name");
-  return nombreGuardado ? nombreGuardado : "Invitado";
-};
-
 export default class endScene extends Phaser.Scene {
   constructor() {
     super("endScene");
