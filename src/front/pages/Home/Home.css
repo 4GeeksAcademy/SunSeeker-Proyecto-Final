@@ -26,6 +26,8 @@
 body {
   background-color: var(--dark);
   overflow-x: hidden;
+  height: 100vh;
+  width: 100vw;
 }
 
 .pixel-lampara-fija {
@@ -92,6 +94,27 @@ body {
   animation: flicker-pixel 5s infinite;
 }
 
+.soporte-boton-jugar {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+}
+
+.soporte-boton-jugar .tubo-soporte {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 15px;
+  height: 1000vh;
+  background-color: var(--deep-teal);
+  border-left: 3px solid var(--navy);
+  border-right: 3px solid var(--navy);
+  z-index: -1;
+}
+
 .iluminacion {
   position: absolute;
   top: 70px;
@@ -108,6 +131,44 @@ body {
   clip-path: polygon(48% 0%, 52% 0%, 100% 100%, 0% 100%);
   filter: blur(25px);
   pointer-events: none;
+}
+
+.main-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-submit-play {
+  font-family: var(--pixel);
+  font-size: 20px;
+  padding: 14px 30px;
+  background: var(--gold);
+  color: var(--navy);
+  border-radius: 10px;
+  border: 2px solid var(--gold);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  box-shadow: 5px 5px 0 var(--orange);
+  width: auto;
+  pointer-events: auto;
+  display: inline-block;
+  z-index: 10;
+  transition:
+    transform 0.1s,
+    box-shadow 0.1s;
+  box-shadow:
+    0 0 35px var(--gold),
+    0 0 30px var(--amber);
+}
+
+.btn-submit:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0px 0px 0 var(--orange);
 }
 
 @keyframes flicker-pixel {
@@ -142,39 +203,4 @@ body {
   .pixel-lampara-fija {
     display: none;
   }
-}
-
-.main-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-.btn-submit-play {
-  font-family: var(--pixel);
-  font-size: 20px;
-  padding: 14px 30px;
-  background: var(--gold);
-  color: var(--navy);
-  border: none;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  box-shadow: 5px 5px 0 var(--orange);
-  width: auto;
-  pointer-events: auto;
-  display: inline-block;
-  z-index: 10;
-  transition:
-    transform 0.1s,
-    box-shadow 0.1s;
-}
-
-.btn-submit:active {
-  transform: translate(4px, 4px);
-  box-shadow: 0px 0px 0 var(--orange);
 }

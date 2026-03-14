@@ -42,3 +42,53 @@
   opacity: 0.85;
   background-color: #000;
 }
+
+.carousel-item {
+  min-height: 320px; 
+}
+
+.carousel-indicators [data-bs-target] {
+  width: 12px;
+  height: 12px;
+  background-color: var(--teal); 
+  border: 2px solid var(--navy);
+  border-radius: 0; 
+  opacity: 0.5;
+}
+
+.carousel-indicators .active {
+  background-color: var(--gold); 
+  box-shadow: 0 0 10px var(--orange);
+  opacity: 1;
+}
+
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-image: none; 
+  width: 20px;
+  height: 20px;
+}
+
+.carousel-control-prev:hover, .carousel-control-next:hover {
+  filter: drop-shadow(0 0 8px var(--gold));
+}
+
+
+.carousel-control-prev-icon::after {
+  content: '<';
+  font-family: var(--pixel);
+  color: var(--orange);
+  font-size: 20px;
+}
+
+.carousel-control-next-icon::after {
+  content: '>';
+  font-family: var(--pixel);
+  color: var(--orange);
+  font-size: 20px;
+}
+
+.mt-4{
+  font-size: 30px;
+}
