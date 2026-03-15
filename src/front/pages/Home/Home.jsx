@@ -44,7 +44,7 @@ export const Home = () => {
                 <div className="soporte-boton-jugar">
                     <div className="tubo-soporte"></div>
                     <button
-                        className="btn-submit-play"
+                        className="btn-home"
                         data-bs-toggle={!isLoggedIn ? "modal" : ""}
                         data-bs-target={!isLoggedIn ? "#homeModal" : ""}
                         onClick={handlePlayClick}
