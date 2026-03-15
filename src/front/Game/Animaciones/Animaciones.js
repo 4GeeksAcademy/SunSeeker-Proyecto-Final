@@ -1,50 +1,41 @@
 export function Animaciones(Game) {
-  Game.anims.create({
-    key: "left",
-    frames: Game.anims.generateFrameNumbers("GatoNaranjaF", {
-      start: 0,
-      end: 3,
-    }),
-    frameRate: 10,
-    repeat: -1,
+  const tipos = [
+    { key: "Naranja", texture: "GatoNaranjaF", frameStop: 5 },
+    { key: "Blanco", texture: "GatoBlanco", frameStop: 5 },
+  ];
+
+  tipos.forEach((gato) => {
+    if (!Game.anims.exists("left_" + gato.key)) {
+      Game.anims.create({
+        key: "left_" + gato.key,
+        frames: Game.anims.generateFrameNumbers(gato.texture, {
+          start: 0,
+          end: 3,
+        }),
+        frameRate: 10,
+        repeat: -1,
+      });
+      Game.anims.create({
+        key: "turn_" + gato.key,
+        frames: [{ key: gato.texture, frame: gato.frameStop }],
+        frameRate: 10,
+      });
+
+      Game.anims.create({
+        key: "Muerte_" + gato.key,
+        frames: [{ key: gato.texture, frame: 6 }],
+        frameRate: 10,
+      });
+    }
   });
 
-  Game.anims.create({
-    key: "turn",
-    frames: [{ key: "GatoNaranjaF", frame: 5 }],
-    frameRate: 10,
-    repeat: -1,
-  });
-
-  Game.anims.create({
-    key: "Muerte",
-    frames: [{ key: "GatoNaranjaF", frame: 6 }],
-    frameRate: 10,
-    repeat: -1,
-  });
-
-  /// Gato azul
-  //  Game.anims.create({
-  //   key: "azulLeft",
-  //   frames: Game.anims.generateFrameNumbers("GatoAzul", {
-  //     start: 0,
-  //     end: 1,
-  //   }),
-  //   frameRate: 10,
-  //   repeat: -1,
-  // });
-
-  //  Game.anims.create({
-  //   key: "azulTurn",
-  //   frames: [{ key: "GatoAzul", frame: 3 }],
-  //   frameRate: 10,
-  //   repeat: -1,
-  // });
-
-  Game.anims.create({
-      key: 'Perrito',
-      frames: Game.anims.generateFrameNumbers('Perrito', { start: 0, end: 1}),
+  // Animación del perrito
+  if (!Game.anims.exists("Perrito")) {
+    Game.anims.create({
+      key: "Perrito",
+      frames: Game.anims.generateFrameNumbers("Perrito", { start: 0, end: 1 }),
       frameRate: 10,
       repeat: -1,
-  });
+    });
+  }
 }

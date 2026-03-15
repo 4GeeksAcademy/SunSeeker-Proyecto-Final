@@ -16,7 +16,11 @@ preload() {
 
     this.load.spritesheet("GatoNaranjaF", "img/GatoNaranja1.png", {
       frameWidth: 49,
-      frameHeight: 36,
+      frameHeight: 31,
+    });
+    this.load.spritesheet("GatoBlanco", "img/GatoBlanco.png", {
+      frameWidth: 89,
+      frameHeight: 58,
     });
    
   }
@@ -46,19 +50,31 @@ preload() {
 
     function Sentar(perrito, suelo) {
       this.GatoNar.setVelocityX(0);
-      this.GatoNar.anims.play("turn", true);
+      this.GatoNar.anims.play("turn_" + sufijo, true);
     }
 
+
+    this.gatoColor = 2; 
+
+    const texturaGato = (this.gatoColor === 2) ? "GatoBlanco" : "GatoNaranjaF";
+    const sufijo = (this.gatoColor === 2) ? "Blanco" : "Naranja";
+    const escala = (this.gatoColor === 2) ? 0.9 : 1.6;
+
+
     this.GatoNar = this.physics.add
-      .sprite(700, 600, "GatoNaranjaF")
-      .setScale(1.6);
+      .sprite(700, 600, texturaGato) 
+      .setScale(escala);
+
+    // this.GatoNar = this.physics.add
+    //   .sprite(700, 600, "GatoNaranjaF")
+    //   .setScale(1.6);
     this.GatoNar.setCollideWorldBounds(true);
     this.physics.add.collider(this.GatoNar, paredes);
 
     // cinematica
     this.GatoNar.setVelocityX(-160);
     this.GatoNar.setFlipX(false);
-    this.GatoNar.anims.play("left", true);
+    this.GatoNar.anims.play("left_" + sufijo, true);
     this.physics.add.collider(GatoSentado, this.GatoNar, Sentar, null, this);
 
 

@@ -1,31 +1,29 @@
+export function Controles(Game) {
+    var cursors = Game.input.keyboard.createCursorKeys();
+    
+    // Determinamos el sufijo según el color
+    let sufijo = (Game.gatoColor === 2) ? "Blanco" : "Naranja";
 
+    if (cursors.left.isDown) {
+        Game.GatoNar.setVelocityX(-160);
+        Game.GatoNar.setFlipX(false);
+        Game.GatoNar.anims.play('left_' + sufijo, true);
+    } else if (cursors.right.isDown) {
+        Game.GatoNar.setVelocityX(160);
+        Game.GatoNar.setFlipX(true);
+        Game.GatoNar.anims.play('left_' + sufijo, true);
+    } else {
+        Game.GatoNar.setVelocityX(0);
+        Game.GatoNar.anims.play('turn_' + sufijo, true);
+    }
 
-export function Controles(Game){
+    if (cursors.up.isDown && Game.GatoNar.body.touching.down) {
+        Game.GatoNar.setVelocityY(-550);
+    }
 
-     var cursors = Game.input.keyboard.createCursorKeys();
-
-            if (cursors.left.isDown) {
-                Game.GatoNar.setVelocityX(-160);
-                Game.GatoNar.setFlipX(false)
-                Game.GatoNar.anims.play('left', true)
-            } else if (cursors.right.isDown) {
-                Game.GatoNar.setVelocityX(160);
-                Game.GatoNar.anims.play('left', true)
-                Game.GatoNar.setFlipX(true)
-            } else {
-                Game.GatoNar.setVelocityX(0);
-                Game.GatoNar.anims.play('turn', true)
-            }
-
-            if (cursors.up.isDown && Game.GatoNar.body.touching.down) {
-                Game.GatoNar.setVelocityY(-550);
-
-            }
-              if (Game.Perrito.body.velocity.x < 0) {
-                Game.Perrito.setFlipX(false); 
-                Game.Perrito.anims.play('Perrito', true)
-             } else if (Game.Perrito.body.velocity.x > 0) {
-                Game.Perrito.setFlipX(true); 
-            }
-
-        }
+    // Lógica del Perrito
+    if (Game.Perrito.body.velocity.x !== 0) {
+        Game.Perrito.setFlipX(Game.Perrito.body.velocity.x > 0);
+        Game.Perrito.anims.play('Perrito', true);
+    }
+}
