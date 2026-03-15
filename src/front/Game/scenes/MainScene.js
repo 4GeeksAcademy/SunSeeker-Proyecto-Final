@@ -31,7 +31,11 @@ export default class MainScene extends Phaser.Scene {
 
     this.load.spritesheet("GatoNaranjaF", "img/GatoNaranja1.png", {
       frameWidth: 49,
-      frameHeight: 36,
+      frameHeight: 31,
+    });
+    this.load.spritesheet("GatoBlanco", "img/GatoBlanco.png", {
+      frameWidth: 89,
+      frameHeight: 58,
     });
     this.load.spritesheet("Perrito", "img/perritoDef.png", {
       frameWidth: 525,
@@ -40,7 +44,6 @@ export default class MainScene extends Phaser.Scene {
   }
 
   create() {
-    //esto es parte del bloque de codigo del reproductor de Jamendo - funciona por el momento con nivel uno, menu y escena final
     CommunicatorMusic.removeAllListeners("change-music-state");
     CommunicatorMusic.on("change-music-state", (data) => {
       if (!this.sys || !this.scene.isActive()) return;
@@ -143,8 +146,8 @@ export default class MainScene extends Phaser.Scene {
       if (this.isDead) return;
       this.isDead = true;
       this.physics.pause();
-      this.GatoNar.anims.play('Muerte', true);
-      this.GatoNar.setTint(0xff0000);
+      this.GatoNar.anims.play("Muerte_" + sufijo, true);
+      // this.GatoNar.setTint(0xff0000);
 
       this.time.addEvent({
         delay: 2000,
@@ -176,9 +179,18 @@ export default class MainScene extends Phaser.Scene {
     this.physics.add.collider(this.Perrito, paredes);
     this.physics.add.overlap(this.Perrito, respawnDog, Respawn, null, this);
 
+
+    this.gatoColor = 1; 
+
+    const texturaGato = (this.gatoColor === 2) ? "GatoBlanco" : "GatoNaranjaF";
+    const sufijo = (this.gatoColor === 2) ? "Blanco" : "Naranja";
+    const escala = (this.gatoColor === 2) ? 0.9 : 1.6;
+
     this.GatoNar = this.physics.add
-      .sprite(420, 1300, "GatoNaranjaF")
-      .setScale(1.6);
+      .sprite(420, 1300, texturaGato) 
+      .setScale(escala);
+
+    ////
     this.GatoNar.setCollideWorldBounds(true);
     this.GatoNar.setBounce(0.1);
     this.physics.add.collider(
@@ -215,7 +227,7 @@ export default class MainScene extends Phaser.Scene {
 
     this.physics.add.overlap(this.GatoNar, peces, PuntosGato, null, this);
 
-    Animaciones(this);
+    Animaciones(this, this.gatoColor);
 
     this.physics.world.setBounds(0, 0, 800, 1500);
     this.cameras.main.setBounds(0, 0, 800, 1500);
@@ -270,7 +282,7 @@ export default class MainScene extends Phaser.Scene {
 
   update() {
     if (this.isDead) {
-        return; 
+      return;
     }
     Controles(this, this.cursors, this.perrito);
   }
