@@ -26,6 +26,11 @@ export function Animaciones(Game) {
         frames: [{ key: gato.texture, frame: 6 }],
         frameRate: 10,
       });
+       Game.anims.create({
+        key: "jump_" + gato.key,
+        frames: [{ key: gato.texture, frame: 4 }],
+        frameRate: 10,
+      });
     }
   });
 
