@@ -75,7 +75,9 @@ export default class endScene extends Phaser.Scene {
     }
 
 
-    this.gatoColor = 2; 
+    // this.gatoColor = 2; 
+    const colorMap = { "Naranja": 1, "Blanco": 2 };
+    this.gatoColor = colorMap[localStorage.getItem("michi_color")] ?? 1;
 
     const texturaGato = (this.gatoColor === 2) ? "GatoBlanco" : "GatoNaranjaF";
     const sufijo = (this.gatoColor === 2) ? "Blanco" : "Naranja";

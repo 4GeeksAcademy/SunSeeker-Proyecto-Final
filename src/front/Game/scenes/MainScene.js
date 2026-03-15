@@ -179,15 +179,20 @@ export default class MainScene extends Phaser.Scene {
     this.physics.add.collider(this.Perrito, paredes);
     this.physics.add.overlap(this.Perrito, respawnDog, Respawn, null, this);
 
+    ////Nuevo aaa
+    // Al inicio de tu escena, antes de crear el gato
+    const colorMap = { Naranja: 1, Blanco: 2 };
+    this.gatoColor = colorMap[localStorage.getItem("michi_color")] ?? 1;
+    ///nuevo aaa
 
-    this.gatoColor = 1; 
+    // this.gatoColor = 1;
 
-    const texturaGato = (this.gatoColor === 2) ? "GatoBlanco" : "GatoNaranjaF";
-    const sufijo = (this.gatoColor === 2) ? "Blanco" : "Naranja";
-    const escala = (this.gatoColor === 2) ? 0.9 : 1.6;
+    const texturaGato = this.gatoColor === 2 ? "GatoBlanco" : "GatoNaranjaF";
+    const sufijo = this.gatoColor === 2 ? "Blanco" : "Naranja";
+    const escala = this.gatoColor === 2 ? 0.9 : 1.6;
 
     this.GatoNar = this.physics.add
-      .sprite(420, 1300, texturaGato) 
+      .sprite(420, 1300, texturaGato)
       .setScale(escala);
 
     ////

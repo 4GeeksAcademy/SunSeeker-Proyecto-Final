@@ -49,6 +49,7 @@ export const signin = async (user) => {
     return { error: data.msg || data.error || "Error al iniciar sesión" };
   }
   localStorage.setItem("token", data.token);
+  localStorage.setItem("michi_color", data.michi_color);
   return { success: true, data };
 };
 
