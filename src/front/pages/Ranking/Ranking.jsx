@@ -27,10 +27,10 @@ export const Ranking = () => {
     }, []);
 
     return (
-        <div className="ranking-page-container">
+        <div className="ranking-page-container mt-2">
             <p className="subtitulo"> RANKING </p>
 
-            <div className="ranking">
+            <div className="ranking mt-3">
                 {ranking.length > 0 ? (
                     ranking.map(({ id, michi_name, score }, index) => (
                         <div key={id} className={`player-card ${index < 3 ? "top3" : ""}`}>
@@ -69,4 +69,3 @@ export const Ranking = () => {
         </div>
     );
 };
-//  

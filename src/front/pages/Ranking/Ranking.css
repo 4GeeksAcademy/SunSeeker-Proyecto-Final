@@ -1,5 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 :root {
   --sky-light: #8ecae6;
   --teal: #219ebc;
@@ -17,11 +23,177 @@
   --pixel: "Press Start 2P", monospace;
 }
 
+.ranking-page-container {
+  background-color: var(--dark);
+  font-family: var(--pixel);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  /* height: calc(100vh - 160px) !important; */
+  min-height: 0 !important; 
+  overflow: hidden;
+  padding: 1px 15px;
+}
+
+.subtitulo {
+  color: var(--cyan);
+  font-size: 1rem;
+  letter-spacing: 4px;
+  margin: 10px 0px;
+  margin-bottom: 1px;
+}
+
+@media (min-width: 768px) {
+  .subtitulo {
+    font-size: 2rem;
+    letter-spacing: 5px;
+  }
+}
+
+.ranking {
+  width: 100%;
+  max-width: 600px;
+  /* display: flex; */
+  flex-direction: column;
+  gap: 1px;
+  /* flex: 1; */
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .ranking {
+    max-width: 600px;
+  }
+}
+
+.player-card {
+  background-color: var(--card);
+  border: 3px solid var(--teal);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 13px;
+  width: 100%;
+  border-width: 3px;
+  transition: all 0.3s ease-in-out;
+}
+
+@media (min-width: 576px) {
+  .player-card {
+    gap: 10px;
+    padding: 22px;
+  }
+}
+
+.player-card.top3 {
+  border-color: var(--gold);
+}
+
+.rank-number {
+  font-family: var(--pixel);
+  font-size: 0.8rem;
+  color: var(--teal);
+  width: 28px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.player-card.top3 .rank-number {
+  color: var(--gold);
+}
+
+.player-card:nth-child(1) .rank-number::before {
+  content: "🥇 ";
+}
+
+.player-card:nth-child(2) .rank-number::before {
+  content: "🥈 ";
+}
+
+.player-card:nth-child(3) .rank-number::before {
+  content: "🥉 ";
+}
+
+.cat-avatar {
+  width: 45px;
+  height: 35px;
+  background-color: var(--navy);
+  border: 2px solid var(--teal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.cat-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (min-width: 576px) {
+  .cat-avatar {
+    width: 80px;
+    height: 56px;
+    font-size: 1.8rem;
+  }
+}
+
+.player-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.player-name {
+  font-family: var(--pixel);
+  font-size: 0.7rem;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.score-bar-bg {
+  width: 100%;
+  height: 6px;
+  background-color: var(--navy);
+  border-radius: 3px;
+}
+
+.score-bar-fill {
+  background-color: var(--amber);
+  height: 100%;
+  transition: width 1s ease-in-out;
+}
+
+.score {
+  font-family: var(--pixel);
+  font-size: 1.2rem;
+  color: var(--gold);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+@media (min-width: 576px) {
+  .player-name {
+    font-size: 0.6rem;
+  }
+  .score {
+    font-size: 1.1rem;
+  }
+}
+
 .esqueleto-fijo {
   opacity: 0.5;
   filter: grayscale(0.8);
   border: 2px dashed var(--teal) !important;
-  background-color: rgba(2,48,71,0.4) !important;
+  background-color: rgba(2, 48, 71, 0.4) !important;
   pointer-events: none;
 }
 
@@ -39,10 +211,10 @@
 }
 
 .no-data-overlay {
-  margin-top: 30px;
+  margin-top: 15px;
   padding: 20px;
   border: 2px solid var(--amber);
-  background: rgba(253, 158, 2, 0.05); 
+  background: rgba(253, 158, 2, 0.05);
   color: var(--amber);
   text-align: center;
   font-family: var(--pixel);
@@ -78,168 +250,5 @@
 
   .esqueleto-line-name {
     width: 80px;
-  }
-}
-
-.ranking-page-container {
-  background-color: var(--dark);
-  font-family: var(--pixel);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-bottom: 50px;
-  width: 100%;
-  padding: 48px 16px;
-  position: relative;
-  z-index: 1;
-}
-
-.subtitulo {
-  color: var(--cyan);
-  font-size: 3.5rem;
-  letter-spacing: 5px;
-  margin-bottom: 10px;
-}
-
-@media (min-width: 768px) {
-  .subtitulo {
-    font-size: 2rem;
-    letter-spacing: 5px;
-  }
-}
-
-.ranking {
-  width: 100%;
-  max-width: 900px;
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-}
-
-@media (min-width: 768px) {
-  .ranking {
-    max-width: 600px;
-  }
-}
-
-.player-card {
-  background-color: var(--card);
-  border: 2px solid var(--teal);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 40px;
-  width: 100%;
-  border-width: 3px;
-  transition: all 0.3s ease-in-out;
-}
-
-@media (min-width: 576px) {
-  .player-card {
-    gap: 20px;
-    padding: 25px;
-  }
-}
-
-.player-card.top3 {
-  border-color: var(--gold);
-}
-
-.rank-number {
-  font-family: var(--pixel);
-  font-size: 0.8rem;
-  color: var(--teal);
-  width: 28px;
-  text-align: center;
-  flex-shrink: 0;
-}
-
-.player-card.top3 .rank-number {
-  color: var(--gold);
-}
-
-.player-card:nth-child(1) .rank-number::before {
-  content: "🥇 ";
-}
-
-.player-card:nth-child(2) .rank-number::before {
-  content: "🥈 ";
-}
-
-.player-card:nth-child(3) .rank-number::before {
-  content: "🥉 ";
-}
-
-.cat-avatar {
-  width: 80px;
-  height: 56px;
-  background-color: var(--navy);
-  border: 2px solid var(--teal);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  flex-shrink: 0;
-  overflow: hidden;
-}
-
-.cat-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-@media (min-width: 576px) {
-  .cat-avatar {
-    width: 80px;
-    height: 56px;
-    font-size: 1.8rem;
-  }
-}
-
-.player-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 0;
-}
-
-.player-name {
-  font-family: var(--pixel);
-  font-size: 2rem;
-  color: var(--text);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.score-bar-bg {
-  width: 100%;
-  height: 6px;
-  background-color: var(--navy);
-  border-radius: 3px;
-}
-
-.score-bar-fill {
-  background-color: var(--amber);
-  height: 100%;
-  transition: width 1s ease-in-out;
-}
-
-.score {
-  font-family: var(--pixel);
-  font-size: 1.2rem;
-  color: var(--gold);
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-@media (min-width: 576px) {
-  .player-name {
-    font-size: 0.6rem;
-  }
-  .score {
-    font-size: 1.1rem;
   }
 }

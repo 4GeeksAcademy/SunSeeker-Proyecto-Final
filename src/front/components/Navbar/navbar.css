@@ -146,6 +146,7 @@ nav {
   align-items: center;
   gap: 12px;
 }
+
 .btn {
   font-family: var(--pixel);
   font-size: 9px;
@@ -169,10 +170,9 @@ nav {
   transform: translate(2px, 2px);
 }
 
-.btn-signin {
-  background: transparent;
-  color: var(--gold);
-  border: 2px solid var(--gold);
+.btn-signup {
+  background: var(--gold) !important; 
+  color: var(--navy) !important;    
   box-shadow: 3px 3px 0 var(--orange);
 }
 
