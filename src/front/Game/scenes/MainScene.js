@@ -44,9 +44,6 @@ export default class MainScene extends Phaser.Scene {
   }
 
   create() {
-    this.gatoColor = 2;
-    let texturaSeleccionada = this.gatoColor === 2 ? "GatoBlanco" : "GatoNaranjaF";
-    let escalaSeleccionada = this.gatoColor === 2 ? 0.9 : 1.6;
     CommunicatorMusic.removeAllListeners("change-music-state");
     CommunicatorMusic.on("change-music-state", (data) => {
       if (!this.sys || !this.scene.isActive()) return;
@@ -149,8 +146,8 @@ export default class MainScene extends Phaser.Scene {
       if (this.isDead) return;
       this.isDead = true;
       this.physics.pause();
-      this.GatoNar.anims.play("Muerte_", true);
-      this.GatoNar.setTint(0xff0000);
+      this.GatoNar.anims.play("Muerte_" + sufijo, true);
+      // this.GatoNar.setTint(0xff0000);
 
       this.time.addEvent({
         delay: 2000,
@@ -182,15 +179,16 @@ export default class MainScene extends Phaser.Scene {
     this.physics.add.collider(this.Perrito, paredes);
     this.physics.add.overlap(this.Perrito, respawnDog, Respawn, null, this);
 
-    //// Gato Naranaja
 
-    // this.GatoNar = this.physics.add
-    //   .sprite(420, 1300, "GatoNaranjaF")
-    //   .setScale(1.6);
+    this.gatoColor = 1; 
 
-    this.GatoNar = this.physics.add.sprite(420, 1300, texturaSeleccionada);
+    const texturaGato = (this.gatoColor === 2) ? "GatoBlanco" : "GatoNaranjaF";
+    const sufijo = (this.gatoColor === 2) ? "Blanco" : "Naranja";
+    const escala = (this.gatoColor === 2) ? 0.9 : 1.6;
 
-    this.GatoNar.setScale(escalaSeleccionada);
+    this.GatoNar = this.physics.add
+      .sprite(420, 1300, texturaGato) 
+      .setScale(escala);
 
     ////
     this.GatoNar.setCollideWorldBounds(true);
