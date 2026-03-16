@@ -3,7 +3,7 @@ import Phaser from "phaser";
 
 import MainScene from "../Game/scenes/MainScene";
 import Level2 from "../Game/scenes/Level2";
-import Level3 from "../Game/scenes/Level3";
+import Level3 from "../Game/scenes/Level3/Level3";
 import endScene from "../Game/scenes/endScene";
 import Menu from "../Game/scenes/Menu";
 import Controles from "../Game/scenes/Controles";
@@ -36,11 +36,11 @@ export default function PhaserGame() {
         default: "arcade",
         arcade: {
           gravity: { y: 1000},
-          debug: false,
+          debug: true,
         },
       },
       // Lista de escenas; aquí pasamos la clase que implementa la lógica
-      scene: [Menu,MainScene,Level2,Level3,Niveles,endScene,Controles,Inventario],
+      scene: [Level3,Menu, MainScene,Level2,Niveles,endScene,Controles,Inventario],
     };
 
     // Crear la instancia del juego con la configuración

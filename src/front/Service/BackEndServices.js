@@ -54,7 +54,7 @@ export const signin = async (user) => {
 
 export const queryRanking = async () => {
   const response = await fetch(
-    `${import.meta.env.VITE_BACKEND_URL}/api/signin`,
+    `${import.meta.env.VITE_BACKEND_URL}/api/partidas`,
   );
   const data = await response.json();
   if (!response.ok) {

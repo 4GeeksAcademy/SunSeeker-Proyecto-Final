@@ -3,7 +3,7 @@
 export function Controles(Game){
 
      var cursors = Game.input.keyboard.createCursorKeys();
-
+     
             if (cursors.left.isDown) {
                 Game.GatoNar.setVelocityX(-160);
                 Game.GatoNar.setFlipX(false)
