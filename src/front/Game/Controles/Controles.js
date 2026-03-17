@@ -32,6 +32,13 @@ export function Controles(Game) {
       Game.Perrito.anims.play("Perrito", true);
     }
   }
+
+  if (Game.PerritoCallejon && Game.PerritoCallejon.body) {
+    if (Game.PerritoCallejon.body.velocity.x !== 0) {
+      Game.PerritoCallejon.setFlipX(Game.PerritoCallejon.body.velocity.x > 0);
+      Game.PerritoCallejon.anims.play("Perrito", true);
+    }
+  }
 }
 
 
