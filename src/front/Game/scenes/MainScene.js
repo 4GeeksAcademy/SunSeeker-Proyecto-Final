@@ -76,6 +76,7 @@ export default class MainScene extends Phaser.Scene {
         }
       }
     });
+    CommunicatorMusic.emit("request-play-music");
 
     this.GatoNar = "";
     this.Perrito = "";
@@ -187,9 +188,20 @@ export default class MainScene extends Phaser.Scene {
     this.gatoColor = colorMap[localStorage.getItem("michi_color")] ?? 1;
     // this.gatoColor = 3;
 
-    const texturaGato = this.gatoColor === 2 ? "GatoBlanco"  : this.gatoColor === 3 ? "GatoNegro" :  "GatoNaranjaF";
-    const sufijo = this.gatoColor === 2 ? "Blanco" : this.gatoColor === 3 ? "Negro" : "Naranja";
-    const escala = this.gatoColor === 2 ? 0.9 : this.gatoColor === 3 ? 1.1  : 1.6;
+    const texturaGato =
+      this.gatoColor === 2
+        ? "GatoBlanco"
+        : this.gatoColor === 3
+          ? "GatoNegro"
+          : "GatoNaranjaF";
+    const sufijo =
+      this.gatoColor === 2
+        ? "Blanco"
+        : this.gatoColor === 3
+          ? "Negro"
+          : "Naranja";
+    const escala =
+      this.gatoColor === 2 ? 0.9 : this.gatoColor === 3 ? 1.1 : 1.6;
 
     this.GatoNar = this.physics.add
       .sprite(420, 1300, texturaGato)
@@ -231,6 +243,16 @@ export default class MainScene extends Phaser.Scene {
     peces.create(265, 1150, "Pez").setScale(0.07);
 
     this.physics.add.overlap(this.GatoNar, peces, PuntosGato, null, this);
+
+      this.events.on("shutdown", () => {
+        CommunicatorMusic.removeAllListeners("change-music-state");
+        CommunicatorMusic.emit("request-pause-music");
+      });
+      this.events.on("destroy", () => {
+        CommunicatorMusic.removeAllListeners("change-music-state");
+        CommunicatorMusic.emit("request-pause-music");
+      });
+
 
     Animaciones(this, this.gatoColor);
 
@@ -290,5 +312,9 @@ export default class MainScene extends Phaser.Scene {
       return;
     }
     Controles(this, this.cursors, this.perrito);
+  }
+
+  cleanupListeners() {
+    CommunicatorMusic.removeAllListeners("change-music-state");
   }
 }
