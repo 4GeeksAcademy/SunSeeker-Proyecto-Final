@@ -16,12 +16,37 @@ export const Game = () => {
         if (tracks.length === 0) {
             jamendoCall(dispatch);
         }
+        const audio = audioRef.current;
+        audio.pause();
+        audio.src = "";
+        setIsPlaying(false);
+
+        return () => {
+            audio.pause();
+            audio.src = "";
+            CommunicatorMusic.emit("change-music-state", { isPlaying: false });
+            CommunicatorMusic.removeAllListeners("request-play-music");
+        };
     }, [])
+
+    useEffect(() => {
+        const pauseFromPhaser = () => {
+            const audio = audioRef.current;
+            audio.pause();
+            setIsPlaying(false);
+            CommunicatorMusic.emit("change-music-state", { isPlaying: false });
+        };
+        CommunicatorMusic.on("request-pause-music", pauseFromPhaser);
+        return () => {
+            CommunicatorMusic.off("request-pause-music", pauseFromPhaser);
+        };
+    }, []);
 
     useEffect(() => {
         const playFromPhaser = () => {
             if (!isPlaying) handleTogglePlay();
         };
+        CommunicatorMusic.removeAllListeners("request-play-music");
         CommunicatorMusic.on("request-play-music", playFromPhaser);
         return () => {
             CommunicatorMusic.off("request-play-music", playFromPhaser);
