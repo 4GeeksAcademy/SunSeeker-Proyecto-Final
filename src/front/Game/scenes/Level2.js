@@ -15,6 +15,7 @@ export default class Level2 extends Phaser.Scene {
   preload() {
     this.load.baseURL = "./";
 
+    this.load.image("Modal", "img/ModalMenuSF.png");
     this.load.image("fondoHorizontal", "img/FondoNivel2.png");
     this.load.image("TablaIzq", "img/TablaIzquierda.png");
     this.load.image("TablaDer", "img/TablaDerecha.png");
@@ -270,13 +271,45 @@ export default class Level2 extends Phaser.Scene {
   .text(16, 16, "Score: " + this.GatoNar.Score, { fontSize: "32px", fill: "#000" })
   .setScrollFactor(0);
 
-    this.add.image(730, 30, "Menu").setScale(0.06).setScrollFactor(0);
-    const menuZone = this.add
-      .zone(673, 10, 115, 38)
-      .setOrigin(0)
-      .setScrollFactor(0);
-    menuZone.setInteractive();
-    menuZone.once("pointerdown", () => this.scene.start("Menu"));
+        // Boton Volver al Menu
+this.add.image(730, 30, "Menu").setScale(0.06).setScrollFactor(0);
+const MenuBtn = this.add.zone(673, 10, 115, 38);
+MenuBtn.setOrigin(0);
+MenuBtn.setInteractive().setScrollFactor(0);
+
+MenuBtn.on("pointerdown", () => {
+  this.physics.pause();
+  this.time.paused = true;
+
+  const overlay = this.add.rectangle(400, 350, 800, 800, 0x000000, 0.6)
+    .setScrollFactor(0).setDepth(10);
+
+  // Aqui pones tu imagen, botones y texto
+  const modalImg = this.add.image(400, 300, "Modal").setScrollFactor(0).setDepth(10).setScale(0.3);
+
+  const btnSi = this.add.zone(270, 316, 110, 70).setInteractive().setScrollFactor(0).setDepth(11);
+  btnSi.setOrigin(0);
+  btnSi.setInteractive().setScrollFactor(0);
+  // this.add.graphics().lineStyle(2, 0xff0000).strokeRectShape(btnSi).setScrollFactor(0);
+
+  const btnNo = this.add.zone(430, 316, 110, 70).setInteractive().setScrollFactor(0).setDepth(11);
+  btnNo.setOrigin(0);
+  btnNo.setInteractive().setScrollFactor(0);
+  // this.add.graphics().lineStyle(2, 0xff0000).strokeRectShape(btnNo).setScrollFactor(0);
+
+  btnSi.once("pointerdown", () => {
+    this.scene.start("Menu");
+  });
+
+  btnNo.once("pointerdown", () => {
+    overlay.destroy()
+    modalImg.destroy();
+    btnSi.destroy();
+    btnNo.destroy();
+    this.physics.resume();
+    this.time.paused = false;
+  });
+});
 
     Animaciones(this);
   }
