@@ -1,7 +1,9 @@
 export function Controles(Game) {
     var cursors = Game.input.keyboard.createCursorKeys();
     
-    let sufijo = (Game.gatoColor === 2) ? "Blanco" : "Naranja";
+    let sufijo = Game.gatoColor === 2 ? "Blanco"
+           : Game.gatoColor === 3 ? "Negro"
+           : "Naranja";
 
     //movimientos
     if (cursors.left.isDown) {
