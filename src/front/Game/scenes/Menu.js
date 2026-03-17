@@ -22,6 +22,10 @@ export default class Menu extends Phaser.Scene {
       frameWidth: 89,
       frameHeight: 58,
     });
+    this.load.spritesheet("GatoNegro", "img/GatoNegroSF.png", {
+      frameWidth: 84,
+      frameHeight: 57,
+    });
     this.load.spritesheet("Perrito", "img/perritoDef.png", {
       frameWidth: 525,
       frameHeight: 400,
@@ -54,13 +58,13 @@ export default class Menu extends Phaser.Scene {
       this.GatoNar.anims.play("turn_" + sufijo, true);
     }
     
-    // this.gatoColor = 2; 
-    const colorMap = { "Naranja": 1, "Blanco": 2 };
+  const colorMap = { Naranja: 1, Blanco: 2, Negro: 3 };
     this.gatoColor = colorMap[localStorage.getItem("michi_color")] ?? 1;
+    // this.gatoColor = 3;
 
-    const texturaGato = (this.gatoColor === 2) ? "GatoBlanco" : "GatoNaranjaF";
-    const sufijo = (this.gatoColor === 2) ? "Blanco" : "Naranja";
-    const escala = (this.gatoColor === 2) ? 0.9 : 1.6;
+    const texturaGato = this.gatoColor === 2 ? "GatoBlanco"  : this.gatoColor === 3 ? "GatoNegro" :  "GatoNaranjaF";
+    const sufijo = this.gatoColor === 2 ? "Blanco" : this.gatoColor === 3 ? "Negro" : "Naranja";
+    const escala = this.gatoColor === 2 ? 0.9 : this.gatoColor === 3 ? 1.1  : 1.6;
 
 
     this.GatoNar = this.physics.add
