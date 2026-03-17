@@ -167,7 +167,7 @@ export default class MainScene extends Phaser.Scene {
         delay: 1000,
         loop: false,
         callback: () => {
-          this.scene.start("endScene", { score: this.GatoNar.Score });
+          this.scene.start("Level2", { score: this.GatoNar.Score });
         },
       });
     }

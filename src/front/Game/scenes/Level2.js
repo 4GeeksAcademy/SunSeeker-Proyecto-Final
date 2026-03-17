@@ -8,6 +8,10 @@ export default class Level2 extends Phaser.Scene {
     super("Level2");
   }
 
+  init(data) {
+  this.previousScore = data.score ?? 0;
+}
+
   preload() {
     this.load.baseURL = "./";
 
@@ -38,6 +42,7 @@ export default class Level2 extends Phaser.Scene {
       frameWidth: 251,
       frameHeight: 199,
     });
+    
   }
 
   create() {
@@ -180,7 +185,7 @@ export default class Level2 extends Phaser.Scene {
 
     this.GatoNar.setCollideWorldBounds(true);
     this.GatoNar.setBounce(0.1);
-    this.GatoNar.Score = 0;
+    this.GatoNar.Score = this.previousScore ?? 0; 
 
     this.physics.add.collider(
       this.GatoNar,
@@ -262,8 +267,8 @@ export default class Level2 extends Phaser.Scene {
 
     this.add.image(115, 34, "ScoreFondo").setScale(0.46).setScrollFactor(0);
     this.ScoreText = this.add
-      .text(16, 16, "Score: 0", { fontSize: "32px", fill: "#000" })
-      .setScrollFactor(0);
+  .text(16, 16, "Score: " + this.GatoNar.Score, { fontSize: "32px", fill: "#000" })
+  .setScrollFactor(0);
 
     this.add.image(730, 30, "Menu").setScale(0.06).setScrollFactor(0);
     const menuZone = this.add

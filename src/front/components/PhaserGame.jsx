@@ -40,7 +40,7 @@ export default function PhaserGame() {
         },
       },
       // Lista de escenas; aquí pasamos la clase que implementa la lógica
-      scene: [Level2,Menu,MainScene,Level3,Niveles,endScene,Controles,Inventario],
+      scene: [Menu,MainScene,Level2,Level3,Niveles,endScene,Controles,Inventario],
     };
 
     // Crear la instancia del juego con la configuración
