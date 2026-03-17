@@ -2,6 +2,7 @@ export function Animaciones(Game) {
   const tipos = [
     { key: "Naranja", texture: "GatoNaranjaF", frameStop: 5 },
     { key: "Blanco", texture: "GatoBlanco", frameStop: 5 },
+    { key: "Negro", texture: "GatoNegro", frameStop: 5 },
   ];
 
   tipos.forEach((gato) => {
@@ -24,6 +25,11 @@ export function Animaciones(Game) {
       Game.anims.create({
         key: "Muerte_" + gato.key,
         frames: [{ key: gato.texture, frame: 6 }],
+        frameRate: 10,
+      });
+       Game.anims.create({
+        key: "jump_" + gato.key,
+        frames: [{ key: gato.texture, frame: 4 }],
         frameRate: 10,
       });
     }

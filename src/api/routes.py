@@ -62,7 +62,7 @@ def signin():
     user = michi.user
     if user.check_password(password):
         access_token = create_access_token(identity=str(user.id))
-        return jsonify({"msg": "Inicio de sesión exitosa", "token": access_token}), 200
+        return jsonify({"msg": "Inicio de sesión exitosa", "token": access_token,"michi_color": michi.color}), 200
     else:
         return jsonify({"msg": "Contraseña o Michi_Name incorrectos"}), 400
 
