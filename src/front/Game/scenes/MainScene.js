@@ -17,6 +17,7 @@ export default class MainScene extends Phaser.Scene {
 
   preload() {
     this.load.baseURL = "./";
+    this.load.image("Modal", "img/ModalMenuSF.png");
     this.load.image("fondo", "img/fondo.jpg");
     this.load.image("fondoLargo", "img/mundoRaro.png");
     this.load.image("CasaCiro", "img/CasaDeCiroFn.png");
@@ -42,8 +43,8 @@ export default class MainScene extends Phaser.Scene {
       frameHeight: 57,
     });
     this.load.spritesheet("Perrito", "img/perritoDef.png", {
-      frameWidth: 525,
-      frameHeight: 400,
+      frameWidth: 251,
+      frameHeight: 199,
     });
   }
 
@@ -168,7 +169,7 @@ export default class MainScene extends Phaser.Scene {
         delay: 1000,
         loop: false,
         callback: () => {
-          this.scene.start("endScene", { score: this.GatoNar.Score });
+          this.scene.start("Level2", { score: this.GatoNar.Score });
         },
       });
     }
@@ -176,7 +177,7 @@ export default class MainScene extends Phaser.Scene {
     let NextLevel = this.add.zone(75, 100, 20, 20);
     this.physics.add.existing(NextLevel, true);
 
-    this.Perrito = this.physics.add.sprite(770, 490, "Perrito").setScale(0.13);
+    this.Perrito = this.physics.add.sprite(770, 490, "Perrito").setScale(0.3);
     this.Perrito.setCollideWorldBounds(true);
     this.Perrito.setVelocityX(150);
     this.Perrito.setBounce(1, 0);
@@ -276,16 +277,45 @@ export default class MainScene extends Phaser.Scene {
     });
     this.ScoreText.setScrollFactor(0);
 
-    ///Boton Volver al Menu
-    this.add.image(730, 30, "Menu").setScale(0.06).setScrollFactor(0);
-    //funcion volver al menu
-    const Menu = this.add.zone(673, 10, 115, 38);
-    Menu.setOrigin(0);
-    Menu.setInteractive().setScrollFactor(0);
-    Menu.once("pointerdown", () => this.scene.start("Menu"));
-    // this.add.graphics().lineStyle(2, 0xff0000).strokeRectShape(Menu).setScrollFactor(0);
+    // Boton Volver al Menu
+this.add.image(730, 30, "Menu").setScale(0.06).setScrollFactor(0);
+const MenuBtn = this.add.zone(673, 10, 115, 38);
+MenuBtn.setOrigin(0);
+MenuBtn.setInteractive().setScrollFactor(0);
 
-    // this.cursors = this.input.keyboard.createCursorKeys();
+MenuBtn.on("pointerdown", () => {
+  this.physics.pause();
+  this.time.paused = true;
+
+  const overlay = this.add.rectangle(400, 350, 800, 800, 0x000000, 0.6)
+    .setScrollFactor(0).setDepth(10);
+
+  // Aqui pones tu imagen, botones y texto
+  const modalImg = this.add.image(400, 300, "Modal").setScrollFactor(0).setDepth(10).setScale(0.3);
+
+  const btnSi = this.add.zone(270, 316, 110, 70).setInteractive().setScrollFactor(0).setDepth(11);
+  btnSi.setOrigin(0);
+  btnSi.setInteractive().setScrollFactor(0);
+  // this.add.graphics().lineStyle(2, 0xff0000).strokeRectShape(btnSi).setScrollFactor(0);
+
+  const btnNo = this.add.zone(430, 316, 110, 70).setInteractive().setScrollFactor(0).setDepth(11);
+  btnNo.setOrigin(0);
+  btnNo.setInteractive().setScrollFactor(0);
+  // this.add.graphics().lineStyle(2, 0xff0000).strokeRectShape(btnNo).setScrollFactor(0);
+
+  btnSi.once("pointerdown", () => {
+    this.scene.start("Menu");
+  });
+
+  btnNo.once("pointerdown", () => {
+    overlay.destroy()
+    modalImg.destroy();
+    btnSi.destroy();
+    btnNo.destroy();
+    this.physics.resume();
+    this.time.paused = false;
+  });
+});
   }
 
   refreshTime() {

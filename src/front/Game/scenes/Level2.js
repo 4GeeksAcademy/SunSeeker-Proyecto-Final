@@ -8,9 +8,14 @@ export default class Level2 extends Phaser.Scene {
     super("Level2");
   }
 
+  init(data) {
+  this.previousScore = data.score ?? 0;
+}
+
   preload() {
     this.load.baseURL = "./";
 
+    this.load.image("Modal", "img/ModalMenuSF.png");
     this.load.image("fondoHorizontal", "img/FondoNivel2.png");
     this.load.image("TablaIzq", "img/TablaIzquierda.png");
     this.load.image("TablaDer", "img/TablaDerecha.png");
@@ -34,10 +39,11 @@ export default class Level2 extends Phaser.Scene {
       frameWidth: 84,
       frameHeight: 57,
     });
-    this.load.spritesheet("Perrito", "img/perritoDef.png", {
-      frameWidth: 525,
-      frameHeight: 400,
+   this.load.spritesheet("Perrito", "img/perritoDef.png", {
+      frameWidth: 251,
+      frameHeight: 199,
     });
+    
   }
 
   create() {
@@ -145,7 +151,7 @@ export default class Level2 extends Phaser.Scene {
     //perro callejon
     this.PerritoCallejon = this.physics.add
       .sprite(900, 140, "Perrito")
-      .setScale(0.13);
+      .setScale(0.3);
     this.PerritoCallejon.setCollideWorldBounds(true);
     this.PerritoCallejon.setVelocityX(150);
     this.PerritoCallejon.setBounce(1, 0);
@@ -153,7 +159,7 @@ export default class Level2 extends Phaser.Scene {
     this.physics.add.collider(this.PerritoCallejon, paredesCallejon);
 
     //perro entre cajas
-    this.Perrito = this.physics.add.sprite(1450, 620, "Perrito").setScale(0.13);
+    this.Perrito = this.physics.add.sprite(1450, 620, "Perrito").setScale(0.3);
     this.Perrito.setCollideWorldBounds(true);
     this.Perrito.setVelocityX(150);
     this.Perrito.setBounce(1, 0);
@@ -184,7 +190,7 @@ export default class Level2 extends Phaser.Scene {
 
     this.GatoNar.setCollideWorldBounds(true);
     this.GatoNar.setBounce(0.1);
-    this.GatoNar.Score = 0;
+    this.GatoNar.Score = this.previousScore ?? 0; 
 
     this.physics.add.collider(
       this.GatoNar,
@@ -266,16 +272,48 @@ export default class Level2 extends Phaser.Scene {
 
     this.add.image(115, 34, "ScoreFondo").setScale(0.46).setScrollFactor(0);
     this.ScoreText = this.add
-      .text(16, 16, "Score: 0", { fontSize: "32px", fill: "#000" })
-      .setScrollFactor(0);
+  .text(16, 16, "Score: " + this.GatoNar.Score, { fontSize: "32px", fill: "#000" })
+  .setScrollFactor(0);
 
-    this.add.image(730, 30, "Menu").setScale(0.06).setScrollFactor(0);
-    const menuZone = this.add
-      .zone(673, 10, 115, 38)
-      .setOrigin(0)
-      .setScrollFactor(0);
-    menuZone.setInteractive();
-    menuZone.once("pointerdown", () => this.scene.start("Menu"));
+        // Boton Volver al Menu
+this.add.image(730, 30, "Menu").setScale(0.06).setScrollFactor(0);
+const MenuBtn = this.add.zone(673, 10, 115, 38);
+MenuBtn.setOrigin(0);
+MenuBtn.setInteractive().setScrollFactor(0);
+
+MenuBtn.on("pointerdown", () => {
+  this.physics.pause();
+  this.time.paused = true;
+
+  const overlay = this.add.rectangle(400, 350, 800, 800, 0x000000, 0.6)
+    .setScrollFactor(0).setDepth(10);
+
+  // Aqui pones tu imagen, botones y texto
+  const modalImg = this.add.image(400, 300, "Modal").setScrollFactor(0).setDepth(10).setScale(0.3);
+
+  const btnSi = this.add.zone(270, 316, 110, 70).setInteractive().setScrollFactor(0).setDepth(11);
+  btnSi.setOrigin(0);
+  btnSi.setInteractive().setScrollFactor(0);
+  // this.add.graphics().lineStyle(2, 0xff0000).strokeRectShape(btnSi).setScrollFactor(0);
+
+  const btnNo = this.add.zone(430, 316, 110, 70).setInteractive().setScrollFactor(0).setDepth(11);
+  btnNo.setOrigin(0);
+  btnNo.setInteractive().setScrollFactor(0);
+  // this.add.graphics().lineStyle(2, 0xff0000).strokeRectShape(btnNo).setScrollFactor(0);
+
+  btnSi.once("pointerdown", () => {
+    this.scene.start("Menu");
+  });
+
+  btnNo.once("pointerdown", () => {
+    overlay.destroy()
+    modalImg.destroy();
+    btnSi.destroy();
+    btnNo.destroy();
+    this.physics.resume();
+    this.time.paused = false;
+  });
+});
 
 
    this.events.on("shutdown", () => {
