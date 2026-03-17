@@ -30,8 +30,20 @@ export function Controles(Game) {
     }
 
     //Perrito
+   if (Game.Perrito && Game.Perrito.body) {
     if (Game.Perrito.body.velocity.x !== 0) {
-        Game.Perrito.setFlipX(Game.Perrito.body.velocity.x > 0);
-        Game.Perrito.anims.play('Perrito', true);
+      Game.Perrito.setFlipX(Game.Perrito.body.velocity.x > 0);
+      Game.Perrito.anims.play("Perrito", true);
     }
+  }
+
+  if (Game.PerritoCallejon && Game.PerritoCallejon.body) {
+    if (Game.PerritoCallejon.body.velocity.x !== 0) {
+      Game.PerritoCallejon.setFlipX(Game.PerritoCallejon.body.velocity.x > 0);
+      Game.PerritoCallejon.anims.play("Perrito", true);
+    }
+  }
 }
+
+
+
