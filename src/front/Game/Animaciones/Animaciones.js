@@ -39,7 +39,7 @@ export function Animaciones(Game) {
   if (!Game.anims.exists("Perrito")) {
     Game.anims.create({
       key: "Perrito",
-      frames: Game.anims.generateFrameNumbers("Perrito", { start: 0, end: 1 }),
+      frames: Game.anims.generateFrameNumbers("Perrito", { start: 0, end: 3 }),
       frameRate: 10,
       repeat: -1,
     });

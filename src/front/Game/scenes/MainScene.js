@@ -42,8 +42,8 @@ export default class MainScene extends Phaser.Scene {
       frameHeight: 57,
     });
     this.load.spritesheet("Perrito", "img/perritoDef.png", {
-      frameWidth: 525,
-      frameHeight: 400,
+      frameWidth: 251,
+      frameHeight: 199,
     });
   }
 
@@ -175,7 +175,7 @@ export default class MainScene extends Phaser.Scene {
     let NextLevel = this.add.zone(75, 100, 20, 20);
     this.physics.add.existing(NextLevel, true);
 
-    this.Perrito = this.physics.add.sprite(770, 490, "Perrito").setScale(0.13);
+    this.Perrito = this.physics.add.sprite(770, 490, "Perrito").setScale(0.3);
     this.Perrito.setCollideWorldBounds(true);
     this.Perrito.setVelocityX(150);
     this.Perrito.setBounce(1, 0);

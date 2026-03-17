@@ -26,9 +26,9 @@ export default class Menu extends Phaser.Scene {
       frameWidth: 84,
       frameHeight: 57,
     });
-    this.load.spritesheet("Perrito", "img/perritoDef.png", {
-      frameWidth: 525,
-      frameHeight: 400,
+   this.load.spritesheet("Perrito", "img/perritoDef.png", {
+      frameWidth: 251,
+      frameHeight: 199,
     });
   }
 

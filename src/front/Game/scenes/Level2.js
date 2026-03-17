@@ -34,9 +34,9 @@ export default class Level2 extends Phaser.Scene {
       frameWidth: 84,
       frameHeight: 57,
     });
-    this.load.spritesheet("Perrito", "img/perritoDef.png", {
-      frameWidth: 525,
-      frameHeight: 400,
+   this.load.spritesheet("Perrito", "img/perritoDef.png", {
+      frameWidth: 251,
+      frameHeight: 199,
     });
   }
 
@@ -141,7 +141,7 @@ export default class Level2 extends Phaser.Scene {
     //perro callejon
     this.PerritoCallejon = this.physics.add
       .sprite(900, 140, "Perrito")
-      .setScale(0.13);
+      .setScale(0.3);
     this.PerritoCallejon.setCollideWorldBounds(true);
     this.PerritoCallejon.setVelocityX(150);
     this.PerritoCallejon.setBounce(1, 0);
@@ -149,7 +149,7 @@ export default class Level2 extends Phaser.Scene {
     this.physics.add.collider(this.PerritoCallejon, paredesCallejon);
 
     //perro entre cajas
-    this.Perrito = this.physics.add.sprite(1450, 620, "Perrito").setScale(0.13);
+    this.Perrito = this.physics.add.sprite(1450, 620, "Perrito").setScale(0.3);
     this.Perrito.setCollideWorldBounds(true);
     this.Perrito.setVelocityX(150);
     this.Perrito.setBounce(1, 0);
