@@ -63,3 +63,23 @@ export const queryRanking = async () => {
   }
   return data;
 };
+
+export const updateMichiColor = async (color) => {
+  const token = localStorage.getItem("token");
+    console.log("Token:", token);
+  const response = await fetch(
+    `${import.meta.env.VITE_BACKEND_URL}/api/get_michi`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ color }),
+    });
+    const data = await response.json();
+    if(!response.ok){
+      return {error: data.error || "Error al guardar"};
+    }
+    return { success: true, data};
+};
