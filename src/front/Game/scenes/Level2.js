@@ -44,8 +44,10 @@ export default class Level2 extends Phaser.Scene {
     CommunicatorMusic.removeAllListeners("change-music-state");
     CommunicatorMusic.on("change-music-state", (data) => {
       if (!this.sys || !this.scene.isActive()) return;
+
       if (data.isPlaying) {
         if (this.physics?.world) this.physics.resume();
+
         if (this.time) this.time.paused = false;
         if (this.GatoNar?.anims) {
           this.GatoNar.anims.resume();
@@ -57,6 +59,8 @@ export default class Level2 extends Phaser.Scene {
         if (this.GatoNar?.anims) this.GatoNar.anims.pause();
       }
     });
+    CommunicatorMusic.emit("request-play-music"); 
+   
 
     this.isDead = false;
     const WORLD_W = 3200;
@@ -273,6 +277,16 @@ export default class Level2 extends Phaser.Scene {
     menuZone.setInteractive();
     menuZone.once("pointerdown", () => this.scene.start("Menu"));
 
+
+   this.events.on("shutdown", () => {
+     CommunicatorMusic.removeAllListeners("change-music-state");
+     CommunicatorMusic.emit("request-pause-music");
+   });
+   this.events.on("destroy", () => {
+     CommunicatorMusic.removeAllListeners("change-music-state");
+     CommunicatorMusic.emit("request-pause-music");
+   });
+
     Animaciones(this);
   }
 
@@ -295,5 +309,9 @@ export default class Level2 extends Phaser.Scene {
   update() {
     if (this.isDead) return;
     Controles(this);
+  }
+
+  cleanupListeners() {
+    CommunicatorMusic.removeAllListeners("change-music-state");
   }
 }
