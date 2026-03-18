@@ -34,11 +34,23 @@ export default class MainScene extends Phaser.Scene {
       frameWidth: 49,
       frameHeight: 31,
     });
+     this.load.spritesheet("GatoNaranjaGafas", "img/GatoNaranjaGafas.png", {
+      frameWidth: 49,
+      frameHeight: 31,
+    });
     this.load.spritesheet("GatoBlanco", "img/GatoBlanco.png", {
       frameWidth: 89,
       frameHeight: 58,
     });
+    this.load.spritesheet("GatoBlancoGafas", "img/GatoBlancoGafas.png", {
+      frameWidth: 89,
+      frameHeight: 58,
+    });
     this.load.spritesheet("GatoNegro", "img/GatoNegroSF.png", {
+      frameWidth: 84,
+      frameHeight: 57,
+    });
+    this.load.spritesheet("GatoNegroGafas", "img/GatoNegroGafas.png", {
       frameWidth: 84,
       frameHeight: 57,
     });
@@ -185,24 +197,47 @@ export default class MainScene extends Phaser.Scene {
     this.physics.add.collider(this.Perrito, paredes);
     this.physics.add.overlap(this.Perrito, respawnDog, Respawn, null, this);
 
-    const colorMap = { Naranja: 1, Blanco: 2, Negro: 3 };
+    const colorMap = { Naranja: 1, Blanco: 2, Negro: 3, BlancoGafas: 4, NegroGafas: 5, NaranjaGafas: 6 };
     this.gatoColor = colorMap[localStorage.getItem("michi_color")] ?? 1;
-    // this.gatoColor = 3;
 
     const texturaGato =
       this.gatoColor === 2
         ? "GatoBlanco"
         : this.gatoColor === 3
           ? "GatoNegro"
-          : "GatoNaranjaF";
+          : this.gatoColor === 4
+            ? "GatoBlancoGafas"
+            : this.gatoColor === 5
+              ? "GatoNegroGafas"
+              : this.gatoColor === 6
+                ? "GatoNaranjaGafas"
+                : "GatoNaranjaF";
+
     const sufijo =
       this.gatoColor === 2
         ? "Blanco"
         : this.gatoColor === 3
           ? "Negro"
-          : "Naranja";
+          : this.gatoColor === 4
+            ? "BlancoGafas"
+            : this.gatoColor === 5
+              ? "NegroGafas"
+              : this.gatoColor === 6
+                ? "NaranjaGafas"
+                : "Naranja";
+
     const escala =
-      this.gatoColor === 2 ? 0.9 : this.gatoColor === 3 ? 1.1 : 1.6;
+      this.gatoColor === 2
+        ? 0.9
+        : this.gatoColor === 3
+          ? 1.1
+          : this.gatoColor === 4
+            ? 0.9
+            : this.gatoColor === 5
+              ? 1.1
+              : this.gatoColor === 6
+                ? 1.6
+                : 1.6;
 
     this.GatoNar = this.physics.add
       .sprite(420, 1300, texturaGato)
@@ -245,15 +280,14 @@ export default class MainScene extends Phaser.Scene {
 
     this.physics.add.overlap(this.GatoNar, peces, PuntosGato, null, this);
 
-      this.events.on("shutdown", () => {
-        CommunicatorMusic.removeAllListeners("change-music-state");
-        CommunicatorMusic.emit("request-pause-music");
-      });
-      this.events.on("destroy", () => {
-        CommunicatorMusic.removeAllListeners("change-music-state");
-        CommunicatorMusic.emit("request-pause-music");
-      });
-
+    this.events.on("shutdown", () => {
+      CommunicatorMusic.removeAllListeners("change-music-state");
+      CommunicatorMusic.emit("request-pause-music");
+    });
+    this.events.on("destroy", () => {
+      CommunicatorMusic.removeAllListeners("change-music-state");
+      CommunicatorMusic.emit("request-pause-music");
+    });
 
     Animaciones(this, this.gatoColor);
 
@@ -278,44 +312,58 @@ export default class MainScene extends Phaser.Scene {
     this.ScoreText.setScrollFactor(0);
 
     // Boton Volver al Menu
-this.add.image(730, 30, "Menu").setScale(0.06).setScrollFactor(0);
-const MenuBtn = this.add.zone(673, 10, 115, 38);
-MenuBtn.setOrigin(0);
-MenuBtn.setInteractive().setScrollFactor(0);
+    this.add.image(730, 30, "Menu").setScale(0.06).setScrollFactor(0);
+    const MenuBtn = this.add.zone(673, 10, 115, 38);
+    MenuBtn.setOrigin(0);
+    MenuBtn.setInteractive().setScrollFactor(0);
 
-MenuBtn.on("pointerdown", () => {
-  this.physics.pause();
-  this.time.paused = true;
+    MenuBtn.on("pointerdown", () => {
+      this.physics.pause();
+      this.time.paused = true;
 
-  const overlay = this.add.rectangle(400, 350, 800, 800, 0x000000, 0.6)
-    .setScrollFactor(0).setDepth(10);
+      const overlay = this.add
+        .rectangle(400, 350, 800, 800, 0x000000, 0.6)
+        .setScrollFactor(0)
+        .setDepth(10);
 
-  // Aqui pones tu imagen, botones y texto
-  const modalImg = this.add.image(400, 300, "Modal").setScrollFactor(0).setDepth(10).setScale(0.3);
+      // Aqui pones tu imagen, botones y texto
+      const modalImg = this.add
+        .image(400, 300, "Modal")
+        .setScrollFactor(0)
+        .setDepth(10)
+        .setScale(0.3);
 
-  const btnSi = this.add.zone(270, 316, 110, 70).setInteractive().setScrollFactor(0).setDepth(11);
-  btnSi.setOrigin(0);
-  btnSi.setInteractive().setScrollFactor(0);
-  // this.add.graphics().lineStyle(2, 0xff0000).strokeRectShape(btnSi).setScrollFactor(0);
+      const btnSi = this.add
+        .zone(270, 316, 110, 70)
+        .setInteractive()
+        .setScrollFactor(0)
+        .setDepth(11);
+      btnSi.setOrigin(0);
+      btnSi.setInteractive().setScrollFactor(0);
+      // this.add.graphics().lineStyle(2, 0xff0000).strokeRectShape(btnSi).setScrollFactor(0);
 
-  const btnNo = this.add.zone(430, 316, 110, 70).setInteractive().setScrollFactor(0).setDepth(11);
-  btnNo.setOrigin(0);
-  btnNo.setInteractive().setScrollFactor(0);
-  // this.add.graphics().lineStyle(2, 0xff0000).strokeRectShape(btnNo).setScrollFactor(0);
+      const btnNo = this.add
+        .zone(430, 316, 110, 70)
+        .setInteractive()
+        .setScrollFactor(0)
+        .setDepth(11);
+      btnNo.setOrigin(0);
+      btnNo.setInteractive().setScrollFactor(0);
+      // this.add.graphics().lineStyle(2, 0xff0000).strokeRectShape(btnNo).setScrollFactor(0);
 
-  btnSi.once("pointerdown", () => {
-    this.scene.start("Menu");
-  });
+      btnSi.once("pointerdown", () => {
+        this.scene.start("Menu");
+      });
 
-  btnNo.once("pointerdown", () => {
-    overlay.destroy()
-    modalImg.destroy();
-    btnSi.destroy();
-    btnNo.destroy();
-    this.physics.resume();
-    this.time.paused = false;
-  });
-});
+      btnNo.once("pointerdown", () => {
+        overlay.destroy();
+        modalImg.destroy();
+        btnSi.destroy();
+        btnNo.destroy();
+        this.physics.resume();
+        this.time.paused = false;
+      });
+    });
   }
 
   refreshTime() {
