@@ -7,14 +7,47 @@ from api.utils import generate_sitemap, APIException
 from sqlalchemy import select
 from flask_cors import CORS
 from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity
+from google.oauth2 import id_token
+from google.auth.transport import requests
+import os
 
 api = Blueprint('api', __name__)
 
 # Allow CORS requests to this API
 
+# google authO
+@api.route('/auth/google', methods=['POST'])
+def google_auth():
+    data = request.json
+    email = data.get('email')
+    given_name = data.get('given_name', data.get('name', ''))
 
+    if not email:
+        return jsonify({"error": "Datos inválidos"}), 401
+
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        user = User(email=email, password_hash=None)
+        db.session.add(user)
+        db.session.flush() 
+
+        new_michi = Michi(
+            michi_name=given_name,
+            user_id=user.id,
+            color="Naranja"
+        )
+        db.session.add(new_michi)
+        db.session.commit()
+    else:
+        new_michi = Michi.query.filter_by(user_id=user.id).first()
+
+    access_token = create_access_token(identity=user.id)
+
+    return jsonify({"msg": "Inicio de sesión exitosa","michi_name": new_michi.michi_name, "token": access_token, "michi_color": new_michi.color}), 200
 
 #  REGISTRO E INGRESO
+
+
 @api.route('/signup', methods=['POST'])
 def signup():
     data = request.get_json()
@@ -30,7 +63,8 @@ def signup():
     if existing_user:
         return jsonify({"error": "Usuario con ese email ya existe"}), 400
 
-    existing_michi = db.session.execute(db.select(Michi).where(Michi.michi_name == michi_name)).scalar_one_or_none()
+    existing_michi = db.session.execute(db.select(Michi).where(
+        Michi.michi_name == michi_name)).scalar_one_or_none()
 
     if existing_michi:
         return jsonify({"error": "Nombre de michi ya existe"}), 400
@@ -62,7 +96,7 @@ def signin():
     user = michi.user
     if user.check_password(password):
         access_token = create_access_token(identity=str(user.id))
-        return jsonify({"msg": "Inicio de sesión exitosa", "token": access_token,"michi_color": michi.color}), 200
+        return jsonify({"msg": "Inicio de sesión exitosa", "token": access_token, "michi_color": michi.color}), 200
     else:
         return jsonify({"msg": "Contraseña o Michi_Name incorrectos"}), 400
 

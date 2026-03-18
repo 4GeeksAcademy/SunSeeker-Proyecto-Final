@@ -63,3 +63,24 @@ export const queryRanking = async () => {
   }
   return data;
 };
+
+export const signinGoogle = async (user) => {
+  const response = await fetch(
+    `${import.meta.env.VITE_BACKEND_URL}/api/auth/google`,
+    {
+      method: "POST",
+      body: JSON.stringify(user),
+      headers: {
+        "Content-type": "application/json",
+      },
+    },
+  );
+  const data = await response.json();
+  if (!response.ok) {
+    return { error: data.msg || data.error || "Error al iniciar sesión" };
+  }
+  localStorage.setItem("token", data.token);
+  localStorage.setItem("michi_color", data.michi_color);
+  return { success: true, data };
+};
+

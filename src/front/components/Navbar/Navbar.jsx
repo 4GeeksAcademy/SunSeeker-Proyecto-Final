@@ -82,7 +82,7 @@ export const Navbar = () => {
                     </div>
                 )}
             </div>
-            <SignupModal show={showSignup} onClose={() => setShowSignup(false)} onSwitch={openSignin} />
+            <SignupModal show={showSignup} onClose={() => setShowSignup(false)} onSwitch={openSignin} onLoginSuccess={handleLoginSuccess} />
             <SigninModal
                 show={showSignin}
                 onClose={() => setShowSignin(false)}
