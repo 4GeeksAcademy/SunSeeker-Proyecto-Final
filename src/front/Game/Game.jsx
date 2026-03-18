@@ -4,6 +4,7 @@ import useGlobalReducer from "../hooks/useGlobalReducer"
 import "./Game.css";
 import { CommunicatorMusic } from "./CommunicatorMusic";
 import { jamendoCall } from "../Service/BackEndServices";
+import { FrasesMichiGame } from "./FrasesMichiGame";
 
 export const Game = () => {
     const { store, dispatch } = useGlobalReducer();
@@ -44,6 +45,12 @@ export const Game = () => {
 
     useEffect(() => {
         const playFromPhaser = () => {
+            if (tracks.length === 0) {
+                setTimeout(() => {
+                    CommunicatorMusic.emit("request-play-music");
+                }, 1000);
+                return;
+            }
             if (!isPlaying) handleTogglePlay();
         };
         CommunicatorMusic.removeAllListeners("request-play-music");
@@ -51,13 +58,13 @@ export const Game = () => {
         return () => {
             CommunicatorMusic.off("request-play-music", playFromPhaser);
         };
-    }, [tracks, isPlaying, currentTrackIndex])
+    }, [tracks, isPlaying, currentTrackIndex]);
 
     const handleTogglePlay = () => {
         const audio = audioRef.current;
         const currentTrack = tracks[currentTrackIndex];
         if (!currentTrack) return;
-        if (!audio.src) {
+        if (!audio.src || audio.src !== currentTrack.audio) {
             audio.src = currentTrack.audio;
         }
 
@@ -134,6 +141,7 @@ export const Game = () => {
             <main className="phaser-game-wrapper">
                 <PhaserGame />
             </main>
+            <FrasesMichiGame />
         </div>
     );
 };

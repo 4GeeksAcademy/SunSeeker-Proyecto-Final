@@ -157,15 +157,20 @@ def get_michi_detail():
 def modify_michi_aspect():
     data = request.get_json()
     user = db.session.get(User, int(get_jwt_identity()))
+
+    if not user:
+        return jsonify({"error": "invalid credentials"}), 401
+
     cat = db.session.execute(db.select(Michi).where(
         Michi.user_id == user.id)).scalar_one_or_none()
 
-    if user:
-        cat.michi_name = data.get('michi_name', cat.michi_name)
-        cat.color = data.get('color', cat.color)
-        db.session.commit()
-        return jsonify(cat.serialize()), 200
-    return jsonify({"error": "invalid credentials"}), 401
+    if not cat:
+        return jsonify({"error": "michi not found"}), 404
+
+    cat.michi_name = data.get('michi_name', cat.michi_name)
+    cat.color = data.get('color', cat.color)
+    db.session.commit()
+    return jsonify(cat.serialize()), 200
 # Hago el  delete, pero por ahora no le veo el sentido en hacer un delete.
 
 

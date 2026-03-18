@@ -1,3 +1,4 @@
+import { updateMichiColorPhaser } from "../../Service/BackEndServices";
 import { Animaciones } from "../Animaciones/Animaciones";
 
 export default class Inventario extends Phaser.Scene {
@@ -121,6 +122,7 @@ export default class Inventario extends Phaser.Scene {
         nuevoColor === 2 ? "Blanco" : nuevoColor === 3 ? "Negro" : "Naranja";
 
       localStorage.setItem("michi_color", colorNombre);
+      updateMichiColorPhaser(colorNombre);
 
       // this.GatoNar.body.reset(700, 600);
       this.GatoNar.setPosition(700, 550);

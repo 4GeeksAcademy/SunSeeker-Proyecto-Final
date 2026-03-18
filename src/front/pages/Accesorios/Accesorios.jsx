@@ -1,16 +1,69 @@
+import { useState } from "react";
 import "./Accesorios.css";
+import { updateMichiColor } from "../../Service/BackEndServices";
+import { CommunicatorMusic } from "../../Game/CommunicatorMusic";
+const colores = [
+    { nombre: "Naranja", imagen: "/img/gatoNaranjaSentado.png", valor: "Naranja" },
+    { nombre: "Blanco", imagen: "/img/gatoBlancoSentado.png", valor: "Blanco" },
+    { nombre: "Negro", imagen: "/img/gatoNegroSentado.png", valor: "Negro" },
+];
 
 export const Accesorios = () => {
+
+    const [colorSeleccionado, setColorSeleccionado] = useState(localStorage.getItem("michi_color") || "Naranja");
+    const [mostrarColores, setMostrarColores] = useState(false);
+    const [guardado, setGuardado] = useState(false);
+
+    const gatoActual = colores.find(c => c.valor === colorSeleccionado);
+    const elegirColorMichi = (color) => {
+        setColorSeleccionado(color.valor);
+        localStorage.setItem("michi_color", color.valor);
+        setMostrarColores(false);
+    };
+    const [mensaje,setMensaje] = useState();
+    const handleGuardar = async () => {
+        setGuardado(true);
+        const result = await updateMichiColor(colorSeleccionado);
+
+        if (result.success) {
+            setMensaje({ text: "GUARDADO!", type: "guardado" });
+        } else {
+            setMensaje({ text: "ERROR AL GUARDAR", type: "error" });
+        }
+
+        setGuardado(false);
+        setTimeout(() => setMensaje(null), 2500);
+    };
+
     return (
         <>
-            <div className="container accesorios-container mt-4"> 
+            <div className="container accesorios-container mt-4">
                 <main className="main-content">
                     <div className="row w-100 justify-content-center">
                         <section className="col-12 col-lg-5 mb-4 mb-lg-0 d-flex flex-column align-items-center">
                             <p className="titulo-accesorios">MIS ACCESORIOS</p>
                             <div className="perfil-card">
+                                <button
+                                    className="btn-tres-puntos"
+                                    onClick={() => setMostrarColores(!mostrarColores)}>
+                                    •••
+                                </button>
+                                {mostrarColores && (
+                                    <div className="selector-colores">
+                                        {colores.map(color => (
+                                            <div
+                                                key={color.valor}
+                                                onClick={() => elegirColorMichi(color)}
+                                                className={`color-option ${colorSeleccionado === color.valor ? "seleccionado" : ""}`}
+                                            >
+                                                <img src={color.imagen} alt={color.nombre} />
+                                                <p>{color.nombre}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                                 <div className="michi-placeholder">
-                                    <img src="" alt="" className="michi-img" />
+                                    <img src={gatoActual.imagen} alt={gatoActual.nombre} className="michi-img" />
                                 </div>
                             </div>
                         </section>
@@ -33,52 +86,21 @@ export const Accesorios = () => {
                                     </div>
                                     <button className="btn-equipar">Equipar</button>
                                 </div>
-
-                                <div className="elementos-item">
-                                    <div className="item-icon"></div>
-                                    <div className="item-info">
-                                        <p className="item-name">Gorro Pro</p>
-                                        <p className="item-type">Cabeza</p>
-                                    </div>
-                                    <button className="btn-equipar">Equipar</button>
-                                </div>
-
-                                <div className="elementos-item">
-                                    <div className="item-icon"></div>
-                                    <div className="item-info">
-                                        <p className="item-name">Gorro Pro</p>
-                                        <p className="item-type">Cabeza</p>
-                                    </div>
-                                    <button className="btn-equipar">Equipar</button>
-                                </div>
-
-                                <div className="elementos-item">
-                                    <div className="item-icon"></div>
-                                    <div className="item-info">
-                                        <p className="item-name">Gorro Pro</p>
-                                        <p className="item-type">Cabeza</p>
-                                    </div>
-                                    <button className="btn-equipar">Equipar</button>
-                                </div>
-
-                                <div className="elementos-item">
-                                    <div className="item-icon"></div>
-                                    <div className="item-info">
-                                        <p className="item-name">Gorro Pro</p>
-                                        <p className="item-type">Cabeza</p>
-                                    </div>
-                                    <button className="btn-equipar">Equipar</button>
-                                </div>
                             </div>
                         </section>
                     </div>
                     <div className="row w-100 mt-5">
                         <div className="col-12 d-flex justify-content-center">
-                            <button className="btn-submit-guardar">GUARDAR</button>
+                            <button className="btn-submit-guardar" onClick={handleGuardar} disabled={guardado}>GUARDAR</button>
                         </div>
                     </div>
                 </main>
             </div>
+            {mensaje && (
+                <div className={mensaje.type === "guardado" ? "pixel-alert-guardado" : "pixel-alert-error"}>
+                    {mensaje.text}
+                </div>
+            )}
         </>
     )
 }
