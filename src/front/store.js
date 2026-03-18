@@ -3,6 +3,7 @@ export const initialStore = () => {
   return {
     user: hasToken ? localStorage.getItem("michi_name") : null,
     michiColor: hasToken ? localStorage.getItem("michi_color") : null,
+    michiAccesorio: hasToken ? localStorage.getItem("michi_accesorio") : null,
     message: null,
     Music: [],
     // michi:{}
@@ -33,13 +34,13 @@ export default function storeReducer(store, action = {}) {
         user: null,
         michiColor: null,
       };
-    case "set_michi_color": // 👈 nuevo case
+    case "set_michi_accesorio":
+      return {
+        ...store,
+        michiAccesorio: action.payload,
+      };
+    case "set_michi_color":
       return { ...store, michiColor: action.payload };
-    // case "get_user":
-    //   return {
-    //     ...store,
-    //     michi: action.payload
-    //   };
     default:
       throw Error("Unknown action.");
   }

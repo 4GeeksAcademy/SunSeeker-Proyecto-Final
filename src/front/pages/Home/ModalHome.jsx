@@ -26,14 +26,13 @@ export const ModalHome = ({ id }) => {
 
                             <div className="carousel-item">
                                 <div className="modal-body text-center p-5">
-                                    <h2 className="mb-3">RECOMPENSAS</h2>
+                                    <h2 className="mb-3">ACCESORIOS</h2>
                                     <p className="form-title mt-3">
-                                        ¡PESCA Y GANA!<br />
-                                        JUNTA PESCADOS DURANTE TU VIAJE Y CANJEALOS POR
-                                        ACCESORIOS UNICOS PARA PERSONALIZAR A TU MICHI.
+                                        ¿SIN FOTO?<br />
+                                        ¡VISITA ACCESORIOS, EQUIPA A TU MICHI PARA JUGAR Y APARECE EN EL RANKING CON TU PROPIO ESTILO!
                                     </p>
                                     <div className="mt-4">
-                                        🐟 🎀 🎩 👓 👟
+                                        🐈 🎩 👓 🐈‍⬛
                                     </div>
                                 </div>
                             </div>

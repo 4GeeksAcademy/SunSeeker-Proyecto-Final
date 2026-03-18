@@ -345,13 +345,14 @@ def edit_run():
         Partida.michi_id == cat.id)).scalar_one_or_none()
 
     if not run:
-        run = Partida(michi_id=cat.id, score=0)
-        db.session.add(run)
+     run = Partida(michi_id=cat.id, score=0, accesorio=None)
+     db.session.add(run)
 
     nuevo_score = data.get('score', 0)
     if nuevo_score > run.score:
-        run.score = nuevo_score
-
+     run.score = nuevo_score
+     
+    run.accesorio = data.get('accesorio', run.accesorio)  
     db.session.commit()
     return jsonify(run.serialize()), 200
 

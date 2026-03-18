@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./Ranking.css";
 import { getRanking } from "../../Service/BackEndServices";
+import { imagenAccesorios } from "../../../imagenAccesorios";
 
 
 export const Ranking = () => {
@@ -34,24 +35,29 @@ export const Ranking = () => {
             <div className="ranking mt-3">
                 {loading ? (
                     <p className="loading-text">Cargando ranking...</p>
-                ) : ranking.length > 0 ? (
-                    ranking.map(({ id, michi_name, score }, index) => (
-                        <div key={id} className={`player-card ${index < 3 ? "top3" : ""}`}>
-                            <div className="rank-number">{index + 1}</div>
-                            <div className="cat-avatar">🐱</div>
-                            <div className="player-info">
-                                <div className="player-name">{michi_name}</div>
-                                <div className="score-bar-bg">
-                                    <div className="score-bar-fill" style={{ width: `${(score / ranking[0].score) * 100}%` }}></div>
-                                </div>
-                            </div>
-                            <div className="score">{score}</div>
-                        </div>
-                    ))
                 ) : (
-                    <>
-                        {[...Array(5)].map((_, i) => (
-                            <div key={i} className="player-card esqueleto-fijo">
+                    [...Array(5)].map((_, i) => {
+                        const jugador = ranking[i];
+                        return jugador ? (
+                            <div key={`jugador-${jugador.id}`} className={`player-card ${i < 3 ? "top3" : ""}`}>
+                                <div className="rank-number">{i + 1}</div>
+                                <div className="cat-avatar">
+                                    <img
+                                        src={imagenAccesorios[jugador.color]?.[jugador.accesorio || "ninguno"] || "/img/gatoNaranjaSentado.png"}
+                                        alt={jugador.michi_name}
+                                        className="avatar-img"
+                                    />
+                                </div>
+                                <div className="player-info">
+                                    <div className="player-name">{jugador.michi_name}</div>
+                                    <div className="score-bar-bg">
+                                        <div className="score-bar-fill" style={{ width: `${(jugador.score / ranking[0].score) * 100}%` }}></div>
+                                    </div>
+                                </div>
+                                <div className="score">{jugador.score}</div>
+                            </div>
+                        ) : (
+                                <div key={`esqueleto-${i}`} className="player-card esqueleto-fijo">
                                 <div className="rank-number">?</div>
                                 <div className="cat-avatar esqueleto-bloqueado"></div>
                                 <div className="player-info">
@@ -60,11 +66,8 @@ export const Ranking = () => {
                                 </div>
                                 <div className="score">0000</div>
                             </div>
-                        ))}
-                        <div className="no-data-overlay">
-                            <p>NO SE ENCONTRARON SUNSEEKERS...</p>
-                        </div>
-                    </>
+                        );
+                    })
                 )}
             </div>
         </div>

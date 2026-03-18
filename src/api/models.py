@@ -122,6 +122,7 @@ class Partida(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     michi_id: Mapped[int] = mapped_column(ForeignKey("michi.id"), nullable=False)
     score: Mapped[int] = mapped_column(Integer, nullable=False)
+    accesorio: Mapped[str] = mapped_column(String(50), nullable=True)
 
     michi: Mapped["Michi"] = relationship("Michi", back_populates="partidas")
 
@@ -131,7 +132,8 @@ class Partida(db.Model):
             "michi_id": self.michi_id,
             "score": self.score,
             "michi_name": self.michi.michi_name,
-            "color" : self.michi.color
+            "color" : self.michi.color,
+            "accesorio": self.accesorio
         }
     
     
