@@ -18,7 +18,15 @@ export default class Menu extends Phaser.Scene {
       frameWidth: 49,
       frameHeight: 31,
     });
-     this.load.spritesheet("GatoBlanco", "img/GatoBlanco.png", {
+     this.load.spritesheet("GatoNaranjaGafas", "img/GatoNaranjaGafas.png", {
+      frameWidth: 49,
+      frameHeight: 31,
+    });
+    this.load.spritesheet("GatoBlanco", "img/GatoBlanco.png", {
+      frameWidth: 89,
+      frameHeight: 58,
+    });
+    this.load.spritesheet("GatoBlancoGafas", "img/GatoBlancoGafas.png", {
       frameWidth: 89,
       frameHeight: 58,
     });
@@ -26,7 +34,11 @@ export default class Menu extends Phaser.Scene {
       frameWidth: 84,
       frameHeight: 57,
     });
-   this.load.spritesheet("Perrito", "img/perritoDef.png", {
+    this.load.spritesheet("GatoNegroGafas", "img/GatoNegroGafas.png", {
+      frameWidth: 84,
+      frameHeight: 57,
+    });
+    this.load.spritesheet("Perrito", "img/perritoDef.png", {
       frameWidth: 251,
       frameHeight: 199,
     });
@@ -58,13 +70,48 @@ export default class Menu extends Phaser.Scene {
       this.GatoNar.anims.play("turn_" + sufijo, true);
     }
     
-  const colorMap = { Naranja: 1, Blanco: 2, Negro: 3 };
+     const colorMap = { Naranja: 1, Blanco: 2, Negro: 3, BlancoGafas: 4, NegroGafas: 5, NaranjaGafas: 6 };
     this.gatoColor = colorMap[localStorage.getItem("michi_color")] ?? 1;
-    // this.gatoColor = 3;
 
-    const texturaGato = this.gatoColor === 2 ? "GatoBlanco"  : this.gatoColor === 3 ? "GatoNegro" :  "GatoNaranjaF";
-    const sufijo = this.gatoColor === 2 ? "Blanco" : this.gatoColor === 3 ? "Negro" : "Naranja";
-    const escala = this.gatoColor === 2 ? 0.9 : this.gatoColor === 3 ? 1.1  : 1.6;
+    const texturaGato =
+      this.gatoColor === 2
+        ? "GatoBlanco"
+        : this.gatoColor === 3
+          ? "GatoNegro"
+          : this.gatoColor === 4
+            ? "GatoBlancoGafas"
+            : this.gatoColor === 5
+              ? "GatoNegroGafas"
+              : this.gatoColor === 6
+                ? "GatoNaranjaGafas"
+                : "GatoNaranjaF";
+
+    const sufijo =
+      this.gatoColor === 2
+        ? "Blanco"
+        : this.gatoColor === 3
+          ? "Negro"
+          : this.gatoColor === 4
+            ? "BlancoGafas"
+            : this.gatoColor === 5
+              ? "NegroGafas"
+              : this.gatoColor === 6
+                ? "NaranjaGafas"
+                : "Naranja";
+
+    const escala =
+      this.gatoColor === 2
+        ? 0.9
+        : this.gatoColor === 3
+          ? 1.1
+          : this.gatoColor === 4
+            ? 0.9
+            : this.gatoColor === 5
+              ? 1.1
+              : this.gatoColor === 6
+                ? 1.6
+                : 1.6;
+
 
 
     this.GatoNar = this.physics.add
