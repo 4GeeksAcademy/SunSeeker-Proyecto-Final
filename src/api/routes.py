@@ -155,17 +155,6 @@ def get_michi_detail():
 @api.route('/get_michi', methods=['PUT'])
 @jwt_required()
 def modify_michi_aspect():
-    # data = request.get_json()
-    # user = db.session.get(User, int(get_jwt_identity()))
-    # cat = db.session.execute(db.select(Michi).where(
-    #     Michi.user_id == user.id)).scalar_one_or_none()
-    # if user:
-    #     cat.michi_name = data.get('michi_name', cat.michi_name)
-    #     cat.color = data.get('color', cat.color)
-    #     db.session.commit()
-    #     return jsonify(cat.serialize()), 200
-    # return jsonify({"error": "invalid credentials"}), 401
-
     data = request.get_json()
     user = db.session.get(User, int(get_jwt_identity()))
 

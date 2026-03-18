@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./Accesorios.css";
 import { updateMichiColor } from "../../Service/BackEndServices";
+import { CommunicatorMusic } from "../../Game/CommunicatorMusic";
 const colores = [
     { nombre: "Naranja", imagen: "/img/gatoNaranjaSentado.png", valor: "Naranja" },
     { nombre: "Blanco", imagen: "/img/gatoBlancoSentado.png", valor: "Blanco" },
@@ -19,23 +20,20 @@ export const Accesorios = () => {
         localStorage.setItem("michi_color", color.valor);
         setMostrarColores(false);
     };
-
+    const [mensaje,setMensaje] = useState();
     const handleGuardar = async () => {
         setGuardado(true);
-        try {
-            const result = await updateMichiColor(colorSeleccionado);
-            if (result.success) {
-                alert("¡Guardado!");
-            } else {
-                alert("Error al guardar");
-            }
-        } catch (e) {
-            console.error(e);
-            alert("Error de conexión");
-        } finally {
-            setGuardado(false);
+        const result = await updateMichiColor(colorSeleccionado);
+
+        if (result.success) {
+            setMensaje({ text: "GUARDADO!", type: "guardado" });
+        } else {
+            setMensaje({ text: "ERROR AL GUARDAR", type: "error" });
         }
-    }
+
+        setGuardado(false);
+        setTimeout(() => setMensaje(null), 2500);
+    };
 
     return (
         <>
@@ -45,9 +43,9 @@ export const Accesorios = () => {
                         <section className="col-12 col-lg-5 mb-4 mb-lg-0 d-flex flex-column align-items-center">
                             <p className="titulo-accesorios">MIS ACCESORIOS</p>
                             <div className="perfil-card">
-                                <button 
-                                className="btn-tres-puntos" 
-                                onClick={() => setMostrarColores(!mostrarColores)}>
+                                <button
+                                    className="btn-tres-puntos"
+                                    onClick={() => setMostrarColores(!mostrarColores)}>
                                     •••
                                 </button>
                                 {mostrarColores && (
@@ -88,42 +86,6 @@ export const Accesorios = () => {
                                     </div>
                                     <button className="btn-equipar">Equipar</button>
                                 </div>
-
-                                <div className="elementos-item">
-                                    <div className="item-icon"></div>
-                                    <div className="item-info">
-                                        <p className="item-name">Gorro Pro</p>
-                                        <p className="item-type">Cabeza</p>
-                                    </div>
-                                    <button className="btn-equipar">Equipar</button>
-                                </div>
-
-                                <div className="elementos-item">
-                                    <div className="item-icon"></div>
-                                    <div className="item-info">
-                                        <p className="item-name">Gorro Pro</p>
-                                        <p className="item-type">Cabeza</p>
-                                    </div>
-                                    <button className="btn-equipar">Equipar</button>
-                                </div>
-
-                                <div className="elementos-item">
-                                    <div className="item-icon"></div>
-                                    <div className="item-info">
-                                        <p className="item-name">Gorro Pro</p>
-                                        <p className="item-type">Cabeza</p>
-                                    </div>
-                                    <button className="btn-equipar">Equipar</button>
-                                </div>
-
-                                <div className="elementos-item">
-                                    <div className="item-icon"></div>
-                                    <div className="item-info">
-                                        <p className="item-name">Gorro Pro</p>
-                                        <p className="item-type">Cabeza</p>
-                                    </div>
-                                    <button className="btn-equipar">Equipar</button>
-                                </div>
                             </div>
                         </section>
                     </div>
@@ -134,6 +96,11 @@ export const Accesorios = () => {
                     </div>
                 </main>
             </div>
+            {mensaje && (
+                <div className={mensaje.type === "guardado" ? "pixel-alert-guardado" : "pixel-alert-error"}>
+                    {mensaje.text}
+                </div>
+            )}
         </>
     )
 }
