@@ -12,6 +12,7 @@ export const signup = async (user) => {
     },
   );
   const data = await response.json();
+   console.log("Respuesta signup:", data);
   if (response.ok) {
     return { success: true, data };
   } else {
@@ -30,9 +31,6 @@ export const jamendoCall = async (dispatch) => {
   dispatch({ type: "api_call", payload: data.results });
 };
 
-// export const SendScore = async () =>{
-//   const response = await fetch ( `${import.meta.env.VITE_BACKEND_URL}/api/signup`,)
-// }
 export const signin = async (user) => {
   const response = await fetch(
     `${import.meta.env.VITE_BACKEND_URL}/api/signin`,
@@ -51,17 +49,6 @@ export const signin = async (user) => {
   localStorage.setItem("token", data.token);
   localStorage.setItem("michi_color", data.michi_color);
   return { success: true, data };
-};
-
-export const queryRanking = async () => {
-  const response = await fetch(
-    `${import.meta.env.VITE_BACKEND_URL}/api/signin`,
-  );
-  const data = await response.json();
-  if (!response.ok) {
-    throw new Error(data.error);
-  }
-  return data;
 };
 
 export const updateMichiColor = async (color) => {
@@ -96,4 +83,32 @@ export const updateMichiColorPhaser = (color) => {
     },
     body: JSON.stringify({ color }),
   });
+};
+
+export const guardarPartida = async (score) => {
+  const token = localStorage.getItem("token");
+  const response = await fetch(
+    `${import.meta.env.VITE_BACKEND_URL}/api/get_partida`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ score: score }),
+    },
+  );
+  
+   if (!response.ok) {
+     console.error("Error del servidor:", response.status);
+     return;
+   }
+  const data = await response.json();
+  return data;
+};
+
+export const getRanking = async () => {
+  const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/ranking`);
+  const data = await response.json();
+  return data;
 };

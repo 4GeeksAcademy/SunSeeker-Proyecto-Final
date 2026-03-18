@@ -13,7 +13,6 @@ api = Blueprint('api', __name__)
 # Allow CORS requests to this API
 
 
-
 #  REGISTRO E INGRESO
 @api.route('/signup', methods=['POST'])
 def signup():
@@ -30,7 +29,8 @@ def signup():
     if existing_user:
         return jsonify({"error": "Usuario con ese email ya existe"}), 400
 
-    existing_michi = db.session.execute(db.select(Michi).where(Michi.michi_name == michi_name)).scalar_one_or_none()
+    existing_michi = db.session.execute(db.select(Michi).where(
+        Michi.michi_name == michi_name)).scalar_one_or_none()
 
     if existing_michi:
         return jsonify({"error": "Nombre de michi ya existe"}), 400
@@ -44,6 +44,9 @@ def signup():
         color="Naranja"
     )
     db.session.add(new_michi)
+    db.session.flush()
+    new_partida = Partida(michi_id=new_michi.id, score=0)
+    db.session.add(new_partida)
     db.session.commit()
     return jsonify({"msg": "Usuario creado correctamente!"}), 201
 
@@ -62,7 +65,7 @@ def signin():
     user = michi.user
     if user.check_password(password):
         access_token = create_access_token(identity=str(user.id))
-        return jsonify({"msg": "Inicio de sesión exitosa", "token": access_token,"michi_color": michi.color}), 200
+        return jsonify({"msg": "Inicio de sesión exitosa", "token": access_token, "michi_color": michi.color}), 200
     else:
         return jsonify({"msg": "Contraseña o Michi_Name incorrectos"}), 400
 
@@ -302,21 +305,29 @@ def get_run():
 def create_run():
     data = request.get_json()
     user = db.session.get(User, int(get_jwt_identity()))
+    if not user:
+        return jsonify({"error": "invalid credentials"}), 401
+
     cat = db.session.execute(db.select(Michi).where(
         Michi.user_id == user.id)).scalar_one_or_none()
 
     if not data.get('score'):
         return jsonify({"msg": "score is necessary"}), 400
 
-    if user:
-        new_run = Partida(
-            score=data.get('score'),
-            michi_id=cat.id
-        )
+    run = db.session.execute(db.select(Partida).where(
+        Partida.michi_id == cat.id)).scalar_one_or_none()
+
+    if run:
+        if data.get('score') > run.score:
+            run.score = data.get('score')
+            db.session.commit()
+            return jsonify({"msg": "score actualizado"}), 200
+        return jsonify({"msg": "score no superado"}), 200
+    else:
+        new_run = Partida(score=data.get('score'), michi_id=cat.id)
         db.session.add(new_run)
         db.session.commit()
-        return jsonify({"msg": "run created succesfully"}), 201
-    return jsonify({"error": "invalid credentials"}), 401
+        return jsonify({"msg": "partida creada"}), 201
 
 
 @api.route('/get_partida', methods=['PUT'])
@@ -326,14 +337,23 @@ def edit_run():
     user = db.session.get(User, int(get_jwt_identity()))
     cat = db.session.execute(db.select(Michi).where(
         Michi.user_id == user.id)).scalar_one_or_none()
+
+    if not cat:
+        return jsonify({"error": "no tiene gato asignado"}), 404
+
     run = db.session.execute(db.select(Partida).where(
         Partida.michi_id == cat.id)).scalar_one_or_none()
 
-    if user:
-        run.score = data.get('score', run.score)
-        db.session.commit()
-        return jsonify({run.serialize()}), 200
-    return jsonify({"error": "invalid credentials"}), 401
+    if not run:
+        run = Partida(michi_id=cat.id, score=0)
+        db.session.add(run)
+
+    nuevo_score = data.get('score', 0)
+    if nuevo_score > run.score:
+        run.score = nuevo_score
+
+    db.session.commit()
+    return jsonify(run.serialize()), 200
 
 
 @api.route('/get_partida', methods=['DELETE'])
@@ -399,3 +419,14 @@ def delete_accessorie(id):
     db.session.delete(accessorie)
     db.session.commit()
     return jsonify({"msg": "accessorie deleted successfully"}), 200
+
+
+@api.route('/ranking', methods=['GET'])
+def get_ranking():
+    partidas = db.session.execute(
+        db.select(Partida)
+        .order_by(Partida.score.desc())
+        .limit(5)
+    ).scalars().all()
+
+    return jsonify([partida.serialize() for partida in partidas]), 200
