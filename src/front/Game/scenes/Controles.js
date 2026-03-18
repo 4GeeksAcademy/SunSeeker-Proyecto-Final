@@ -15,6 +15,42 @@ export default class Controles extends Phaser.Scene {
       frameWidth: 49,
       frameHeight: 31,
     });
+    this.load.spritesheet("GatoNaranjaGafas", "img/GatoNaranjaGafas.png", {
+      frameWidth: 49,
+      frameHeight: 31,
+    });
+    this.load.spritesheet("GatoNaranjaSombrero", "img/GatoNaranjaSombrero.png", {
+      frameWidth: 49,
+      frameHeight: 31,
+    });
+    this.load.spritesheet("GatoBlanco", "img/GatoBlanco.png", {
+      frameWidth: 89,
+      frameHeight: 58,
+    });
+    this.load.spritesheet("GatoBlancoGafas", "img/GatoBlancoGafas.png", {
+      frameWidth: 89,
+      frameHeight: 58,
+    });
+    this.load.spritesheet("GatoBlancoSombrero", "img/GatoBlancoSombrero.png", {
+      frameWidth: 89,
+      frameHeight: 58,
+    });
+    this.load.spritesheet("GatoNegro", "img/GatoNegroSF.png", {
+      frameWidth: 84,
+      frameHeight: 57,
+    });
+    this.load.spritesheet("GatoNegroGafas", "img/GatoNegroGafas.png", {
+      frameWidth: 84,
+      frameHeight: 57,
+    });
+    this.load.spritesheet("GatoNegroSombrero", "img/GatoNegroSombrero.png", {
+      frameWidth: 84,
+      frameHeight: 57,
+    });
+    this.load.spritesheet("Perrito", "img/perritoDef.png", {
+      frameWidth: 251,
+      frameHeight: 199,
+    });
   }
 
   create() {
@@ -40,7 +76,11 @@ export default class Controles extends Phaser.Scene {
       this.GatoNar.anims.play("turn_" + sufijo, true);
     }
 
-   const colorMap = { Naranja: 1, Blanco: 2, Negro: 3, BlancoGafas: 4, NegroGafas: 5, NaranjaGafas: 6 };
+    const colorMap = {
+      Naranja: 1, Blanco: 2, Negro: 3,
+      BlancoGafas: 4, NegroGafas: 5, NaranjaGafas: 6,
+      NaranjaSombrero: 7, BlancoSombrero: 8, NegroSombrero: 9,
+    };
     this.gatoColor = colorMap[localStorage.getItem("michi_color")] ?? 1;
 
     const texturaGato =
@@ -54,8 +94,14 @@ export default class Controles extends Phaser.Scene {
               ? "GatoNegroGafas"
               : this.gatoColor === 6
                 ? "GatoNaranjaGafas"
-                : "GatoNaranjaF";
-
+                : this.gatoColor === 7
+                  ? "GatoNaranjaSombrero"
+                  : this.gatoColor === 8
+                    ? "GatoBlancoSombrero"
+                    : this.gatoColor === 9
+                      ? "GatoNegroSombrero"
+                      : "GatoNaranjaF";
+ 
     const sufijo =
       this.gatoColor === 2
         ? "Blanco"
@@ -67,8 +113,14 @@ export default class Controles extends Phaser.Scene {
               ? "NegroGafas"
               : this.gatoColor === 6
                 ? "NaranjaGafas"
-                : "Naranja";
-
+                : this.gatoColor === 7
+                  ? "NaranjaSombrero"
+                  : this.gatoColor === 8
+                    ? "BlancoSombrero"
+                    : this.gatoColor === 9
+                      ? "NegroSombrero"
+                      : "Naranja";
+ 
     const escala =
       this.gatoColor === 2
         ? 0.9
@@ -80,7 +132,13 @@ export default class Controles extends Phaser.Scene {
               ? 1.1
               : this.gatoColor === 6
                 ? 1.6
-                : 1.6;
+                : this.gatoColor === 7
+                  ? 1.6
+                  : this.gatoColor === 8
+                    ? 0.9
+                    : this.gatoColor === 9
+                      ? 1.1
+                      : 1.6;
     this.GatoNar = this.physics.add
       .sprite(700, 600, texturaGato)
       .setScale(escala);
