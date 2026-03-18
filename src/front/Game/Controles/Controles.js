@@ -12,6 +12,12 @@ export function Controles(Game) {
         ? "NegroGafas"
         : Game.gatoColor === 6
         ? "NaranjaGafas"
+        : Game.gatoColor === 7
+        ? "NaranjaSombrero"
+        : Game.gatoColor === 8
+        ? "BlancoSombrero"
+        : Game.gatoColor === 9
+        ? "NegroSombrero"
         : "Naranja";
 
     //movimientos
