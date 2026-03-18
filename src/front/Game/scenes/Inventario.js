@@ -157,9 +157,19 @@ export default class Inventario extends Phaser.Scene {
                       ? 1.1
                       : 1.6;
 
-    this.GatoNar = this.physics.add
-      .sprite(700, 600, texturaGato)
-      .setScale(escala);
+    // this.GatoNar = this.physics.add
+    //   .sprite(700, 600, texturaGato)
+    //   .setScale(escala);
+    
+    const offsetYMap = {
+  1: 615, 6: 615, 7: 615,  
+  2: 600, 4: 600, 8: 600,  
+  3: 600, 5: 600, 9: 600,  
+};
+
+this.GatoNar = this.physics.add
+  .sprite(700, offsetYMap[this.gatoColor] ?? 600, texturaGato)
+  .setScale(escala);
 
     this.GatoNar.setCollideWorldBounds(true);
     this.physics.add.collider(this.GatoNar, paredes);
@@ -275,7 +285,16 @@ export default class Inventario extends Phaser.Scene {
       localStorage.setItem("michi_color", colorNombre);
       updateMichiColorPhaser(colorNombre);
  
-      this.GatoNar.setPosition(700, 550);
+      // this.GatoNar.setPosition(700, 550);
+
+      const offsetYMap = {
+  1: 615, 6: 615, 7: 615,  // Naranjas
+  2: 600, 4: 600, 8: 600,  // Blancos
+  3: 600, 5: 600, 9: 600,  // Negros
+};
+
+this.GatoNar.setPosition(700, offsetYMap[nuevoColor] ?? 600);
+
       this.GatoNar.setVelocityX(-160);
       this.GatoNar.setVelocityY(0);
       this.GatoNar.setFlipX(false);
