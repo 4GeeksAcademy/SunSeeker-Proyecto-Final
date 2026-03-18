@@ -1,3 +1,4 @@
+import { guardarPartida } from "../../Service/BackEndServices";
 import { Animaciones } from "../Animaciones/Animaciones";
 import { CommunicatorMusic } from "../CommunicatorMusic";
 
@@ -34,6 +35,9 @@ export default class endScene extends Phaser.Scene {
   }
 
   create() {
+    //esto es para el score y el ranking
+    guardarPartida(this.PuntosObtenidos);
+
     //esto es parte del bloque de codigo del reproductor de Jamendo - funciona por el momento con nivel uno, menu y escena final
     CommunicatorMusic.removeAllListeners("change-music-state");
     CommunicatorMusic.on("change-music-state", (data) => {

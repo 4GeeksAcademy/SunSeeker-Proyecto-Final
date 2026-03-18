@@ -51,12 +51,19 @@
   }
 }
 
+.loading-text {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--cyan);
+    margin-top: 2rem;
+}
+
 .ranking {
   width: 100%;
   max-width: 600px;
-  /* display: flex; */
+  display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 10px;
   /* flex: 1; */
   justify-content: center;
 }
@@ -97,6 +104,7 @@
   width: 28px;
   text-align: center;
   flex-shrink: 0;
+  padding: 5px;
 }
 
 .player-card.top3 .rank-number {
@@ -152,7 +160,7 @@
 
 .player-name {
   font-family: var(--pixel);
-  font-size: 0.7rem;
+  font-size: 10px;
   color: var(--text);
   white-space: nowrap;
   overflow: hidden;
@@ -182,7 +190,7 @@
 
 @media (min-width: 576px) {
   .player-name {
-    font-size: 0.6rem;
+    font-size: 15px;
   }
   .score {
     font-size: 1.1rem;

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./Ranking.css";
-import { queryRanking } from "../../Service/BackEndServices";
+import { getRanking } from "../../Service/BackEndServices";
+
 
 export const Ranking = () => {
 
@@ -11,7 +12,7 @@ export const Ranking = () => {
         try {
             setLoading(true);
             const delay = new Promise(resolve => setTimeout(resolve, 3000));
-            const [data] = await Promise.all([queryRanking(), delay]);
+            const [data] = await Promise.all([getRanking(), delay]);
             const top5 = data.sort((a, b) => b.score - a.score).slice(0, 5);
             setRanking(top5);
         }
@@ -31,7 +32,9 @@ export const Ranking = () => {
             <p className="subtitulo"> RANKING </p>
 
             <div className="ranking mt-3">
-                {ranking.length > 0 ? (
+                {loading ? (
+                    <p className="loading-text">Cargando ranking...</p>
+                ) : ranking.length > 0 ? (
                     ranking.map(({ id, michi_name, score }, index) => (
                         <div key={id} className={`player-card ${index < 3 ? "top3" : ""}`}>
                             <div className="rank-number">{index + 1}</div>
@@ -58,11 +61,9 @@ export const Ranking = () => {
                                 <div className="score">0000</div>
                             </div>
                         ))}
-                        {!loading && (
-                            <div className="no-data-overlay">
-                                <p> NO SE ENCONTRARON SUNSEEKERS...</p>
-                            </div>
-                        )}
+                        <div className="no-data-overlay">
+                            <p>NO SE ENCONTRARON SUNSEEKERS...</p>
+                        </div>
                     </>
                 )}
             </div>
