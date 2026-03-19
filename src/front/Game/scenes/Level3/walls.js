@@ -34,8 +34,8 @@ game.walls = game.physics.add.staticGroup()
   createSuperWall(game, game.scale.width - 135, game.scale.height - 3260).setOrigin(0, 0).refreshBody()
 
 
-  game.puerta = game.add.image(404, -2145, 'puerta').setOrigin(0, 0).setScale(0.25)
-  game.finish = game.add.zone(440, -2060, 80, 100);
+  game.puerta = game.add.image(404, -2225, 'puerta').setOrigin(0, 0).setScale(0.25)
+  game.finish = game.add.zone(440, -2140, 80, 100);
   game.physics.add.existing(game.finish, true);
 
   game.backWall = game.add.image(148, 437, 'paredFond').setOrigin(0, 0).setScale(1.16)

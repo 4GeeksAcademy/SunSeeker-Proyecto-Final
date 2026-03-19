@@ -1,51 +1,124 @@
 export function createPlayer(game) {
-  game.gato = game.physics.add
-    .sprite(400, 0, "gato")
-    .setOrigin(0, 0)
-    .setCollideWorldBounds(true)
-    .setGravityY(300);
+  // game.GatoNar = game.physics.add
+  //   .sprite(400, 0, "gato")
+  //   .setOrigin(0, 0)
+  //   .setCollideWorldBounds(true)
+  //   .setGravityY(300);
   
-  game.Score = 0;
-  game.scoreText = game.add.text(16, 16, "Score: 0", { 
-    fontFamily: 'Courier New', 
-    fontSize: '24px',
-    color: '#ffffff'
-  }).setScrollFactor(0)
+  // game.Score =  game.previousScore ?? 0;
+  // game.ScoreText = game.add.text(25, 16, "Score: 0", {
+  //     fontSize: "32px",
+  //     fill: "#000",
+  //   });
+  //   game.ScoreText.setScrollFactor(0);
   game.keys = game.input.keyboard.createCursorKeys();
+
+        const colorMap = {
+      Naranja: 1, Blanco: 2, Negro: 3,
+      BlancoGafas: 4, NegroGafas: 5, NaranjaGafas: 6,
+      NaranjaSombrero: 7, BlancoSombrero: 8, NegroSombrero: 9,
+    };
+    game.gatoColor = colorMap[localStorage.getItem("michi_color")] ?? 1;
+
+    game.texturaGato =
+      game.gatoColor === 2
+        ? "GatoBlanco"
+        : game.gatoColor === 3
+          ? "GatoNegro"
+          : game.gatoColor === 4
+            ? "GatoBlancoGafas"
+            : game.gatoColor === 5
+              ? "GatoNegroGafas"
+              : game.gatoColor === 6
+                ? "GatoNaranjaGafas"
+                : game.gatoColor === 7
+                  ? "GatoNaranjaSombrero"
+                  : game.gatoColor === 8
+                    ? "GatoBlancoSombrero"
+                    : game.gatoColor === 9
+                      ? "GatoNegroSombrero"
+                      : "GatoNaranjaF";
+ 
+    game.sufijo =
+      game.gatoColor === 2
+        ? "Blanco"
+        : game.gatoColor === 3
+          ? "Negro"
+          : game.gatoColor === 4
+            ? "BlancoGafas"
+            : game.gatoColor === 5
+              ? "NegroGafas"
+              : game.gatoColor === 6
+                ? "NaranjaGafas"
+                : game.gatoColor === 7
+                  ? "NaranjaSombrero"
+                  : game.gatoColor === 8
+                    ? "BlancoSombrero"
+                    : game.gatoColor === 9
+                      ? "NegroSombrero"
+                      : "Naranja";
+ 
+    game.escala =
+      game.gatoColor === 2
+        ? 0.9
+        : game.gatoColor === 3
+          ? 1.1
+          : game.gatoColor === 4
+            ? 0.9
+            : game.gatoColor === 5
+              ? 1.1
+              : game.gatoColor === 6
+                ? 1.6
+                : game.gatoColor === 7
+                  ? 1.6
+                  : game.gatoColor === 8
+                    ? 0.9
+                    : game.gatoColor === 9
+                      ? 1.1
+                      : 1.6;
+
+      game.GatoNar = game.physics.add
+      .sprite(400, 600, game.texturaGato)
+      .setScale(game.escala)
+      .setOrigin(0, 0)
+      .setCollideWorldBounds(true)
+      .setGravityY(-200);
+      
+      
 }
 
 export function createColliders(game) {
-  game.physics.add.collider(game.gato, game.floor);
-  game.physics.add.collider(game.gato, game.tejado);
-  game.physics.add.collider(game.gato, game.box);
-  game.physics.add.overlap(game.gato, game.peces, (gato, item) => {
-  if (item.texture.key === 'pez') {
-    addToScore(25, item, game)
-    game.Score += 25
-    game.scoreText.setText("Score: " + game.Score)
-    item.destroy()
-  }
-})
-  game.physics.add.overlap(game.gato, game.finish, ()=>{end(game)} , null, this)
+  game.physics.add.collider(game.GatoNar, game.floor);
+  game.physics.add.collider(game.GatoNar, game.tejado);
+  game.physics.add.collider(game.GatoNar, game.box);
+//   game.physics.add.overlap(game.GatoNar, game.peces, (GatoNar, item) => {
+//   if (item.texture.key === 'pez') {
+//     addToScore(25, item, game)
+//     game.Score += 25
+//     game.Score.setText("Score: " + game.Score)
+//     item.destroy()
+//   }
+// })
+  game.physics.add.overlap(game.GatoNar, game.finish, ()=>{end(game)} , null, this)
   game.perritos.forEach(perrito => {
-  game.physics.add.overlap(game.gato, perrito, ()=>{onHitEnemy(game)})
+  game.physics.add.overlap(game.GatoNar, perrito, ()=>{onHitEnemy(game)})
   })
 }
 
-function gatoDeath(gato){
-    if (gato.isDead) return;
-    gato.isDead = true
-    gato.anims.play('gato-death', true)
-    gato.setCollideWorldBounds(false)
-    gato.setVelocityX(0)
-    gato.body.checkCollision.none = true
+export function GatoNarDeath(GatoNar, game){
+    if (GatoNar.isDead) return;
+    GatoNar.isDead = true
+    GatoNar.anims.play('Muerte_' + game.sufijo, true)
+    GatoNar.setCollideWorldBounds(false)
+    GatoNar.setVelocityX(0)
+    GatoNar.body.checkCollision.none = true
     setTimeout(() => {
-        gato.setVelocityY(-600)
+        GatoNar.setVelocityY(-600)
     }, 100)
 }
 
 export function onHitEnemy (game){
-    gatoDeath(game.gato)
+    GatoNarDeath(game.GatoNar, game)
     setTimeout(() => {
       game.scene.start("endScene", { score: game.Score })
     }, 2000)
@@ -101,14 +174,14 @@ game.scene.start("endScene", { score: game.Score })
 //     game[key].body.setSize(w / game[key].scaleX, h / game[key].scaleY)
 //   }
 
-//   game[`pepino${id}Collider`] = game.physics.add.collider(game[key], game.gato)
-//   game[`pepino${id}Overlap`] = game.physics.add.overlap(game.gato, game[key], onHitEnemy)
-//   game.physics.add.overlap(game.gato, game[key], onHitEnemy)
+//   game[`pepino${id}Collider`] = game.physics.add.collider(game[key], game.GatoNar)
+//   game[`pepino${id}Overlap`] = game.physics.add.overlap(game.GatoNar, game[key], onHitEnemy)
+//   game.physics.add.overlap(game.GatoNar, game[key], onHitEnemy)
 // }
 
 function spawnPerrito(game, x , y, flip){
-  game.perrito = game.physics.add.sprite(x, y, 'perrito').setOrigin(0, 0).setScale(0.14).setGravityY(-1000).setVelocityX(flip ? 180 : -135) 
-  game.perrito.anims.play('perrito')
+  game.perrito = game.physics.add.sprite(x, y, 'Perrito').setOrigin(0, 0).setScale(0.4).setGravityY(-1000).setVelocityX(flip ? 180 : -135) 
+  game.perrito.anims.play('Perrito')
   if (flip) game.perrito.flipX = true
 
   game.perrito.respawnY = y

@@ -1,6 +1,7 @@
 export function Controles(Game) {
     var cursors = Game.input.keyboard.createCursorKeys();
-    
+    if (Game.GatoNar.isDead) return
+
     let sufijo =
   Game.gatoColor === 2
     ? "Blanco"

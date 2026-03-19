@@ -25,6 +25,7 @@ const INIT_SPRITESHEETS = [
         frameHeight: 400
     
     }
+    
 ]
 
 export const createSpritesheets = (game) => {

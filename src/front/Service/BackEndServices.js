@@ -123,3 +123,10 @@ export const signinGoogle = async (user) => {
   return { success: true, data };
 };
 
+export const getRanking = async () => {
+  const response = await fetch(`
+    ${import.meta.env.VITE_BACKEND_URL}/api/ranking,
+  `);
+  const data = await response.json();
+  return data;
+};

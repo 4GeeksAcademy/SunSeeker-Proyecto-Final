@@ -24,7 +24,7 @@ export function createPlatforms(game) {
   game.peces = game.physics.add.staticGroup()
   // tejado izquierdo
   createTejado(game, 100, game.scale.height - 150)
-  createTejado(game, 100, game.scale.height - 620)
+  createTejado(game, 100, game.scale.height - 600)
   createTejado(game, 100, game.scale.height - 1150)
   createTejado(game, 100, game.scale.height - 1710)
   createTejado(game, 100, game.scale.height - 2220)
@@ -40,22 +40,22 @@ export function createPlatforms(game) {
 
   // izquierdo
   createCaja(game, 400, game.scale.height - 280, 'caja').setOrigin(0, 0).setScale(0.2).refreshBody()
-  createCaja(game, 400, game.scale.height - 730, 'caja').setOrigin(0, 0).setScale(0.2).refreshBody()
+  createCaja(game, 440, game.scale.height - 700, 'caja').setOrigin(0, 0).setScale(0.2).refreshBody()
   createCaja(game, 400, game.scale.height - 1030, 'caja').setOrigin(0, 0).setScale(0.2).refreshBody()
-  createCaja(game, 200, game.scale.height - 1280, 'caja').setOrigin(0, 0).setScale(0.2).refreshBody()
+  createCaja(game, 250, game.scale.height - 1300, 'caja').setOrigin(0, 0).setScale(0.2).refreshBody()
   createCaja(game, 257, game.scale.height - 1580, 'caja').setOrigin(0, 0).setScale(0.2).refreshBody()
   createCaja(game, 400, game.scale.height - 2100, 'caja').setOrigin(0, 0).setScale(0.2).refreshBody()
   createCaja(game, 135, game.scale.height - 2655, 'caja').setOrigin(0, 0).setScale(0.2).refreshBody()
-  createCaja(game, 380, game.scale.height - 2755, 'caja').setOrigin(0, 0).setScale(0.2).refreshBody()
+  createCaja(game, 380, game.scale.height - 2835, 'caja').setOrigin(0, 0).setScale(0.2).refreshBody()
   
   // derecho
-  createCaja(game, 460, game.scale.height - 530, 'caja').setOrigin(0, 0).setScale(0.2).refreshBody()
-  createCaja(game, 620, game.scale.height - 900, 'caja').setOrigin(0, 0).setScale(0.2).refreshBody()
+  createCaja(game, 400, game.scale.height - 550, 'caja').setOrigin(0, 0).setScale(0.2).refreshBody()
+  createCaja(game, 620, game.scale.height - 1570, 'caja').setOrigin(0, 0).setScale(0.2).refreshBody()
   createCaja(game, 480, game.scale.height - 1400, 'caja').setOrigin(0, 0).setScale(0.2).refreshBody()
   createCaja(game, 420, game.scale.height - 1830, 'caja').setOrigin(0, 0).setScale(0.2).refreshBody()
   createCaja(game, 420, game.scale.height - 2300, 'caja').setOrigin(0, 0).setScale(0.2).refreshBody()
   createCaja(game, 420, game.scale.height - 2540, 'caja').setOrigin(0, 0).setScale(0.2).refreshBody()
-  createCaja(game, 420, game.scale.height - 2752, 'caja').setOrigin(0, 0).setScale(0.2).refreshBody()
+  createCaja(game, 420, game.scale.height - 2832, 'caja').setOrigin(0, 0).setScale(0.2).refreshBody()
   
   //pez derecha
   createPez(game, 638, game.scale.height - 1100)
