@@ -65,10 +65,19 @@ def signin():
     user = michi.user
     if user.check_password(password):
         access_token = create_access_token(identity=str(user.id))
-        return jsonify({"msg": "Inicio de sesión exitosa", "token": access_token, "michi_color": michi.color}), 200
+
+        partida = db.session.execute(db.select(Partida).where(
+            Partida.michi_id == michi.id)).scalar_one_or_none()
+
+        return jsonify({
+            "msg": "Inicio de sesión exitosa",
+            "token": access_token,
+            "michi_color": michi.color,
+            "michi_accesorio": partida.accesorio if partida else None  
+        }), 200
     else:
         return jsonify({"msg": "Contraseña o Michi_Name incorrectos"}), 400
-
+    
 # USUARIO C R U D por renombrar las rutas
 # VERIFICAR LOS RETURN si se necesita que se devuelva la serializacioin en alguno.
 

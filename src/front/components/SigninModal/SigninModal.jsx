@@ -3,9 +3,10 @@ import "./SigninModal.css";
 import { useNavigate } from "react-router-dom";
 import { signin } from "../../Service/BackEndServices";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
+import { CommunicatorMusic } from "../../Game/CommunicatorMusic";
 
 export const SigninModal = ({ show, onClose, onSwitch, onLoginSuccess }) => {
-    const {dispatch} = useGlobalReducer();
+    const { dispatch } = useGlobalReducer();
     const [user, setUser] = useState({
         michi_name: "",
         password: ""
@@ -22,7 +23,7 @@ export const SigninModal = ({ show, onClose, onSwitch, onLoginSuccess }) => {
             ...user,
             [e.target.name]: e.target.value
         });
-        if(status.msg){
+        if (status.msg) {
             setStatus({ type: "", msg: "" });
         }
     }
@@ -35,15 +36,17 @@ export const SigninModal = ({ show, onClose, onSwitch, onLoginSuccess }) => {
         const result = await signin(user, navigate)
         if (result && !result.error) {
             localStorage.setItem("michi_name", user.michi_name)
-            dispatch({
-                type: "login_user",
-                payload: user.michi_name
-            })
+            dispatch({ type: "login_user", payload: user.michi_name })
             localStorage.setItem("michi_color", result.michi_color)
-            dispatch({ 
-                type: "set_michi_color", 
-                payload: result.michi_color 
-            })
+            dispatch({ type: "set_michi_color", payload: result.michi_color })
+            dispatch({ type: "set_michi_accesorio", payload: result.michi_accesorio || null });
+            
+    
+            const clavePhaser = result.michi_accesorio
+                ? `${result.michi_color}${result.michi_accesorio}`
+                : result.michi_color;
+            localStorage.setItem("michi_color", clavePhaser);
+
             setStatus({ type: "success", msg: "Ingresando" });
             setTimeout(() => {
                 onLoginSuccess();
@@ -55,6 +58,7 @@ export const SigninModal = ({ show, onClose, onSwitch, onLoginSuccess }) => {
             setStatus({ type: "error", msg: result?.error });
         }
     }
+
     useEffect(() => {
         if (!show) {
             setUser({

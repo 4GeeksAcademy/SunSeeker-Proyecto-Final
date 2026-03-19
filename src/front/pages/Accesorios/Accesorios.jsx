@@ -1,8 +1,9 @@
 import { useState } from "react";
 import "./Accesorios.css";
-import { updateMichiColor } from "../../Service/BackEndServices";
+import { guardarAccesorio, updateMichiColor } from "../../Service/BackEndServices";
 import { CommunicatorMusic } from "../../Game/CommunicatorMusic";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
+
 const colores = [
     { nombre: "Naranja", imagen: "/img/gatoNaranjaSentado.png", valor: "Naranja" },
     { nombre: "Blanco", imagen: "/img/gatoBlancoSentado.png", valor: "Blanco" },
@@ -46,11 +47,21 @@ const categorias = ["Gafas", "Sombrero"];
 
 export const Accesorios = () => {
     const { dispatch } = useGlobalReducer();
-    const [colorSeleccionado, setColorSeleccionado] = useState(localStorage.getItem("michi_color") || "Naranja");
+    const ACCESORIOS_VALIDOS = ["Gafas", "Sombrero"];
+    const COLORES_VALIDOS = ["Naranja", "Blanco", "Negro"];
+
+    const [colorSeleccionado, setColorSeleccionado] = useState(() => {
+        const saved = localStorage.getItem("michi_color");
+        return COLORES_VALIDOS.includes(saved) ? saved : "Naranja";
+    });
     const [mostrarColores, setMostrarColores] = useState(false);
     const [guardado, setGuardado] = useState(false);
     const [mensaje, setMensaje] = useState();
-    const [accesorioEquipado, setAccesorioEquipado] = useState(null);
+    
+    const [accesorioEquipado, setAccesorioEquipado] = useState(() => {
+        const saved = localStorage.getItem("michi_accesorio");
+        return ACCESORIOS_VALIDOS.includes(saved) ? saved : null;
+    });
 
     const imagenActual = imagenGato[colorSeleccionado][accesorioEquipado || "ninguno"];
 
@@ -73,8 +84,21 @@ export const Accesorios = () => {
         const result = await updateMichiColor(colorSeleccionado);
 
         if (result.success) {
+            const clavePhaser = accesorioEquipado
+                ? `${colorSeleccionado}${accesorioEquipado}`
+                : colorSeleccionado;
+            await guardarAccesorio(accesorioEquipado);
+
             dispatch({ type: "set_michi_color", payload: colorSeleccionado });
-            localStorage.setItem("michi_color", colorSeleccionado);
+            dispatch({ type: "set_michi_accesorio", payload: accesorioEquipado });
+            localStorage.setItem("michi_color", clavePhaser);
+            localStorage.setItem("michi_accesorio", accesorioEquipado || "");
+
+            CommunicatorMusic.emit("cambiar_michi", {
+                color: colorSeleccionado,
+                accesorio: accesorioEquipado,
+            });
+
             setMensaje({ text: "GUARDADO!", type: "guardado" });
         } else {
             setMensaje({ text: "ERROR AL GUARDAR", type: "error" });
