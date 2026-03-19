@@ -1,6 +1,6 @@
 import { Animaciones } from "../Animaciones/Animaciones";
 import { CommunicatorMusic } from "../CommunicatorMusic";
-import { createSpritesheets } from "./Level3/spritesheets";
+// import { createSpritesheets } from "./Level3/spritesheets";
 
 export default class Menu extends Phaser.Scene {
   constructor() {
@@ -14,7 +14,7 @@ export default class Menu extends Phaser.Scene {
     this.load.image("Controles", "img/menuControles.png");
     this.load.image("Inventario", "img/menuInventario.png");
     this.load.image("Niveles", "img/menuNiveles.png");
-    createSpritesheets(this)
+    // createSpritesheets(this)
 
     this.load.spritesheet("GatoNaranjaF", "img/GatoNaranja1.png", {
       frameWidth: 49,

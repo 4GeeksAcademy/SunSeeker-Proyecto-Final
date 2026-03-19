@@ -1,5 +1,5 @@
-import { createSpritesheets } from "./spritesheets";
-import { assets } from "../../assets_game";
+// import { createSpritesheets } from "./spritesheets";
+// import { assets } from "../../assets_game";
 import { createWalls } from "./walls";
 import { createPlatforms } from "./platforms";
 import { createColliders, createEnemies, createPlayer, GatoNarDeath} from "./player";
@@ -15,16 +15,16 @@ init(data) {
   this.previousScore = data.score ?? 0;
 }
   preload() {
-  createSpritesheets(this)
-  this.load.image('pared-izq', assets.entorno.paredIzq)
-  this.load.image('pared-der', assets.entorno.paredDer)
-  this.load.image('caja', assets.entorno.caja)
-  this.load.image('techos', assets.entorno.techos)
-  this.load.image('suelo', assets.entorno.suelo)
-  this.load.image('paredFond', assets.entorno.paredFond)
-  this.load.image('cielo', assets.entorno.cielo)
-  this.load.image('puerta', assets.entorno.puerta)
-  this.load.image('pez', assets.pescado.pescado)
+  // createSpritesheets(this)
+  this.load.image('pared-izq', "img/ParedIzquierda.png")
+  this.load.image('pared-der', "img/ParedDerecha.png")
+  this.load.image('caja', "img/CajaAXel.png")
+  this.load.image('techos', "img/Tejado.png")
+  this.load.image('suelo', "img/Suelo.png")
+  this.load.image('paredFond', "img/MuroFondo.png")
+  this.load.image('cielo', "img/Cielo.png")
+  this.load.image('puerta', "img/puertaGato.png")
+  this.load.image('pez', "img/pezAzulSF.png")
   this.load.image("Modal", "public/img/ModalMenuSF.png");
   this.load.image("Menu", "public/img/MenuSFondo.png");
   this.load.image("ScoreFondo", "public/img/vacioLargo.png");
