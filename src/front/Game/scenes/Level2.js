@@ -31,7 +31,23 @@ export default class Level2 extends Phaser.Scene {
       frameWidth: 49,
       frameHeight: 31,
     });
+    this.load.spritesheet("GatoNaranjaGafas", "img/GatoNaranjaGafas.png", {
+      frameWidth: 49,
+      frameHeight: 31,
+    });
+    this.load.spritesheet("GatoNaranjaSombrero", "img/GatoNaranjaSombrero.png", {
+      frameWidth: 49,
+      frameHeight: 31,
+    });
     this.load.spritesheet("GatoBlanco", "img/GatoBlanco.png", {
+      frameWidth: 89,
+      frameHeight: 58,
+    });
+    this.load.spritesheet("GatoBlancoGafas", "img/GatoBlancoGafas.png", {
+      frameWidth: 89,
+      frameHeight: 58,
+    });
+    this.load.spritesheet("GatoBlancoSombrero", "img/GatoBlancoSombrero.png", {
       frameWidth: 89,
       frameHeight: 58,
     });
@@ -39,7 +55,15 @@ export default class Level2 extends Phaser.Scene {
       frameWidth: 84,
       frameHeight: 57,
     });
-   this.load.spritesheet("Perrito", "img/perritoDef.png", {
+    this.load.spritesheet("GatoNegroGafas", "img/GatoNegroGafas.png", {
+      frameWidth: 84,
+      frameHeight: 57,
+    });
+    this.load.spritesheet("GatoNegroSombrero", "img/GatoNegroSombrero.png", {
+      frameWidth: 84,
+      frameHeight: 57,
+    });
+    this.load.spritesheet("Perrito", "img/perritoDef.png", {
       frameWidth: 251,
       frameHeight: 199,
     });
@@ -166,7 +190,11 @@ export default class Level2 extends Phaser.Scene {
     this.physics.add.collider(this.Perrito, platforms);
     this.physics.add.collider(this.Perrito, cajas);
 
-    const colorMap = { Naranja: 1, Blanco: 2, Negro: 3 };
+      const colorMap = {
+      Naranja: 1, Blanco: 2, Negro: 3,
+      BlancoGafas: 4, NegroGafas: 5, NaranjaGafas: 6,
+      NaranjaSombrero: 7, BlancoSombrero: 8, NegroSombrero: 9,
+    };
     this.gatoColor = colorMap[localStorage.getItem("michi_color")] ?? 1;
 
     const texturaGato =
@@ -174,15 +202,58 @@ export default class Level2 extends Phaser.Scene {
         ? "GatoBlanco"
         : this.gatoColor === 3
           ? "GatoNegro"
-          : "GatoNaranjaF";
+          : this.gatoColor === 4
+            ? "GatoBlancoGafas"
+            : this.gatoColor === 5
+              ? "GatoNegroGafas"
+              : this.gatoColor === 6
+                ? "GatoNaranjaGafas"
+                : this.gatoColor === 7
+                  ? "GatoNaranjaSombrero"
+                  : this.gatoColor === 8
+                    ? "GatoBlancoSombrero"
+                    : this.gatoColor === 9
+                      ? "GatoNegroSombrero"
+                      : "GatoNaranjaF";
+ 
     const sufijo =
       this.gatoColor === 2
         ? "Blanco"
         : this.gatoColor === 3
           ? "Negro"
-          : "Naranja";
+          : this.gatoColor === 4
+            ? "BlancoGafas"
+            : this.gatoColor === 5
+              ? "NegroGafas"
+              : this.gatoColor === 6
+                ? "NaranjaGafas"
+                : this.gatoColor === 7
+                  ? "NaranjaSombrero"
+                  : this.gatoColor === 8
+                    ? "BlancoSombrero"
+                    : this.gatoColor === 9
+                      ? "NegroSombrero"
+                      : "Naranja";
+ 
     const escala =
-      this.gatoColor === 2 ? 0.9 : this.gatoColor === 3 ? 1.1 : 1.6;
+      this.gatoColor === 2
+        ? 0.9
+        : this.gatoColor === 3
+          ? 1.1
+          : this.gatoColor === 4
+            ? 0.9
+            : this.gatoColor === 5
+              ? 1.1
+              : this.gatoColor === 6
+                ? 1.6
+                : this.gatoColor === 7
+                  ? 1.6
+                  : this.gatoColor === 8
+                    ? 0.9
+                    : this.gatoColor === 9
+                      ? 1.1
+                      : 1.6;
+
 
     this.GatoNar = this.physics.add
       .sprite(90, WORLD_H - 120, texturaGato)

@@ -3,6 +3,12 @@ export function Animaciones(Game) {
     { key: "Naranja", texture: "GatoNaranjaF", frameStop: 5 },
     { key: "Blanco", texture: "GatoBlanco", frameStop: 5 },
     { key: "Negro", texture: "GatoNegro", frameStop: 5 },
+    { key: "BlancoGafas", texture: "GatoBlancoGafas", frameStop: 5 },
+    { key: "NegroGafas", texture: "GatoNegroGafas", frameStop: 5 },
+    { key: "NaranjaGafas", texture: "GatoNaranjaGafas", frameStop: 5 },
+    { key: "BlancoSombrero", texture: "GatoBlancoSombrero", frameStop: 5 },
+    { key: "NegroSombrero", texture: "GatoNegroSombrero", frameStop: 5 },
+    { key: "NaranjaSombrero", texture: "GatoNaranjaSombrero", frameStop: 5 },
   ];
 
   tipos.forEach((gato) => {

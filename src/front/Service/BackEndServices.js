@@ -12,6 +12,7 @@ export const signup = async (user) => {
     },
   );
   const data = await response.json();
+   console.log("Respuesta signup:", data);
   if (response.ok) {
     return { success: true, data };
   } else {
@@ -30,9 +31,6 @@ export const jamendoCall = async (dispatch) => {
   dispatch({ type: "api_call", payload: data.results });
 };
 
-// export const SendScore = async () =>{
-//   const response = await fetch ( `${import.meta.env.VITE_BACKEND_URL}/api/signup`,)
-// }
 export const signin = async (user) => {
   const response = await fetch(
     `${import.meta.env.VITE_BACKEND_URL}/api/signin`,
@@ -50,17 +48,58 @@ export const signin = async (user) => {
   }
   localStorage.setItem("token", data.token);
   localStorage.setItem("michi_color", data.michi_color);
-  return { success: true, data };
+  return { success: true, michi_color: data.michi_color, data };
 };
 
-export const queryRanking = async () => {
+export const updateMichiColor = async (color) => {
+  const token = localStorage.getItem("token");
   const response = await fetch(
-    `${import.meta.env.VITE_BACKEND_URL}/api/signin`,
+    `${import.meta.env.VITE_BACKEND_URL}/api/get_michi`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ color }),
+    },
   );
   const data = await response.json();
   if (!response.ok) {
-    throw new Error(data.error);
+    return { error: data.error || "Error al guardar" };
   }
+  return { success: true, data };
+};
+
+export const updateMichiColorPhaser = (color) => {
+  const token = localStorage.getItem("token");
+  if (!token) return;
+  fetch(`${import.meta.env.VITE_BACKEND_URL}/api/get_michi`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ color }),
+  });
+};
+
+export const guardarPartida = async (score) => {
+  const token = localStorage.getItem("token");
+  const accesorio = localStorage.getItem("michi_accesorio") || null;
+
+  const response = await fetch(
+    `${import.meta.env.VITE_BACKEND_URL}/api/get_partida`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ score, accesorio }), 
+    },
+  );
+  const data = await response.json();
   return data;
 };
 

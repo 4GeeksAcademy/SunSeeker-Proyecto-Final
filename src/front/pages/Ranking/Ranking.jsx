@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import "./Ranking.css";
-import { queryRanking } from "../../Service/BackEndServices";
+import { getRanking } from "../../Service/BackEndServices";
+import { imagenAccesorios } from "../../../imagenAccesorios";
+
 
 export const Ranking = () => {
 
@@ -11,7 +13,7 @@ export const Ranking = () => {
         try {
             setLoading(true);
             const delay = new Promise(resolve => setTimeout(resolve, 3000));
-            const [data] = await Promise.all([queryRanking(), delay]);
+            const [data] = await Promise.all([getRanking(), delay]);
             const top5 = data.sort((a, b) => b.score - a.score).slice(0, 5);
             setRanking(top5);
         }
@@ -31,24 +33,31 @@ export const Ranking = () => {
             <p className="subtitulo"> RANKING </p>
 
             <div className="ranking mt-3">
-                {ranking.length > 0 ? (
-                    ranking.map(({ id, michi_name, score }, index) => (
-                        <div key={id} className={`player-card ${index < 3 ? "top3" : ""}`}>
-                            <div className="rank-number">{index + 1}</div>
-                            <div className="cat-avatar">🐱</div>
-                            <div className="player-info">
-                                <div className="player-name">{michi_name}</div>
-                                <div className="score-bar-bg">
-                                    <div className="score-bar-fill" style={{ width: `${(score / ranking[0].score) * 100}%` }}></div>
-                                </div>
-                            </div>
-                            <div className="score">{score}</div>
-                        </div>
-                    ))
+                {loading ? (
+                    <p className="loading-text">Cargando ranking...</p>
                 ) : (
-                    <>
-                        {[...Array(5)].map((_, i) => (
-                            <div key={i} className="player-card esqueleto-fijo">
+                    [...Array(5)].map((_, i) => {
+                        const jugador = ranking[i];
+                        return jugador ? (
+                            <div key={`jugador-${jugador.id}`} className={`player-card ${i < 3 ? "top3" : ""}`}>
+                                <div className="rank-number">{i + 1}</div>
+                                <div className="cat-avatar">
+                                    <img
+                                        src={imagenAccesorios[jugador.color]?.[jugador.accesorio || "ninguno"] || "/img/gatoNaranjaSentado.png"}
+                                        alt={jugador.michi_name}
+                                        className="avatar-img"
+                                    />
+                                </div>
+                                <div className="player-info">
+                                    <div className="player-name">{jugador.michi_name}</div>
+                                    <div className="score-bar-bg">
+                                        <div className="score-bar-fill" style={{ width: `${(jugador.score / ranking[0].score) * 100}%` }}></div>
+                                    </div>
+                                </div>
+                                <div className="score">{jugador.score}</div>
+                            </div>
+                        ) : (
+                                <div key={`esqueleto-${i}`} className="player-card esqueleto-fijo">
                                 <div className="rank-number">?</div>
                                 <div className="cat-avatar esqueleto-bloqueado"></div>
                                 <div className="player-info">
@@ -57,13 +66,8 @@ export const Ranking = () => {
                                 </div>
                                 <div className="score">0000</div>
                             </div>
-                        ))}
-                        {!loading && (
-                            <div className="no-data-overlay">
-                                <p> NO SE ENCONTRARON SUNSEEKERS...</p>
-                            </div>
-                        )}
-                    </>
+                        );
+                    })
                 )}
             </div>
         </div>
