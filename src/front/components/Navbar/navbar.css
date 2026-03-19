@@ -72,7 +72,7 @@ nav {
 }
 
 .michi-name-display {
-  font-family: var(--pixel); 
+  font-family: var(--pixel);
   font-size: 12px;
   color: var(--orange);
   text-shadow: 0 0 20px var(--gold);
@@ -94,6 +94,17 @@ nav {
   justify-content: flex-end;
   padding: 2px;
   cursor: pointer;
+  overflow: hidden;
+  position: relative;
+}
+
+.perfil-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  top: 0;
+  left: 0;
 }
 
 .flecha-pixel {
@@ -146,6 +157,7 @@ nav {
   align-items: center;
   gap: 12px;
 }
+
 .btn {
   font-family: var(--pixel);
   font-size: 9px;
@@ -169,10 +181,9 @@ nav {
   transform: translate(2px, 2px);
 }
 
-.btn-signin {
-  background: transparent;
-  color: var(--gold);
-  border: 2px solid var(--gold);
+.btn-signup {
+  background: var(--gold) !important; 
+  color: var(--navy) !important;    
   box-shadow: 3px 3px 0 var(--orange);
 }
 
@@ -195,6 +206,10 @@ nav {
   box-shadow:
     3px 3px 0 var(--orange),
     0 0 12px var(--gold);
+}
+
+.fa-solid{
+  font-size: 15px;
 }
 
 @media (max-width: 575.98px) {

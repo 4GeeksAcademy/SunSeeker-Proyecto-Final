@@ -1,6 +1,12 @@
 import Phaser from "phaser";
 import { Controles } from "../Controles/Controles";
 import { Animaciones } from "../Animaciones/Animaciones";
+import { CommunicatorMusic } from "../CommunicatorMusic";
+
+export const obtenerNombreDelGato = () => {
+  const nombreGuardado = localStorage.getItem("michi_name");
+  return nombreGuardado ? nombreGuardado : "Invitado";
+};
 
 export default class MainScene extends Phaser.Scene {
   constructor() {
@@ -11,6 +17,7 @@ export default class MainScene extends Phaser.Scene {
 
   preload() {
     this.load.baseURL = "./";
+    this.load.image("Modal", "img/ModalMenuSF.png");
     this.load.image("fondo", "img/fondo.jpg");
     this.load.image("fondoLargo", "img/mundoRaro.png");
     this.load.image("CasaCiro", "img/CasaDeCiroFn.png");
@@ -20,22 +27,88 @@ export default class MainScene extends Phaser.Scene {
     this.load.image("TablaLarga", "img/sueloLargo.png");
     this.load.image("Pez", "img/pezAzulSF.png");
     this.load.image("PuertaGato", "img/puertaGato.png");
+    this.load.image("Menu", "img/MenuSFondo.png");
+    this.load.image("ScoreFondo", "img/vacioLargo.png");
 
-    this.load.spritesheet("GatoNaranja", "img/gatoNaranjaFinal.png", {
-      frameWidth: 48,
+   this.load.spritesheet("GatoNaranjaF", "img/GatoNaranja1.png", {
+      frameWidth: 49,
       frameHeight: 31,
-    })
-    this.load.spritesheet("Perrito", "img/perritoDef.png", {
-      frameWidth: 525,
-      frameHeight: 400,
     });
-    
-
+    this.load.spritesheet("GatoNaranjaGafas", "img/GatoNaranjaGafas.png", {
+      frameWidth: 49,
+      frameHeight: 31,
+    });
+    this.load.spritesheet("GatoNaranjaSombrero", "img/GatoNaranjaSombrero.png", {
+      frameWidth: 49,
+      frameHeight: 31,
+    });
+    this.load.spritesheet("GatoBlanco", "img/GatoBlanco.png", {
+      frameWidth: 89,
+      frameHeight: 58,
+    });
+    this.load.spritesheet("GatoBlancoGafas", "img/GatoBlancoGafas.png", {
+      frameWidth: 89,
+      frameHeight: 58,
+    });
+    this.load.spritesheet("GatoBlancoSombrero", "img/GatoBlancoSombrero.png", {
+      frameWidth: 89,
+      frameHeight: 58,
+    });
+    this.load.spritesheet("GatoNegro", "img/GatoNegroSF.png", {
+      frameWidth: 84,
+      frameHeight: 57,
+    });
+    this.load.spritesheet("GatoNegroGafas", "img/GatoNegroGafas.png", {
+      frameWidth: 84,
+      frameHeight: 57,
+    });
+    this.load.spritesheet("GatoNegroSombrero", "img/GatoNegroSombrero.png", {
+      frameWidth: 84,
+      frameHeight: 57,
+    });
+    this.load.spritesheet("Perrito", "img/perritoDef.png", {
+      frameWidth: 251,
+      frameHeight: 199,
+    });
   }
 
   create() {
+    CommunicatorMusic.removeAllListeners("change-music-state");
+    CommunicatorMusic.on("change-music-state", (data) => {
+      if (!this.sys || !this.scene.isActive()) return;
+
+      if (data.isPlaying) {
+        if (this.physics && this.physics.world) {
+          this.physics.resume();
+        }
+
+        if (this.time) this.time.paused = false;
+
+        if (this.GatoNar && this.GatoNar.anims) {
+          this.GatoNar.anims.resume();
+          this.GatoNar.anims.play("turn", true);
+
+          if (data.bpm) {
+            const speedRatio = data.bpm / 120;
+            this.GatoNar.anims.timeScale = speedRatio;
+          }
+        }
+      } else {
+        if (this.physics && this.physics.world) this.physics.pause();
+        if (this.time) this.time.paused = true;
+        if (this.GatoNar && this.GatoNar.anims) {
+          this.GatoNar.anims.pause();
+        }
+      }
+    });
+    CommunicatorMusic.emit("request-play-music");
+
     this.GatoNar = "";
     this.Perrito = "";
+    this.isDead = false;
+
+    //Nombre del jugador traido del localstore
+    const nombreDelJugador = obtenerNombreDelGato();
 
     // this.add.image(400, 330, 'fondo').setScale(0.8);
     this.add.image(400, 760, "fondoLargo").setScale(1.1);
@@ -59,7 +132,7 @@ export default class MainScene extends Phaser.Scene {
     platforms.create(570, 980, "TablaDer").setScale(0.3).refreshBody();
 
     platforms.create(265, 1025, "TablaIzq").setScale(0.3).refreshBody();
-    platforms.create(570, 1125, "TablaDer").setScale(0.3).refreshBody();
+    platforms.create(570, 1140, "TablaDer").setScale(0.3).refreshBody();
     platforms.create(265, 1250, "TablaIzq").setScale(0.3).refreshBody();
     platforms.create(570, 1350, "TablaDer").setScale(0.3).refreshBody();
 
@@ -100,8 +173,11 @@ export default class MainScene extends Phaser.Scene {
     }
 
     function Morder() {
+      if (this.isDead) return;
+      this.isDead = true;
       this.physics.pause();
-      this.GatoNar.setTint(0xff0000);
+      this.GatoNar.anims.play("Muerte_" + sufijo, true);
+      // this.GatoNar.setTint(0xff0000);
 
       this.time.addEvent({
         delay: 2000,
@@ -117,14 +193,15 @@ export default class MainScene extends Phaser.Scene {
         delay: 1000,
         loop: false,
         callback: () => {
-          this.scene.start("endScene", { score: this.GatoNar.Score });
+          this.scene.start("Level2", { score: this.GatoNar.Score });
         },
       });
     }
+
     let NextLevel = this.add.zone(75, 100, 20, 20);
     this.physics.add.existing(NextLevel, true);
 
-    this.Perrito = this.physics.add.sprite(770, 490, "Perrito").setScale(0.13);
+    this.Perrito = this.physics.add.sprite(770, 490, "Perrito").setScale(0.3);
     this.Perrito.setCollideWorldBounds(true);
     this.Perrito.setVelocityX(150);
     this.Perrito.setBounce(1, 0);
@@ -132,9 +209,75 @@ export default class MainScene extends Phaser.Scene {
     this.physics.add.collider(this.Perrito, paredes);
     this.physics.add.overlap(this.Perrito, respawnDog, Respawn, null, this);
 
+   const colorMap = {
+      Naranja: 1, Blanco: 2, Negro: 3,
+      BlancoGafas: 4, NegroGafas: 5, NaranjaGafas: 6,
+      NaranjaSombrero: 7, BlancoSombrero: 8, NegroSombrero: 9,
+    };
+    this.gatoColor = colorMap[localStorage.getItem("michi_color")] ?? 1;
+
+    const texturaGato =
+      this.gatoColor === 2
+        ? "GatoBlanco"
+        : this.gatoColor === 3
+          ? "GatoNegro"
+          : this.gatoColor === 4
+            ? "GatoBlancoGafas"
+            : this.gatoColor === 5
+              ? "GatoNegroGafas"
+              : this.gatoColor === 6
+                ? "GatoNaranjaGafas"
+                : this.gatoColor === 7
+                  ? "GatoNaranjaSombrero"
+                  : this.gatoColor === 8
+                    ? "GatoBlancoSombrero"
+                    : this.gatoColor === 9
+                      ? "GatoNegroSombrero"
+                      : "GatoNaranjaF";
+ 
+    const sufijo =
+      this.gatoColor === 2
+        ? "Blanco"
+        : this.gatoColor === 3
+          ? "Negro"
+          : this.gatoColor === 4
+            ? "BlancoGafas"
+            : this.gatoColor === 5
+              ? "NegroGafas"
+              : this.gatoColor === 6
+                ? "NaranjaGafas"
+                : this.gatoColor === 7
+                  ? "NaranjaSombrero"
+                  : this.gatoColor === 8
+                    ? "BlancoSombrero"
+                    : this.gatoColor === 9
+                      ? "NegroSombrero"
+                      : "Naranja";
+ 
+    const escala =
+      this.gatoColor === 2
+        ? 0.9
+        : this.gatoColor === 3
+          ? 1.1
+          : this.gatoColor === 4
+            ? 0.9
+            : this.gatoColor === 5
+              ? 1.1
+              : this.gatoColor === 6
+                ? 1.6
+                : this.gatoColor === 7
+                  ? 1.6
+                  : this.gatoColor === 8
+                    ? 0.9
+                    : this.gatoColor === 9
+                      ? 1.1
+                      : 1.6;
+
     this.GatoNar = this.physics.add
-      .sprite(420, 1300, "Gatonaranja")
-      .setScale(1.6);
+      .sprite(420, 1300, texturaGato)
+      .setScale(escala);
+
+    ////
     this.GatoNar.setCollideWorldBounds(true);
     this.GatoNar.setBounce(0.1);
     this.physics.add.collider(
@@ -171,7 +314,16 @@ export default class MainScene extends Phaser.Scene {
 
     this.physics.add.overlap(this.GatoNar, peces, PuntosGato, null, this);
 
-    Animaciones(this);
+    this.events.on("shutdown", () => {
+      CommunicatorMusic.removeAllListeners("change-music-state");
+      CommunicatorMusic.emit("request-pause-music");
+    });
+    this.events.on("destroy", () => {
+      CommunicatorMusic.removeAllListeners("change-music-state");
+      CommunicatorMusic.emit("request-pause-music");
+    });
+
+    Animaciones(this, this.gatoColor);
 
     this.physics.world.setBounds(0, 0, 800, 1500);
     this.cameras.main.setBounds(0, 0, 800, 1500);
@@ -185,6 +337,7 @@ export default class MainScene extends Phaser.Scene {
     });
     this.refreshTime();
     this.timeTXT.setScrollFactor(0);
+    this.add.image(115, 34, "ScoreFondo").setScale(0.46).setScrollFactor(0);
 
     this.ScoreText = this.add.text(16, 16, "Score: 0", {
       fontSize: "32px",
@@ -192,7 +345,59 @@ export default class MainScene extends Phaser.Scene {
     });
     this.ScoreText.setScrollFactor(0);
 
-    // this.cursors = this.input.keyboard.createCursorKeys();
+    // Boton Volver al Menu
+    this.add.image(730, 30, "Menu").setScale(0.06).setScrollFactor(0);
+    const MenuBtn = this.add.zone(673, 10, 115, 38);
+    MenuBtn.setOrigin(0);
+    MenuBtn.setInteractive().setScrollFactor(0);
+
+    MenuBtn.on("pointerdown", () => {
+      this.physics.pause();
+      this.time.paused = true;
+
+      const overlay = this.add
+        .rectangle(400, 350, 800, 800, 0x000000, 0.6)
+        .setScrollFactor(0)
+        .setDepth(10);
+
+      // Aqui pones tu imagen, botones y texto
+      const modalImg = this.add
+        .image(400, 300, "Modal")
+        .setScrollFactor(0)
+        .setDepth(10)
+        .setScale(0.3);
+
+      const btnSi = this.add
+        .zone(270, 316, 110, 70)
+        .setInteractive()
+        .setScrollFactor(0)
+        .setDepth(11);
+      btnSi.setOrigin(0);
+      btnSi.setInteractive().setScrollFactor(0);
+      // this.add.graphics().lineStyle(2, 0xff0000).strokeRectShape(btnSi).setScrollFactor(0);
+
+      const btnNo = this.add
+        .zone(430, 316, 110, 70)
+        .setInteractive()
+        .setScrollFactor(0)
+        .setDepth(11);
+      btnNo.setOrigin(0);
+      btnNo.setInteractive().setScrollFactor(0);
+      // this.add.graphics().lineStyle(2, 0xff0000).strokeRectShape(btnNo).setScrollFactor(0);
+
+      btnSi.once("pointerdown", () => {
+        this.scene.start("Menu");
+      });
+
+      btnNo.once("pointerdown", () => {
+        overlay.destroy();
+        modalImg.destroy();
+        btnSi.destroy();
+        btnNo.destroy();
+        this.physics.resume();
+        this.time.paused = false;
+      });
+    });
   }
 
   refreshTime() {
@@ -215,6 +420,13 @@ export default class MainScene extends Phaser.Scene {
   }
 
   update() {
-    Controles(this,this.cursors ,this.perrito)
-}
+    if (this.isDead) {
+      return;
+    }
+    Controles(this, this.cursors, this.perrito);
+  }
+
+  cleanupListeners() {
+    CommunicatorMusic.removeAllListeners("change-music-state");
+  }
 }

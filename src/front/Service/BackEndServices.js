@@ -12,6 +12,7 @@ export const signup = async (user) => {
     },
   );
   const data = await response.json();
+   console.log("Respuesta signup:", data);
   if (response.ok) {
     return { success: true, data };
   } else {
@@ -21,7 +22,7 @@ export const signup = async (user) => {
 
 export const jamendoCall = async (dispatch) => {
   const response = await fetch(
-    `https://api.jamendo.com/v3.0/tracks/?client_id=${JamendoUser}&format=json&limit=5&fuzzytags=lofi&order=popularity_month`,
+    `https://api.jamendo.com/v3.0/tracks/?client_id=${JamendoUser}&format=json&limit=5&fuzzytags=lofi&order=popularity_month&include=musicinfo`,
   );
   const data = await response.json();
   if (!response.ok) {
@@ -30,9 +31,6 @@ export const jamendoCall = async (dispatch) => {
   dispatch({ type: "api_call", payload: data.results });
 };
 
-// export const SendScore = async () =>{
-//   const response = await fetch ( `${import.meta.env.VITE_BACKEND_URL}/api/signup`,)
-// }
 export const signin = async (user) => {
   const response = await fetch(
     `${import.meta.env.VITE_BACKEND_URL}/api/signin`,
@@ -49,16 +47,79 @@ export const signin = async (user) => {
     return { error: data.msg || data.error || "Error al iniciar sesión" };
   }
   localStorage.setItem("token", data.token);
-  return { success: true, data };
+  localStorage.setItem("michi_color", data.michi_color);
+  return { success: true, michi_color: data.michi_color, data };
 };
 
-export const queryRanking = async () => {
+export const updateMichiColor = async (color) => {
+  const token = localStorage.getItem("token");
   const response = await fetch(
-    `${import.meta.env.VITE_BACKEND_URL}/api/partidas`,
+    `${import.meta.env.VITE_BACKEND_URL}/api/get_michi`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ color }),
+    },
   );
   const data = await response.json();
   if (!response.ok) {
-    throw new Error(data.error);
+    return { error: data.error || "Error al guardar" };
   }
+  return { success: true, data };
+};
+
+export const updateMichiColorPhaser = (color) => {
+  const token = localStorage.getItem("token");
+  if (!token) return;
+  fetch(`${import.meta.env.VITE_BACKEND_URL}/api/get_michi`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ color }),
+  });
+};
+
+export const guardarPartida = async (score) => {
+  const token = localStorage.getItem("token");
+  const accesorio = localStorage.getItem("michi_accesorio") || null;
+
+  const response = await fetch(
+    `${import.meta.env.VITE_BACKEND_URL}/api/get_partida`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ score, accesorio }), 
+    },
+  );
+  const data = await response.json();
   return data;
 };
+
+export const signinGoogle = async (user) => {
+  const response = await fetch(
+    `${import.meta.env.VITE_BACKEND_URL}/api/auth/google`,
+    {
+      method: "POST",
+      body: JSON.stringify(user),
+      headers: {
+        "Content-type": "application/json",
+      },
+    },
+  );
+  const data = await response.json();
+  if (!response.ok) {
+    return { error: data.msg || data.error || "Error al iniciar sesión" };
+  }
+  localStorage.setItem("token", data.token);
+  localStorage.setItem("michi_color", data.michi_color);
+  return { success: true, data };
+};
+

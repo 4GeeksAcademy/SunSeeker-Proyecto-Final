@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { SignupModal } from "../SignupModal/SignupModal";
 import { SigninModal } from "../SigninModal/SigninModal";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
+import { imagenAccesorios } from "../../../imagenAccesorios";
 
 
 export const Navbar = () => {
@@ -11,7 +12,9 @@ export const Navbar = () => {
     const navigate = useNavigate();
     const [showSignup, setShowSignup] = useState(false);
     const [showSignin, setShowSignin] = useState(false);
-
+    const michiColor = store.michiColor || "Naranja";
+    const michiAccesorio = store.michiAccesorio || "ninguno";
+    const fotoNavbar = imagenAccesorios[michiColor][michiAccesorio];
     const openSignup = () => {
         setShowSignin(false);
         setShowSignup(true);
@@ -64,11 +67,13 @@ export const Navbar = () => {
                         <span className="michi-name-display">{michiName}</span>
                         <div className="michi-dropdown-container">
                             <div className="perfil-box">
+                                <img src={fotoNavbar} alt="michi" className="perfil-img" />
                                 <span className="flecha-pixel">▼</span>
                             </div>
                             <ul className="michi-dropdown-menu">
-                                <li><Link to="/demo">Accesorios</Link></li>
+                                <li><Link to="/accesorios">Accesorios</Link></li>
                                 <li><Link to="/ranking">Ranking</Link></li>
+                                <li className="michi-name-display"><Link to="/game"><i className="fa-solid fa-cat"></i> JUGAR</Link></li>
                                 <li onClick={handleLogout} className="logout-btn">Logout</li>
                             </ul>
                         </div>
@@ -81,7 +86,7 @@ export const Navbar = () => {
                     </div>
                 )}
             </div>
-            <SignupModal show={showSignup} onClose={() => setShowSignup(false)} onSwitch={openSignin} />
+            <SignupModal show={showSignup} onClose={() => setShowSignup(false)} onSwitch={openSignin} onLoginSuccess={handleLoginSuccess} />
             <SigninModal
                 show={showSignin}
                 onClose={() => setShowSignin(false)}

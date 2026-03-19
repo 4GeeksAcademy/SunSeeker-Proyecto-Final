@@ -8,7 +8,7 @@ import { jamendoCall } from "../../Service/BackEndServices.js";
 
 
 export const Home = () => {
-    const {store , dispatch} = useGlobalReducer();
+    const { store, dispatch } = useGlobalReducer();
     const navigate = useNavigate();
     const isLoggedIn = !!store.user;
 
@@ -19,9 +19,9 @@ export const Home = () => {
         }
     };
 
-    useEffect(()=>{
-		jamendoCall(dispatch)
-	},[])
+    useEffect(() => {
+        jamendoCall(dispatch)
+    }, [])
 
     return (
         <>
@@ -41,17 +41,20 @@ export const Home = () => {
                 </div>
             </div>
             <div className="main-content">
-                <button
-                    className="btn-submit-play"
-                    data-bs-toggle={!isLoggedIn ? "modal" : ""}
-                    data-bs-target={!isLoggedIn ? "#homeModal" : ""}     
-                    onClick={handlePlayClick}           
+                <div className="soporte-boton-jugar">
+                    <div className="tubo-soporte"></div>
+                    <button
+                        className="btn-home"
+                        data-bs-toggle={!isLoggedIn ? "modal" : ""}
+                        data-bs-target={!isLoggedIn ? "#homeModal" : ""}
+                        onClick={handlePlayClick}
                     >
-                    🐈‍⬛  JUGAR 🐈
-                </button>
+                        🐈‍⬛  JUGAR 🐈
+                    </button>
+
+                </div>
             </div>
             <ModalHome id="homeModal" />
         </>
     )
-
 };
