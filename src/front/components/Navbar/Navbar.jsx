@@ -86,7 +86,7 @@ export const Navbar = () => {
                     </div>
                 )}
             </div>
-            <SignupModal show={showSignup} onClose={() => setShowSignup(false)} onSwitch={openSignin} onLoginSuccess={handleLoginSuccess} />
+            <SignupModal show={showSignup} onClose={() => setShowSignup(false)} onSwitch={openSignin} />
             <SigninModal
                 show={showSignin}
                 onClose={() => setShowSignin(false)}
