@@ -39,6 +39,11 @@ export const SigninModal = ({ show, onClose, onSwitch, onLoginSuccess }) => {
                 type: "login_user",
                 payload: user.michi_name
             })
+            localStorage.setItem("michi_color", result.michi_color)
+            dispatch({ 
+                type: "set_michi_color", 
+                payload: result.michi_color 
+            })
             setStatus({ type: "success", msg: "Ingresando" });
             setTimeout(() => {
                 onLoginSuccess();

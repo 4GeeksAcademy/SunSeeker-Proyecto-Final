@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./FrasesMichiGame.css";
 import { useFetcher } from "react-router-dom";
 import { CommunicatorMusic } from "./CommunicatorMusic";
+import { imagenAccesorios } from "../../imagenAccesorios"; 
 
 const frases = [
     "Hoy me siento imparable...",
@@ -19,10 +20,12 @@ const frases = [
 export const FrasesMichiGame = () => {
     const [fraseActual, setFraseActual] = useState(frases[Math.floor(Math.random() * frases.length)]);
     const [color, setColor] = useState(localStorage.getItem("michi_color") || "Naranja");
-    
+    const [accesorio, setAccesorio] = useState(localStorage.getItem("michi_accesorio") || "ninguno");
+
     useEffect(() => {
         const intervalo = setInterval(() => {
             setColor(localStorage.getItem("michi_color") || "Naranja");
+            setAccesorio(localStorage.getItem("michi_accesorio") || "ninguno");
             setFraseActual(prev => {
                 const otrasFrases = frases.filter(f => f !== prev);
                 return otrasFrases[Math.floor(Math.random() * otrasFrases.length)];
@@ -37,7 +40,7 @@ export const FrasesMichiGame = () => {
                 <p className="frase-texto">"{fraseActual}"</p>
             </div>
             <img
-                src={`/img/gato${color}Sentado.png`}
+                src={imagenAccesorios[color]?.[accesorio] || "/img/gatoNaranjaSentado.png"}
                 alt="michi"
                 className="frase-gato"
             />

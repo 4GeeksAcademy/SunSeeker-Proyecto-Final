@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { SignupModal } from "../SignupModal/SignupModal";
 import { SigninModal } from "../SigninModal/SigninModal";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
+import { imagenAccesorios } from "../../../imagenAccesorios";
 
 
 export const Navbar = () => {
@@ -11,7 +12,9 @@ export const Navbar = () => {
     const navigate = useNavigate();
     const [showSignup, setShowSignup] = useState(false);
     const [showSignin, setShowSignin] = useState(false);
-
+    const michiColor = store.michiColor || "Naranja";
+    const michiAccesorio = store.michiAccesorio || "ninguno";
+    const fotoNavbar = imagenAccesorios[michiColor][michiAccesorio];
     const openSignup = () => {
         setShowSignin(false);
         setShowSignup(true);
@@ -64,6 +67,7 @@ export const Navbar = () => {
                         <span className="michi-name-display">{michiName}</span>
                         <div className="michi-dropdown-container">
                             <div className="perfil-box">
+                                <img src={fotoNavbar} alt="michi" className="perfil-img" />
                                 <span className="flecha-pixel">▼</span>
                             </div>
                             <ul className="michi-dropdown-menu">

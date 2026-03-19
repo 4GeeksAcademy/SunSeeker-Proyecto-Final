@@ -48,12 +48,11 @@ export const signin = async (user) => {
   }
   localStorage.setItem("token", data.token);
   localStorage.setItem("michi_color", data.michi_color);
-  return { success: true, data };
+  return { success: true, michi_color: data.michi_color, data };
 };
 
 export const updateMichiColor = async (color) => {
   const token = localStorage.getItem("token");
-  console.log("Token:", token);
   const response = await fetch(
     `${import.meta.env.VITE_BACKEND_URL}/api/get_michi`,
     {
@@ -87,6 +86,8 @@ export const updateMichiColorPhaser = (color) => {
 
 export const guardarPartida = async (score) => {
   const token = localStorage.getItem("token");
+  const accesorio = localStorage.getItem("michi_accesorio") || null;
+
   const response = await fetch(
     `${import.meta.env.VITE_BACKEND_URL}/api/get_partida`,
     {
@@ -95,14 +96,9 @@ export const guardarPartida = async (score) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ score: score }),
+      body: JSON.stringify({ score, accesorio }), 
     },
   );
-  
-   if (!response.ok) {
-     console.error("Error del servidor:", response.status);
-     return;
-   }
   const data = await response.json();
   return data;
 };

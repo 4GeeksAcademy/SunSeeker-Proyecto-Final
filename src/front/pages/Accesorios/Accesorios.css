@@ -66,7 +66,7 @@ body {
 .btn-tres-puntos {
   background: none;
   border: none;
-  font-size: 20px;
+  font-size: 15px;
   cursor: pointer;
   color: var(--text);
   letter-spacing: 4px;
@@ -143,6 +143,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  margin-top: 70px;
 }
 
 .elementos-item {
@@ -273,6 +274,19 @@ body {
   }
 }
 
+.coming-soon {
+  margin-top: 50px;
+  padding: 15px;
+  border: 2px dashed var(--teal);
+  color: var(--teal);
+  text-align: center;
+  font-family: var(--pixel);
+  font-size: 0.55rem;
+  line-height: 2;
+  opacity: 0.7;
+}
+
+
 @media (max-width: 991.98px) {
   .accesorios-container {
     padding: 14px;
@@ -312,6 +326,7 @@ body {
   }
 }
 
+
 @media (max-width: 575.98px) {
   .perfil-card {
     height: 160px;
@@ -348,4 +363,14 @@ body {
     font-size: 11px;
     padding: 10px 30px;
   }
+}
+
+.elementos-item.equipado {
+    border-color: var(--gold);
+}
+
+.img-accesorios{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
