@@ -1,3 +1,5 @@
+import { Game } from "phaser";
+
 export function createPlayer(game) {
   // game.GatoNar = game.physics.add
   //   .sprite(400, 0, "gato")
@@ -120,7 +122,7 @@ export function GatoNarDeath(GatoNar, game){
 export function onHitEnemy (game){
     GatoNarDeath(game.GatoNar, game)
     setTimeout(() => {
-      game.scene.start("endScene", { score: game.Score })
+      game.scene.start("endScene", { score: game.GatoNar.Score })
     }, 2000)
     
 }

@@ -3,7 +3,7 @@ import Phaser from "phaser";
 
 import MainScene from "../Game/scenes/MainScene";
 import Level2 from "../Game/scenes/Level2";
-import Level3 from "../Game/scenes/Level3";
+import Level3 from "../Game/scenes/Level3/Level3";
 import endScene from "../Game/scenes/endScene";
 import Menu from "../Game/scenes/Menu";
 import Controles from "../Game/scenes/Controles";
