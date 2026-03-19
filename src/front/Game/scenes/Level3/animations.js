@@ -36,7 +36,7 @@ export const createAnimations = (game) => {
   game.anims.create({
     key: "perrito",
     frames: game.anims.generateFrameNumbers("perrito", { start: 0, end: 1 }),
-    frameRate: 10,
+    frameRate: 1,
     repeat: -1,
   });
 };

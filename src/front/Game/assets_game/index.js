@@ -4,6 +4,9 @@ import paredDer from './entorno/Sprite-pared-derecha-Sheet.png'
 import caja from './entorno/Sprite-caja-Sheet.png'
 import techos from './entorno/Sprite-techos-Sheet.png'
 import suelo from './entorno/Sprite-suelo-look.png'
+import paredFond from './entorno/Sprite-pared-fondo-Sheet.png'
+import cielo from './entorno/Sprite-cielo--Sheet.png'
+import puerta from './entorno/puertaGato.png'
 
 // Enemigos
 import pepinillo from './enemigos/Pepinillo-animation.png'
@@ -20,7 +23,10 @@ export const assets = {
     paredDer,
     caja,
     techos,
-    suelo
+    suelo,
+    paredFond,
+    cielo,
+    puerta
   },
   enemigos: {
     pepinillo,

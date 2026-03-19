@@ -1,5 +1,5 @@
 export const checkControls = (game) =>{
-    
+    if (game.gato.isDead) return;
     
     if (game.keys.right.isDown) {
         game.gato.x += 2
