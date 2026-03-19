@@ -292,7 +292,7 @@ export default class Level2 extends Phaser.Scene {
         this.time.addEvent({
           delay: 1000,
           callback: () =>
-            this.scene.start("endScene", { score: this.GatoNar.Score }),
+            this.scene.start("Level3", { score: this.GatoNar.Score }),
         });
       },
       null,
