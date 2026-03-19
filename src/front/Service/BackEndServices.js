@@ -103,8 +103,23 @@ export const guardarPartida = async (score) => {
   return data;
 };
 
-export const getRanking = async () => {
-  const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/ranking`);
+export const signinGoogle = async (user) => {
+  const response = await fetch(
+    `${import.meta.env.VITE_BACKEND_URL}/api/auth/google`,
+    {
+      method: "POST",
+      body: JSON.stringify(user),
+      headers: {
+        "Content-type": "application/json",
+      },
+    },
+  );
   const data = await response.json();
-  return data;
+  if (!response.ok) {
+    return { error: data.msg || data.error || "Error al iniciar sesión" };
+  }
+  localStorage.setItem("token", data.token);
+  localStorage.setItem("michi_color", data.michi_color);
+  return { success: true, data };
 };
+

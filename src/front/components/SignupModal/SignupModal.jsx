@@ -1,21 +1,42 @@
 import React, { useEffect, useState } from "react";
 import "./signupModal.css";
 import { useNavigate } from "react-router-dom";
-import { signup } from "../../Service/BackEndServices";
-import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
+import { signinGoogle, signup } from "../../Service/BackEndServices";
+import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";  
+import useGlobalReducer from "../../hooks/useGlobalReducer";
 
-export const SignupModal = ({ show, onClose, onSwitch }) => {
+export const SignupModal = ({ show, onClose, onSwitch, onLoginSuccess }) => {
+    const {dispatch} = useGlobalReducer();
     const navigate = useNavigate();
     const [showPass, setShowPass] = useState(false);
     const [showConfirmPass, setShowConfirmPass] = useState(false);
     const [status, setStatus] = useState({ type: "", msg: "" });
     const [showRequirements, setShowRequirements] = useState(false);
 
-    const loginConGoogle = useGoogleLogin({
-        onSuccess: tokenResponse => console.log(tokenResponse),
-        onError: () => console.log("Login Failed"),
-    });
+    const login = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+    const userInfo = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+        headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+        }).then(res => res.json());
 
+      const result = await signinGoogle(userInfo); 
+        if (result && !result.error) {
+            dispatch({
+                type: "login_user",
+                payload: result.data.michi_name
+            })
+            setStatus({ type: "success", msg: "Ingresando" });
+            setTimeout(() => {
+                onLoginSuccess();
+                onClose();
+                navigate("/")
+                setStatus({ type: "", msg: "" })
+            }, 1500);
+        } else {setStatus({ type: "error", msg: result.error || "Error al iniciar sesión" });}
+    },
+    onError: (error) => console.log('Error:', error)
+  });
+    
     const [formData, setFormData] = useState({
         michi_name: "",
         email: "",
@@ -191,7 +212,7 @@ export const SignupModal = ({ show, onClose, onSwitch }) => {
                     <button
                         type="button"
                         className="btn-google-pixel"
-                        onClick={() => loginConGoogle()}
+                        onClick={() => login()}
                     >
                         <i className="fa-brands fa-google"></i>
                         INICIAR SESION CON GOOGLE

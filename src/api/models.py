@@ -20,7 +20,7 @@ class User (db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     email: Mapped[str] = mapped_column(
         String(100), unique=True, nullable=False)
-    password_hash: Mapped[str] = mapped_column(String(100), nullable=False)
+    password_hash: Mapped[str] = mapped_column(String(100), nullable=True)
     fecha_registro: Mapped[datetime] = mapped_column(
         DateTime, default=datetime.now)
 
