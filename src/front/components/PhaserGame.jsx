@@ -36,7 +36,7 @@ export default function PhaserGame() {
         default: "arcade",
         arcade: {
           gravity: { y: 1000},
-          debug: false,
+          debug: true,
         },
       },
       // Lista de escenas; aquí pasamos la clase que implementa la lógica

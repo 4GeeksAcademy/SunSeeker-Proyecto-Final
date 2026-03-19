@@ -112,7 +112,8 @@ ScoreText = "";
   createPlayer(this)
   createEnemies(this)
   createColliders(this)
-  this.GatoNar.Score = 0;
+  this.GatoNar.Score = this.previousScore || 0;
+  this.ScoreText.setText("Score: " + this.GatoNar.Score);
   //puntos
   function PuntosGato(gato, pezTocando) {
       pezTocando.disableBody(true, true);

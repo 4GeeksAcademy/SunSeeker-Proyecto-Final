@@ -11,10 +11,10 @@ export const SignupModal = ({ show, onClose, onSwitch }) => {
     const [status, setStatus] = useState({ type: "", msg: "" });
     const [showRequirements, setShowRequirements] = useState(false);
 
-    const loginConGoogle = useGoogleLogin({
-        onSuccess: tokenResponse => console.log(tokenResponse),
-        onError: () => console.log("Login Failed"),
-    });
+    // const loginConGoogle = useGoogleLogin({
+    //     onSuccess: tokenResponse => console.log(tokenResponse),
+    //     onError: () => console.log("Login Failed"),
+    // });
 
     const [formData, setFormData] = useState({
         michi_name: "",
@@ -188,14 +188,15 @@ export const SignupModal = ({ show, onClose, onSwitch }) => {
                     <button type="submit" className="btn-submit">
                         CREAR CUENTA
                     </button>
-                    <button
+                    {/* <button
                         type="button"
                         className="btn-google-pixel"
                         onClick={() => loginConGoogle()}
                     >
                         <i className="fa-brands fa-google"></i>
                         INICIAR SESION CON GOOGLE
-                    </button>
+                    </button> */}
+                    
                 </form>
                 <p className="card-footer-text text-center mt-3">
                     ¿Ya tenés cuenta? <a href="#" className="text-decoration-none" onClick={onSwitch}>Iniciar sesión</a>

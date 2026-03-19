@@ -146,8 +146,8 @@ function addToScore(scoreToAdd, origin, game) {
     })
 }
 
-function end(game){
-game.scene.start("endScene", { score: game.Score })
+function end(game) {
+  game.scene.start("endScene", { score: game.GatoNar.Score });
 }
 
 // function spawnPepino(game, x, y, estado, caja, id) {
