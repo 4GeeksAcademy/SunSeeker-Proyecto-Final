@@ -1,5 +1,6 @@
 import { updateMichiColorPhaser } from "../../Service/BackEndServices";
 import { Animaciones } from "../Animaciones/Animaciones";
+import { CommunicatorMusic } from "../CommunicatorMusic";
 
 export default class Inventario extends Phaser.Scene {
   constructor() {
@@ -20,10 +21,14 @@ export default class Inventario extends Phaser.Scene {
       frameWidth: 49,
       frameHeight: 31,
     });
-    this.load.spritesheet("GatoNaranjaSombrero", "img/GatoNaranjaSombrero.png", {
-      frameWidth: 49,
-      frameHeight: 31,
-    });
+    this.load.spritesheet(
+      "GatoNaranjaSombrero",
+      "img/GatoNaranjaSombrero.png",
+      {
+        frameWidth: 49,
+        frameHeight: 31,
+      },
+    );
     this.load.spritesheet("GatoBlanco", "img/GatoBlanco.png", {
       frameWidth: 89,
       frameHeight: 58,
@@ -94,9 +99,15 @@ export default class Inventario extends Phaser.Scene {
     this.physics.add.existing(GatoSentado, true);
 
     const colorMap = {
-      Naranja: 1, Blanco: 2, Negro: 3,
-      BlancoGafas: 4, NegroGafas: 5, NaranjaGafas: 6,
-      NaranjaSombrero: 7, BlancoSombrero: 8, NegroSombrero: 9,
+      Naranja: 1,
+      Blanco: 2,
+      Negro: 3,
+      BlancoGafas: 4,
+      NegroGafas: 5,
+      NaranjaGafas: 6,
+      NaranjaSombrero: 7,
+      BlancoSombrero: 8,
+      NegroSombrero: 9,
     };
     this.gatoColor = colorMap[localStorage.getItem("michi_color")] ?? 1;
 
@@ -118,7 +129,7 @@ export default class Inventario extends Phaser.Scene {
                     : this.gatoColor === 9
                       ? "GatoNegroSombrero"
                       : "GatoNaranjaF";
- 
+
     const sufijo =
       this.gatoColor === 2
         ? "Blanco"
@@ -137,7 +148,7 @@ export default class Inventario extends Phaser.Scene {
                     : this.gatoColor === 9
                       ? "NegroSombrero"
                       : "Naranja";
- 
+
     const escala =
       this.gatoColor === 2
         ? 0.9
@@ -160,16 +171,22 @@ export default class Inventario extends Phaser.Scene {
     // this.GatoNar = this.physics.add
     //   .sprite(700, 600, texturaGato)
     //   .setScale(escala);
-    
-    const offsetYMap = {
-  1: 615, 6: 615, 7: 615,  
-  2: 600, 4: 600, 8: 600,  
-  3: 600, 5: 600, 9: 600,  
-};
 
-this.GatoNar = this.physics.add
-  .sprite(700, offsetYMap[this.gatoColor] ?? 600, texturaGato)
-  .setScale(escala);
+    const offsetYMap = {
+      1: 615,
+      6: 615,
+      7: 615,
+      2: 600,
+      4: 600,
+      8: 600,
+      3: 600,
+      5: 600,
+      9: 600,
+    };
+
+    this.GatoNar = this.physics.add
+      .sprite(700, offsetYMap[this.gatoColor] ?? 600, texturaGato)
+      .setScale(escala);
 
     this.GatoNar.setCollideWorldBounds(true);
     this.physics.add.collider(this.GatoNar, paredes);
@@ -205,7 +222,7 @@ this.GatoNar = this.physics.add
 
     const cambiarGato = (nuevoColor) => {
       this.gatoColor = nuevoColor;
- 
+
       const nuevaTextura =
         nuevoColor === 2
           ? "GatoBlanco"
@@ -224,7 +241,7 @@ this.GatoNar = this.physics.add
                       : nuevoColor === 9
                         ? "GatoNegroSombrero"
                         : "GatoNaranjaF";
- 
+
       const nuevoSufijo =
         nuevoColor === 2
           ? "Blanco"
@@ -243,7 +260,7 @@ this.GatoNar = this.physics.add
                       : nuevoColor === 9
                         ? "NegroSombrero"
                         : "Naranja";
- 
+
       const nuevaEscala =
         nuevoColor === 2
           ? 0.9
@@ -262,7 +279,7 @@ this.GatoNar = this.physics.add
                       : nuevoColor === 9
                         ? 1.1
                         : 1.6;
- 
+
       const colorNombre =
         nuevoColor === 2
           ? "Blanco"
@@ -281,24 +298,30 @@ this.GatoNar = this.physics.add
                       : nuevoColor === 9
                         ? "NegroSombrero"
                         : "Naranja";
- 
+
       localStorage.setItem("michi_color", colorNombre);
       updateMichiColorPhaser(colorNombre);
- 
+
       // this.GatoNar.setPosition(700, 550);
 
       const offsetYMap = {
-  1: 615, 6: 615, 7: 615,  // Naranjas
-  2: 600, 4: 600, 8: 600,  // Blancos
-  3: 600, 5: 600, 9: 600,  // Negros
-};
+        1: 615,
+        6: 615,
+        7: 615, // Naranjas
+        2: 600,
+        4: 600,
+        8: 600, // Blancos
+        3: 600,
+        5: 600,
+        9: 600, // Negros
+      };
 
-this.GatoNar.setPosition(700, offsetYMap[nuevoColor] ?? 600);
+      this.GatoNar.setPosition(700, offsetYMap[nuevoColor] ?? 600);
 
       this.GatoNar.setVelocityX(-160);
       this.GatoNar.setVelocityY(0);
       this.GatoNar.setFlipX(false);
- 
+
       this.GatoNar.setTexture(nuevaTextura);
       this.GatoNar.setScale(nuevaEscala);
       this.GatoNar.anims.play("left_" + nuevoSufijo, true);
@@ -335,7 +358,7 @@ this.GatoNar.setPosition(700, offsetYMap[nuevoColor] ?? 600);
     //   .strokeRectShape(btnGatoBlancoGafas)
     //   .setScrollFactor(0);
 
-      const btnGatoNegroGafas = this.add
+    const btnGatoNegroGafas = this.add
       .zone(518, 250, 115, 115)
       .setInteractive({ useHandCursor: true })
       .on("pointerdown", () => cambiarGato(5));
@@ -346,7 +369,7 @@ this.GatoNar.setPosition(700, offsetYMap[nuevoColor] ?? 600);
     //   .strokeRectShape(btnGatoNegroGafas)
     //   .setScrollFactor(0);
 
-      const btnGatoNaranjaGafas = this.add
+    const btnGatoNaranjaGafas = this.add
       .zone(160, 250, 115, 115)
       .setInteractive({ useHandCursor: true })
       .on("pointerdown", () => cambiarGato(6));
@@ -357,7 +380,7 @@ this.GatoNar.setPosition(700, offsetYMap[nuevoColor] ?? 600);
     //   .strokeRectShape(btnGatoNaranjaGafas)
     //   .setScrollFactor(0);
 
-      const btnGatoNaranjaSombrero = this.add
+    const btnGatoNaranjaSombrero = this.add
       .zone(160, 420, 115, 115)
       .setInteractive({ useHandCursor: true })
       .on("pointerdown", () => cambiarGato(7));
@@ -368,7 +391,7 @@ this.GatoNar.setPosition(700, offsetYMap[nuevoColor] ?? 600);
     //   .strokeRectShape(btnGatoNaranjaSombrero)
     //   .setScrollFactor(0);
 
-      const btnGatoBlancoSombrero = this.add
+    const btnGatoBlancoSombrero = this.add
       .zone(340, 420, 115, 115)
       .setInteractive({ useHandCursor: true })
       .on("pointerdown", () => cambiarGato(8));
@@ -379,7 +402,7 @@ this.GatoNar.setPosition(700, offsetYMap[nuevoColor] ?? 600);
     //   .strokeRectShape(btnGatoBlancoSombrero)
     //   .setScrollFactor(0);
 
-      const btnGatoNegroSombrero = this.add
+    const btnGatoNegroSombrero = this.add
       .zone(518, 420, 115, 115)
       .setInteractive({ useHandCursor: true })
       .on("pointerdown", () => cambiarGato(9));
@@ -395,6 +418,28 @@ this.GatoNar.setPosition(700, offsetYMap[nuevoColor] ?? 600);
     Volver.setOrigin(0);
     Volver.setInteractive();
     Volver.once("pointerdown", () => this.scene.start("Menu"));
+
+    // Al final del create()
+    CommunicatorMusic.on("cambiar_michi", ({ color, accesorio }) => {
+      const clave = accesorio ? `${color}${accesorio}` : color; 
+      const colorMap = {
+        Naranja: 1,
+        Blanco: 2,
+        Negro: 3,
+        BlancoGafas: 4,
+        NegroGafas: 5,
+        NaranjaGafas: 6,
+        NaranjaSombrero: 7,
+        BlancoSombrero: 8,
+        NegroSombrero: 9,
+      };
+      const nuevoColor = colorMap[clave] ?? 1;
+      cambiarGato(nuevoColor);
+    });
+    
+    this.events.on("shutdown", () => {
+      CommunicatorMusic.off("cambiar_michi");
+    });
   }
 
   update() {}

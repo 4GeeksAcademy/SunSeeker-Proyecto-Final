@@ -12,9 +12,14 @@ export const Navbar = () => {
     const navigate = useNavigate();
     const [showSignup, setShowSignup] = useState(false);
     const [showSignin, setShowSignin] = useState(false);
-    const michiColor = store.michiColor || "Naranja";
-    const michiAccesorio = store.michiAccesorio || "ninguno";
+
+    const COLORES_VALIDOS = ["Naranja", "Blanco", "Negro"];
+    const ACCESORIOS_VALIDOS = ["Gafas", "Sombrero"];
+
+    const michiColor = COLORES_VALIDOS.includes(store.michiColor) ? store.michiColor : "Naranja";
+    const michiAccesorio = ACCESORIOS_VALIDOS.includes(store.michiAccesorio) ? store.michiAccesorio : "ninguno";
     const fotoNavbar = imagenAccesorios[michiColor][michiAccesorio];
+    
     const openSignup = () => {
         setShowSignin(false);
         setShowSignup(true);

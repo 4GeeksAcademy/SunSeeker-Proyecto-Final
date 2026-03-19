@@ -190,6 +190,63 @@ export default class Menu extends Phaser.Scene {
     controlesOption.once("pointerdown", () => this.scene.start("Controles"));
     // this.add.graphics().lineStyle(2, 0xff0000).strokeRectShape(controlesOption);
 
+    CommunicatorMusic.on("cambiar_michi", ({ color, accesorio }) => {
+      if (!this.GatoNar || !this.GatoNar.active) return; 
+
+      const clave = accesorio ? `${color}${accesorio}` : color;
+      const colorMap = {
+        Naranja: 1,
+        Blanco: 2,
+        Negro: 3,
+        BlancoGafas: 4,
+        NegroGafas: 5,
+        NaranjaGafas: 6,
+        NaranjaSombrero: 7,
+        BlancoSombrero: 8,
+        NegroSombrero: 9,
+      };
+      const nuevoColor = colorMap[clave] ?? 1;
+      this.gatoColor = nuevoColor;
+
+      const texturaMap = {
+        1: "GatoNaranjaF",
+        2: "GatoBlanco",
+        3: "GatoNegro",
+        4: "GatoBlancoGafas",
+        5: "GatoNegroGafas",
+        6: "GatoNaranjaGafas",
+        7: "GatoNaranjaSombrero",
+        8: "GatoBlancoSombrero",
+        9: "GatoNegroSombrero",
+      };
+      const sufijoMap = {
+        1: "Naranja",
+        2: "Blanco",
+        3: "Negro",
+        4: "BlancoGafas",
+        5: "NegroGafas",
+        6: "NaranjaGafas",
+        7: "NaranjaSombrero",
+        8: "BlancoSombrero",
+        9: "NegroSombrero",
+      };
+      const escalaMap = {
+        1: 1.6,
+        2: 0.9,
+        3: 1.1,
+        4: 0.9,
+        5: 1.1,
+        6: 1.6,
+        7: 1.6,
+        8: 0.9,
+        9: 1.1,
+      };
+
+      this.GatoNar.setTexture(texturaMap[nuevoColor]);
+      this.GatoNar.setScale(escalaMap[nuevoColor]);
+      this.GatoNar.anims.play("turn_" + sufijoMap[nuevoColor], true);
+    });
+
   }
 
   update() {}

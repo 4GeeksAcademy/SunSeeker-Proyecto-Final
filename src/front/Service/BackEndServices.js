@@ -12,7 +12,7 @@ export const signup = async (user) => {
     },
   );
   const data = await response.json();
-   console.log("Respuesta signup:", data);
+  console.log("Respuesta signup:", data);
   if (response.ok) {
     return { success: true, data };
   } else {
@@ -46,9 +46,21 @@ export const signin = async (user) => {
   if (!response.ok) {
     return { error: data.msg || data.error || "Error al iniciar sesión" };
   }
+  
+  const clavePhaser = data.michi_accesorio
+    ? `${data.michi_color}${data.michi_accesorio}`
+    : data.michi_color;
+
   localStorage.setItem("token", data.token);
-  localStorage.setItem("michi_color", data.michi_color);
-  return { success: true, michi_color: data.michi_color, data };
+  localStorage.setItem("michi_color", clavePhaser); 
+  localStorage.setItem("michi_accesorio", data.michi_accesorio || "");
+
+  return {
+    success: true,
+    michi_color: data.michi_color,
+    michi_accesorio: data.michi_accesorio,
+    data,
+  };
 };
 
 export const updateMichiColor = async (color) => {
@@ -96,7 +108,7 @@ export const guardarPartida = async (score) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ score, accesorio }), 
+      body: JSON.stringify({ score, accesorio }),
     },
   );
   const data = await response.json();
@@ -104,7 +116,26 @@ export const guardarPartida = async (score) => {
 };
 
 export const getRanking = async () => {
-  const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/ranking`);
+  const response = await fetch(
+    `${import.meta.env.VITE_BACKEND_URL}/api/ranking`,
+  );
+  const data = await response.json();
+  return data;
+};
+
+export const guardarAccesorio = async (accesorio) => {
+  const token = localStorage.getItem("token");
+  const response = await fetch(
+    `${import.meta.env.VITE_BACKEND_URL}/api/get_partida`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ accesorio: accesorio || null }),
+    },
+  );
   const data = await response.json();
   return data;
 };
