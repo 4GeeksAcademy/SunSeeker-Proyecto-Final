@@ -75,7 +75,7 @@ def signup():
     new_michi = Michi(
         michi_name=michi_name,
         user_id=new_user.id,
-        color="Naranja"
+        color="Naranja",
     )
     db.session.add(new_michi)
     db.session.flush()
