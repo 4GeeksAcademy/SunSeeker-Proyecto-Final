@@ -9,6 +9,8 @@ import { BackendURL } from './components/BackendURL';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const Main = () => {
+    const CLIENT_ID = '227740684290-3sgbfmusl1gj5s51fgen5c3j3moiibqb.apps.googleusercontent.com'
+
     
     if (! import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_BACKEND_URL == "") return (
         <React.StrictMode>
@@ -18,7 +20,7 @@ const Main = () => {
     return (
         <React.StrictMode>
             {/* Provide global state to all components */}
-            <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+            <GoogleOAuthProvider clientId={CLIENT_ID}>
                 <StoreProvider>
                     {/* Set up routing for the application */}
                     <RouterProvider router={router}>
