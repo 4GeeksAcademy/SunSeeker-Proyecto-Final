@@ -1,12 +1,19 @@
 export const initialStore = () => {
+  const COLORES_VALIDOS = ["Naranja", "Blanco", "Negro"];
+  const ACCESORIOS_VALIDOS = ["Gafas", "Sombrero"];
+
+  const savedColor = localStorage.getItem("michi_color");
+  const savedAccesorio = localStorage.getItem("michi_accesorio");
   const hasToken = !!localStorage.getItem("token");
+
   return {
     user: hasToken ? localStorage.getItem("michi_name") : null,
-    michiColor: hasToken ? localStorage.getItem("michi_color") : null,
-    michiAccesorio: hasToken ? localStorage.getItem("michi_accesorio") : null,
+    michiColor: COLORES_VALIDOS.includes(savedColor) ? savedColor : "Naranja",
+    michiAccesorio: ACCESORIOS_VALIDOS.includes(savedAccesorio)
+      ? savedAccesorio
+      : null,
     message: null,
     Music: [],
-    // michi:{}
   };
 };
 
@@ -33,6 +40,7 @@ export default function storeReducer(store, action = {}) {
         ...store,
         user: null,
         michiColor: null,
+        michiAccesorio: null,
       };
     case "set_michi_accesorio":
       return {
