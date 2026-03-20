@@ -24,10 +24,14 @@ export default class Menu extends Phaser.Scene {
       frameWidth: 49,
       frameHeight: 31,
     });
-    this.load.spritesheet("GatoNaranjaSombrero", "img/GatoNaranjaSombrero.png", {
-      frameWidth: 49,
-      frameHeight: 31,
-    });
+    this.load.spritesheet(
+      "GatoNaranjaSombrero",
+      "img/GatoNaranjaSombrero.png",
+      {
+        frameWidth: 49,
+        frameHeight: 31,
+      },
+    );
     this.load.spritesheet("GatoBlanco", "img/GatoBlanco.png", {
       frameWidth: 89,
       frameHeight: 58,
@@ -83,13 +87,31 @@ export default class Menu extends Phaser.Scene {
       this.GatoNar.setVelocityX(0);
       this.GatoNar.anims.play("turn_" + sufijo, true);
     }
-    
-     const colorMap = {
-      Naranja: 1, Blanco: 2, Negro: 3,
-      BlancoGafas: 4, NegroGafas: 5, NaranjaGafas: 6,
-      NaranjaSombrero: 7, BlancoSombrero: 8, NegroSombrero: 9,
+
+    //  const colorMap = {
+    //   Naranja: 1, Blanco: 2, Negro: 3,
+    //   BlancoGafas: 4, NegroGafas: 5, NaranjaGafas: 6,
+    //   NaranjaSombrero: 7, BlancoSombrero: 8, NegroSombrero: 9,
+    // };
+    // this.gatoColor = colorMap[localStorage.getItem("michi_color")] ?? 1;
+    const colorBase = localStorage.getItem("michi_color") || "Naranja";
+    const accesorioBase = localStorage.getItem("michi_accesorio") || "";
+    const claveCompleta = accesorioBase
+      ? `${colorBase}${accesorioBase}`
+      : colorBase;
+
+    const colorMap = {
+      Naranja: 1,
+      Blanco: 2,
+      Negro: 3,
+      BlancoGafas: 4,
+      NegroGafas: 5,
+      NaranjaGafas: 6,
+      NaranjaSombrero: 7,
+      BlancoSombrero: 8,
+      NegroSombrero: 9,
     };
-    this.gatoColor = colorMap[localStorage.getItem("michi_color")] ?? 1;
+    this.gatoColor = colorMap[claveCompleta] ?? 1;
 
     const texturaGato =
       this.gatoColor === 2
@@ -109,7 +131,7 @@ export default class Menu extends Phaser.Scene {
                     : this.gatoColor === 9
                       ? "GatoNegroSombrero"
                       : "GatoNaranjaF";
- 
+
     const sufijo =
       this.gatoColor === 2
         ? "Blanco"
@@ -128,7 +150,7 @@ export default class Menu extends Phaser.Scene {
                     : this.gatoColor === 9
                       ? "NegroSombrero"
                       : "Naranja";
- 
+
     const escala =
       this.gatoColor === 2
         ? 0.9
@@ -148,9 +170,8 @@ export default class Menu extends Phaser.Scene {
                       ? 1.1
                       : 1.6;
 
-
     this.GatoNar = this.physics.add
-      .sprite(700, 600, texturaGato) 
+      .sprite(700, 600, texturaGato)
       .setScale(escala);
 
     this.GatoNar.setCollideWorldBounds(true);
@@ -159,7 +180,7 @@ export default class Menu extends Phaser.Scene {
     // cinematica
     this.GatoNar.setVelocityX(-160);
     this.GatoNar.setFlipX(false);
-    this.GatoNar.anims.play("left_"+ sufijo, true);
+    this.GatoNar.anims.play("left_" + sufijo, true);
     this.physics.add.collider(GatoSentado, this.GatoNar, Sentar, null, this);
 
     const jugarOption = this.add.zone(265, 126, 350, 48);
@@ -193,7 +214,7 @@ export default class Menu extends Phaser.Scene {
     // this.add.graphics().lineStyle(2, 0xff0000).strokeRectShape(controlesOption);
 
     CommunicatorMusic.on("cambiar_michi", ({ color, accesorio }) => {
-      if (!this.GatoNar || !this.GatoNar.active) return; 
+      if (!this.GatoNar || !this.GatoNar.active) return;
 
       const clave = accesorio ? `${color}${accesorio}` : color;
       const colorMap = {
@@ -248,7 +269,6 @@ export default class Menu extends Phaser.Scene {
       this.GatoNar.setScale(escalaMap[nuevoColor]);
       this.GatoNar.anims.play("turn_" + sufijoMap[nuevoColor], true);
     });
-
   }
 
   update() {}

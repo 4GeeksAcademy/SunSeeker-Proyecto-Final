@@ -91,7 +91,7 @@ export const Accesorios = () => {
 
             dispatch({ type: "set_michi_color", payload: colorSeleccionado });
             dispatch({ type: "set_michi_accesorio", payload: accesorioEquipado });
-            localStorage.setItem("michi_color", clavePhaser);
+            localStorage.setItem("michi_color", colorSeleccionado);
             localStorage.setItem("michi_accesorio", accesorioEquipado || "");
 
             CommunicatorMusic.emit("cambiar_michi", {

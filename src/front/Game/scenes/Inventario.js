@@ -1,4 +1,7 @@
-import { updateMichiColorPhaser } from "../../Service/BackEndServices";
+import {
+  guardarAccesorio,
+  updateMichiColorPhaser,
+} from "../../Service/BackEndServices";
 import { Animaciones } from "../Animaciones/Animaciones";
 import { CommunicatorMusic } from "../CommunicatorMusic";
 
@@ -98,18 +101,38 @@ export default class Inventario extends Phaser.Scene {
     let GatoSentado = this.add.zone(80, 640, 20, 20);
     this.physics.add.existing(GatoSentado, true);
 
-    const colorMap = {
-      Naranja: 1,
-      Blanco: 2,
-      Negro: 3,
-      BlancoGafas: 4,
-      NegroGafas: 5,
-      NaranjaGafas: 6,
-      NaranjaSombrero: 7,
-      BlancoSombrero: 8,
-      NegroSombrero: 9,
-    };
-    this.gatoColor = colorMap[localStorage.getItem("michi_color")] ?? 1;
+    // const colorMap = {
+    //   Naranja: 1,
+    //   Blanco: 2,
+    //   Negro: 3,
+    //   BlancoGafas: 4,
+    //   NegroGafas: 5,
+    //   NaranjaGafas: 6,
+    //   NaranjaSombrero: 7,
+    //   BlancoSombrero: 8,
+    //   NegroSombrero: 9,
+    // };
+    // this.gatoColor = colorMap[localStorage.getItem("michi_color")] ?? 1;
+
+      const colorBase = localStorage.getItem("michi_color") || "Naranja";
+      const accesorioBase = localStorage.getItem("michi_accesorio") || "";
+      const claveCompleta = accesorioBase
+        ? `${colorBase}${accesorioBase}`
+        : colorBase;
+
+      const colorMap = {
+        Naranja: 1,
+        Blanco: 2,
+        Negro: 3,
+        BlancoGafas: 4,
+        NegroGafas: 5,
+        NaranjaGafas: 6,
+        NaranjaSombrero: 7,
+        BlancoSombrero: 8,
+        NegroSombrero: 9,
+      };
+      this.gatoColor = colorMap[claveCompleta] ?? 1;
+
 
     const texturaGato =
       this.gatoColor === 2
@@ -299,10 +322,36 @@ export default class Inventario extends Phaser.Scene {
                         ? "NegroSombrero"
                         : "Naranja";
 
-      localStorage.setItem("michi_color", colorNombre);
-      updateMichiColorPhaser(colorNombre);
+      // localStorage.setItem("michi_color", colorNombre);
+      // updateMichiColorPhaser(colorNombre);
 
-      // this.GatoNar.setPosition(700, 550);
+      const accesorioMap = {
+        1: null,
+        2: null,
+        3: null,
+        4: "Gafas",
+        5: "Gafas",
+        6: "Gafas",
+        7: "Sombrero",
+        8: "Sombrero",
+        9: "Sombrero",
+      };
+      const accesorioActual = accesorioMap[nuevoColor] ?? null;
+
+      const colorBase =
+        nuevoColor <= 3
+          ? colorNombre
+          : colorNombre.replace("Gafas", "").replace("Sombrero", "");
+
+      localStorage.setItem("michi_color", colorBase);
+      localStorage.setItem("michi_accesorio", accesorioActual || "");
+      updateMichiColorPhaser(colorBase);
+      guardarAccesorio(accesorioActual);
+
+      CommunicatorMusic.emit("cambiar_michi", {
+        color: colorBase,
+        accesorio: accesorioActual,
+      });
 
       const offsetYMap = {
         1: 615,
@@ -419,27 +468,27 @@ export default class Inventario extends Phaser.Scene {
     Volver.setInteractive();
     Volver.once("pointerdown", () => this.scene.start("Menu"));
 
-    // Al final del create()
-    CommunicatorMusic.on("cambiar_michi", ({ color, accesorio }) => {
-      const clave = accesorio ? `${color}${accesorio}` : color; 
-      const colorMap = {
-        Naranja: 1,
-        Blanco: 2,
-        Negro: 3,
-        BlancoGafas: 4,
-        NegroGafas: 5,
-        NaranjaGafas: 6,
-        NaranjaSombrero: 7,
-        BlancoSombrero: 8,
-        NegroSombrero: 9,
-      };
-      const nuevoColor = colorMap[clave] ?? 1;
-      cambiarGato(nuevoColor);
-    });
     
-    this.events.on("shutdown", () => {
-      CommunicatorMusic.off("cambiar_michi");
-    });
+    // CommunicatorMusic.on("cambiar_michi", ({ color, accesorio }) => {
+    //   const clave = accesorio ? `${color}${accesorio}` : color;
+    //   const colorMap = {
+    //     Naranja: 1,
+    //     Blanco: 2,
+    //     Negro: 3,
+    //     BlancoGafas: 4,
+    //     NegroGafas: 5,
+    //     NaranjaGafas: 6,
+    //     NaranjaSombrero: 7,
+    //     BlancoSombrero: 8,
+    //     NegroSombrero: 9,
+    //   };
+    //   const nuevoColor = colorMap[clave] ?? 1;
+    //   cambiarGato(nuevoColor);
+    // });
+
+    // this.events.on("shutdown", () => {
+    //   CommunicatorMusic.off("cambiar_michi");
+    // });
   }
 
   update() {}

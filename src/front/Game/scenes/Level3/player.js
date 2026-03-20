@@ -15,12 +15,31 @@ export function createPlayer(game) {
   //   game.ScoreText.setScrollFactor(0);
   game.keys = game.input.keyboard.createCursorKeys();
 
-        const colorMap = {
-      Naranja: 1, Blanco: 2, Negro: 3,
-      BlancoGafas: 4, NegroGafas: 5, NaranjaGafas: 6,
-      NaranjaSombrero: 7, BlancoSombrero: 8, NegroSombrero: 9,
-    };
-    game.gatoColor = colorMap[localStorage.getItem("michi_color")] ?? 1;
+    //     const colorMap = {
+    //   Naranja: 1, Blanco: 2, Negro: 3,
+    //   BlancoGafas: 4, NegroGafas: 5, NaranjaGafas: 6,
+    //   NaranjaSombrero: 7, BlancoSombrero: 8, NegroSombrero: 9,
+    // };
+    // game.gatoColor = colorMap[localStorage.getItem("michi_color")] ?? 1;
+
+  const colorBase = localStorage.getItem("michi_color") || "Naranja";
+  const accesorioBase = localStorage.getItem("michi_accesorio") || "";
+  const claveCompleta = accesorioBase
+    ? `${colorBase}${accesorioBase}`
+    : colorBase;
+
+  const colorMap = {
+    Naranja: 1,
+    Blanco: 2,
+    Negro: 3,
+    BlancoGafas: 4,
+    NegroGafas: 5,
+    NaranjaGafas: 6,
+    NaranjaSombrero: 7,
+    BlancoSombrero: 8,
+    NegroSombrero: 9,
+  };
+  game.gatoColor = colorMap[claveCompleta] ?? 1;
 
     game.texturaGato =
       game.gatoColor === 2
