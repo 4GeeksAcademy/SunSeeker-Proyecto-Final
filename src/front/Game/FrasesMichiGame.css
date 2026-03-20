@@ -42,3 +42,9 @@
     image-rendering: pixelated;
     margin-top: 8px;
 }
+
+@media (max-width: 992px) {
+  .frase-container {
+    display: none;
+  }
+}
