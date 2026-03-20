@@ -66,6 +66,7 @@ export const Game = () => {
         if (!currentTrack) return;
         if (!audio.src || audio.src !== currentTrack.audio) {
             audio.src = currentTrack.audio;
+            audio.volume = 0.2;  // CAMBIA EL VOLUMEN VALORES DEL 0 AL 1
         }
 
         if (isPlaying) {
@@ -73,6 +74,7 @@ export const Game = () => {
             setIsPlaying(false);
             CommunicatorMusic.emit("change-music-state", { isPlaying: false });
         } else {
+            audio.volume = 0.2; // CAMBIA EL VOLUMEN VALORES DEL 0 AL 1
             audio.play()
                 .then(() => {
                     setIsPlaying(true);
