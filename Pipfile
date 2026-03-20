@@ -21,10 +21,11 @@ wtforms = "==3.1.2"
 sqlalchemy = "*"
 flask-bcrypt = "*"
 flask-jwt-extended = "*"
+tomli = "*"
 
 
 [requires]
-python_version = "3.13"
+python_version = "3.10"
 
 [scripts]
 start="flask run -p 3001 -h 0.0.0.0"
