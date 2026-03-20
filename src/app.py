@@ -10,15 +10,21 @@ from api.models import db
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
-
-# from models import Person
+from flask_cors import CORS
+from flask_jwt_extended import JWTManager
+from datetime import timedelta
 
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
 static_file_dir = os.path.join(os.path.dirname(
     os.path.realpath(__file__)), '../dist/')
 app = Flask(__name__)
 app.url_map.strict_slashes = False
+app.config['JWT_SECRET_KEY']=os.getenv('JWT_SECRET_KEY')
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=8)
+jwt = JWTManager(app)
 
+# Enable CORS for the entire app
+CORS(app)
 # database condiguration
 db_url = os.getenv("DATABASE_URL")
 if db_url is not None:

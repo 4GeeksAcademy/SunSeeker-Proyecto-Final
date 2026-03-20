@@ -1,0 +1,180 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+:root {
+  --sky-light: #8ecae6;
+  --teal: #219ebc;
+  --deep-teal: #126782;
+  --cyan: #4adfe3;
+  --navy: #023047;
+  --dark: #0d1b2a;
+  --card: #0e2a45;
+  --gold: #ffb703;
+  --amber: #fd9e02;
+  --orange: #fb8500;
+  --gold-dim: #c07d10;
+  --border: #f5a623;
+  --text: #e8d9a0;
+  --pixel: "Press Start 2P", monospace;
+}
+
+.footer-callejon {
+  background: var(--navy);
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  min-height: 80px;
+  height: auto;
+  justify-content: center;
+  align-items: center;
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0, 0, 0, 0.12) 3px,
+    rgba(0, 0, 0, 0.12) 4px
+  );
+}
+
+.callejon-glow {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 200px;
+  background: radial-gradient(
+    ellipse,
+    rgba(255, 183, 3, 0.18) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+.callejon-box {
+  position: absolute;
+  bottom: 0;
+  background: #6b4c2a;
+  border: 2px solid #4a3018;
+  image-rendering: pixelated;
+  z-index: 5;
+}
+
+.callejon-box::after {
+  content: "";
+  position: absolute;
+  top: 30%;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.box-1 {
+  left: 20px;
+  width: 40px;
+  height: 36px;
+}
+.box-2 {
+  left: 48px;
+  width: 28px;
+  height: 48px;
+}
+.box-3 {
+  left: 18px;
+  bottom: 36px;
+  width: 34px;
+  height: 28px;
+}
+.box-4 {
+  right: 30px;
+  width: 44px;
+  height: 40px;
+}
+.box-5 {
+  right: 62px;
+  width: 30px;
+  height: 32px;
+}
+.box-6 {
+  right: 28px;
+  bottom: 40px;
+  width: 36px;
+  height: 30px;
+}
+
+.callejon-footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between; 
+  align-items: center;
+  padding: 8px 30px; 
+  height: 20px; 
+  width: 80%;
+  margin: 0;
+}
+
+.callejon-marca {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.callejon-marca h3 {
+  font-size: 10px;
+  font-family: var(--pixel);
+  color: var(--gold);
+  text-align: center;
+  margin-bottom: 0;
+  text-shadow:
+    2px 2px 0 var(--orange),
+    0 0 20px var(--gold);
+  animation: glow2 2.5s infinite alternate;
+}
+
+.callejon-marca p {
+  font-size: 9px;
+  font-family: var(--pixel);
+  color: rgba(142, 202, 230, 0.5);
+  line-height: 2;
+  text-align: center;
+  letter-spacing: 1px;
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+
+
+@media (min-width: 768px) {
+  .callejon-footer {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    height: auto;
+  }
+  .callejon-marca h3 {
+    font-size: 19px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+  }
+  .callejon-marca p {
+    font-size: 8px;
+    text-align:center;
+    white-space: normal;
+  }
+}
+
+@keyframes glow2 {
+  from {
+    text-shadow:
+      2px 2px 0 var(--orange),
+      0 0 8px var(--gold);
+  }
+  to {
+    text-shadow:
+      2px 2px 0 var(--orange),
+      0 0 24px var(--gold);
+  }
+}
